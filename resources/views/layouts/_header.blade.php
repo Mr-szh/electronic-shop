@@ -20,7 +20,7 @@
             <ul class="navbar-nav navbar-right">
                 <!-- 登录注册链接开始 -->
                 @guest
-                <!-- 身份验证链接 -->
+                <!-- 身份验证链接 --> 
                 <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">登录</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">注册</a></li>
                 @else

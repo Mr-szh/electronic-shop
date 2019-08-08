@@ -14,17 +14,22 @@ class CreateUserAddressesTable extends Migration
     public function up()
     {
         Schema::create('user_addresses', function (Blueprint $table) {
+            // 递增主键
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
+            // 设置外键
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            // 三级联动
             $table->string('province');
             $table->string('city');
             $table->string('district');
+
             $table->string('address');
             $table->unsignedInteger('zip');
             $table->string('contact_name');
             $table->string('contact_phone');
             $table->dateTime('last_used_at')->nullable();
+            // 每个迁移文件名都包含时间戳
             $table->timestamps();
         });
     }
