@@ -18,6 +18,7 @@ class CreateUserAddressesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             // 设置外键
+            // onDelete: 如果父表的记录被删除，那么子表的记录也相应的删除
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             // 三级联动
             $table->string('province');
