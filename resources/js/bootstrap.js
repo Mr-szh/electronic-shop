@@ -1,3 +1,5 @@
+// 通过 JS 来调用 sweetalert 弹出二次确认提示框
+require('sweetalert');
 window._ = require('lodash');
 
 /**
