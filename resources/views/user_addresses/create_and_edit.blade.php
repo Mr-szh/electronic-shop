@@ -14,7 +14,7 @@
                 <!-- 输出后端报错开始 -->
                 @if (count($errors) > 0)
                 <div class="alert alert-danger">
-                    <h4>有错误发生：</h4>
+                    <!-- <h4>有错误发生：</h4> -->
                     <ul>
                         @foreach ($errors->all() as $error)
                         <li><i class="glyphicon glyphicon-remove"></i> {{ $error }}</li>
@@ -36,6 +36,8 @@
                             <!-- 引入 csrf token 字段 -->
                             {{ csrf_field() }}
 
+                            <!-- Html 属性 init-value 对应 Vue 里的 initValue 属性 -->
+                            <!-- :init-value展开来就是 v-bind:initValue="xxxx"，这用来指明后面的值是一个 表达式 而非 字符串 -->
                             <!-- 传入的是一个由省市区名称组成的数组的 JSON 字符串，Vue 会把这个 JSON 字符串解析成数组赋值给组件内的 initValue -->
                             <!-- 注意这里多了 @change -->
                             <select-district :init-value="{{ json_encode([old('province', $address->province), old('city', $address->city), old('district', $address->district)]) }}" @change="onDistrictChanged" inline-template>

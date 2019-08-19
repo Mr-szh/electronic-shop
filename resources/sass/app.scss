@@ -56,3 +56,84 @@ body {
         }
     }
 }
+
+.carousel-inner img {
+    width: 100%;
+    height: 100%;
+}
+
+.section-padding {
+    padding: 80px 0;
+}
+
+.user-information-form-wrap {
+    background-color: #fff;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+    padding: 23px 30px 30px;
+
+    form .create-account {
+        margin-top: 25px;
+    }
+
+    h4 {
+        font-family: "Nunito Sans", sans-serif;
+        color: #222222;
+        font-weight: 700;
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    .single-input-item {
+        margin-top: 20px;
+
+        .btn,
+        button {
+            width: 93px;
+            height: 31px;
+            border: none;
+            cursor: pointer;
+            outline: none;
+            padding: 0;
+            box-shadow: none;
+            transition: 0.4s;
+            background-color: transparent;
+        }
+
+        .btn-default,
+        .btn-confirm,
+        .btn-reset {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 0;
+            background-color: #87b106;
+            padding: 4px 13px;
+        }
+
+        .btn-default:hover,
+        .btn-confirm:hover,
+        .btn-reset:hover {
+            color: #fff;
+            background-color: #222222;
+        }
+
+        input {
+            color: #555555;
+            border: 1px solid #ccc;
+            padding: 12px 10px;
+            width: 100%;
+            font-size: 14px;
+            background: #f7f7f7;
+        }
+
+        input:active,
+        input:focus {
+            border-color: #87b106;
+            background-color: #fff;
+        }
+
+        select.form-control {
+            height: 48.22px;
+        }
+    }
+}

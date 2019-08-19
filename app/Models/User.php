@@ -6,7 +6,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-// 这里加上 MustVerifyEmail
 class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
@@ -38,7 +37,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    // ? User ?????? UserAddress ?? / ?????
     public function addresses()
     {
         return $this->hasMany(UserAddress::class);

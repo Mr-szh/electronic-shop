@@ -8,9 +8,15 @@
     <!-- CSRF Token 避免应用遭到跨站请求伪造攻击 -->
     <!-- 该令牌用于验证授权用户和发起请求者是否是同一个人 -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Electronic-shop Shop')</title>
+    <title>@yield('title', '电子产品商城')</title>
     
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    <!--<link rel="stylesheet" href="{{ URL::asset('/css/bootstrap.min.css') }}">
+  
+    <script src="{{ URL::asset('/js/jquery.min.js') }}"></script>
+    <script src="{{ URL::asset('/js/popper.min.js') }}"></script>
+    <script src="{{ URL::asset('/js/bootstrap.min.js') }}"></script> -->
+    
 </head>
 
 <body>

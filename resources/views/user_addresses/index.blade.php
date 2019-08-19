@@ -21,6 +21,15 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @if(!count($addresses))
+                        <tr>
+                            <td class="text-center" colspan="5">
+                                <a class="btn btn-primary" href="{{ route('user_addresses.create')}}">
+                                    还没有收货地址请添加收货地址哦！
+                                </a>
+                            </td>
+                        </tr>
+                        @else
                         @foreach($addresses as $address)
                         <tr>
                             <td>{{ $address->contact_name }}</td>
@@ -34,6 +43,7 @@
                             </td>
                         </tr>
                         @endforeach
+                        @endif
                     </tbody>
                 </table>
             </div>
@@ -62,8 +72,14 @@
                 }
                 // 调用删除接口，用 id 来拼接出请求的 url
                 axios.delete('/user_addresses/' + id).then(function() {
-                    // 请求成功之后重新加载页面
-                    location.reload();
+                    swal({
+                        title: "删除成功！",
+                        text: "您已经删除当前地址",
+                        icon: "success"
+                    }).then(function () {
+                        // 请求成功之后重新加载页面
+                        location.reload();
+                    }) 
                 })
             });
         });

@@ -96,6 +96,7 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => 'password_resets',
+            // 密码重置令牌一小时内有效
             'expire' => 60,
         ],
     ],
