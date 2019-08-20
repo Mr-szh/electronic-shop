@@ -12,6 +12,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['middleware' => ['auth', 'verified']], function() {
     Route::get('user_information','UserController@index')->name('user_information.index');
     Route::put('user_information', 'UserController@update')->name('user_information.update');
+    Route::get('user_information/change', 'UserController@change')->name('user_information.change');
+    Route::put('user_information/change', 'UserController@replace')->name('user_information.replace');
 
     Route::get('user_addresses', 'UserAddressesController@index')->name('user_addresses.index');
     Route::get('user_addresses/create', 'UserAddressesController@create')->name('user_addresses.create');

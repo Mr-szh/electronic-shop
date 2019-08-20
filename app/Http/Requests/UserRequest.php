@@ -12,14 +12,15 @@ class UserRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
+            'name' => 'required|max:12',
         ];
     }
 
-    public function attributes()
+    public function messages()
     {
         return [
-            'name' => '用户名',
+            'name.required' => '用户名不能为空',
+            'name.max' => '用户名长度不能超过12个字符',
         ];
     }
 }

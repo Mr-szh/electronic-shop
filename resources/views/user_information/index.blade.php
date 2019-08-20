@@ -2,21 +2,6 @@
 @section('title', '用户信息')
 
 @section('content')
-
-<!-- 输出后端报错开始 -->
-@if (count($errors) > 0)
-<div class="card-body">
-    <div class="alert alert-danger">
-        <h4>有错误发生：</h4>
-        <ul>
-            @foreach ($errors->all() as $error)
-            <li><i class="glyphicon glyphicon-remove"></i> {{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-</div>
-@endif
-
 <div class="section-padding">
     <div class="container">
         <div class="member-area-from-wrap">
@@ -36,7 +21,7 @@
                 <div class="col-lg-6">
                     <div class="user-information-form-wrap sign-up-form">
                         <h4>用户信息</h4>
-                        <a href="#" class="float-right">更改密码</a>
+                        <a href="{{ route('user_information.change') }}" class="float-right">更改密码</a>
                         <!-- <form class="form-horizontal" role="form" action="{{ route('user_information.update') }}" method="post"> -->
                             {{ method_field('PUT') }}
                             {{ csrf_field() }}
@@ -91,25 +76,27 @@
         
         // 监听修改按钮的点击事件
         $('.btn-confirm').click(function() {
+            var msg = '';
+            
             axios.put('{{ route('user_information.update') }}',
             {
                 name: $("input[name='name']").val(),
                 sex: $('#showSex').find("option:selected").val(),
                 birthday: $("input[name='birthday']").val(),
             }).then(function() { // 请求成功会执行这个回调
-                swal('操作成功', '', 'success').then(function () {
-                    // 这里加了一个 then() 方法
+                swal('修改成功', '', 'success').then(function () {
+                    // 重新刷新页面
                     location.reload();
                 });
-            }, function(error) { // 请求失败会执行这个回调
-                // 如果返回码是 401 代表没登录
-                if (error.response && error.response.status === 401) {
-                    swal('请先登录', '', 'error');
-                } else if (error.response && error.response.data.msg) {
-                    // 其他有 msg 字段的情况，将 msg 提示给用户
-                    swal(error.response.data.msg, '', 'error');
+            }, function(error) { 
+                // 请求失败会执行这个回调
+                $("input").removeClass('dangerous');
+
+                if (error.response.data.errors.name) {
+                    msg = msg + error.response.data.errors.name[0];
+                    $("input[name='name']").addClass('dangerous');
+                    swal('输入错误', msg, 'error');
                 } else {
-                    // 其他情况应该是系统挂了
                     swal('系统错误', '', 'error');
                 }
             });

@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\PasswordRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\VarDumper\VarDumper;
 
 class UserController extends Controller
 {
@@ -32,5 +35,21 @@ class UserController extends Controller
         Auth::user()->save();
 
         return [];
+    }
+
+    public function change()
+    {
+        return view('user_information.change_password', ['user' => Auth::user()]);
+    }
+
+    public function replace(PasswordRequest $request)
+    {
+        $password = $request->input('password');
+        $password = Hash::make($password);
+
+        Auth::user()->password = $password;
+        Auth::user()->save();
+        
+        return []; 
     }
 }

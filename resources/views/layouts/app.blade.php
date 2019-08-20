@@ -11,6 +11,7 @@
     <title>@yield('title', '电子产品商城')</title>
     
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ URL::asset('/images/favicon.ico') }}" />
     <!--<link rel="stylesheet" href="{{ URL::asset('/css/bootstrap.min.css') }}">
   
     <script src="{{ URL::asset('/js/jquery.min.js') }}"></script>
