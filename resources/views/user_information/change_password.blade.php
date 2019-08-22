@@ -11,9 +11,12 @@
                     <div class="user-information-form-wrap">
                         <h4>用户头像</h4>
                         <form action="#" method="post">
-                            <div class="single-input-item">
-                                <p>{{ $user->name }}</p>
-                                <p>{{ $user->created_at }}</p>
+                            <div class="box">
+                                <img class="img-thumbnail" src="{{ URL::asset($user->avatar) }}" />
+                            </div>
+                            <div class="single-input-item text-center">
+                                <h5>{{ $user->name }}</h5>
+                                <h6>{{ $user->created_at->toDateString() }}</h6>
                             </div>
                         </form>
                     </div>
@@ -27,7 +30,7 @@
                         {{ csrf_field() }}
                         <div class="single-input-item">
                             原始密码：
-                            <input type="text" name="oldPassword" placeholder="请输入您的原密码"/>
+                            <input type="text" name="oldPassword" placeholder="请输入您的原密码" />
                         </div>
                         <div class="single-input-item">
                             新密码：
@@ -56,10 +59,10 @@
             var msg = '';
 
             axios.put('{{ route('user_information.replace') }}', {
-                oldPassword: $("input[name='oldPassword']").val(),
-                password: $("input[name='password']").val(),
-                password_confirmation: $("input[name='password_confirmation']").val(),
-            }).then(function() {
+                    oldPassword: $("input[name='oldPassword']").val(),
+                    password: $("input[name='password']").val(),
+                    password_confirmation: $("input[name='password_confirmation']").val(),
+                }).then(function() {
                 swal('密码更改成功', '', 'success').then(function() {
                     location.reload();
                 });

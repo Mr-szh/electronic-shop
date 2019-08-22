@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\VarDumper\VarDumper;
+use App\Handlers\ImageUploadHandler;
 
 class UserController extends Controller
 {
@@ -49,7 +50,23 @@ class UserController extends Controller
 
         Auth::user()->password = $password;
         Auth::user()->save();
+
+        return [];
+    }
+
+    public function updateAvatar(Request $request, ImageUploadHandler $uploader)
+    {
+        $path = '';
+        if ($request->file('avatar')) {
+            $result = $uploader->save($request->file('avatar'), 'avatars', 1);
+            if ($result) {
+                $path = $result['path'];
+            }
+        }
+
+        Auth::user()->avatar = $path;
+        Auth::user()->save();
         
-        return []; 
+        return view('user_information.index', ['user' => Auth::user()]);
     }
 }

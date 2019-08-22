@@ -4,6 +4,12 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+// Fontawesome
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/brands';
+
 /* universal */
 
 body {
@@ -70,10 +76,7 @@ body {
     background-color: #fff;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
     padding: 23px 30px 30px;
-
-    form .create-account {
-        margin-top: 25px;
-    }
+    position: relative;
 
     h4 {
         font-family: "Nunito Sans", sans-serif;
@@ -81,6 +84,57 @@ body {
         font-weight: 700;
         margin: 0;
         line-height: 1.2;
+    }
+
+    .box {
+        width: 200px;
+        height: 200px;
+        margin: 40px auto;
+        background-size: cover;
+    }
+
+    .box img {
+        width: 200px;
+        height: 200px;
+    }
+
+    .box::before,
+    .box::after {
+        content: '';
+        width: 230px;
+        height: 230px;
+        border: 2px solid #2ecc71;
+        position: absolute;
+        top: 90px;
+        left: 163px;
+        right: 0;
+        bottom: 0;
+        margin: -15px;
+        animation: borderClip 8s linear infinite;
+    }
+
+    .box::after {
+        animation-delay: -4s;
+    }
+
+    @keyframes borderClip {
+
+        0%,
+        100% {
+            clip: rect(0px, 230px, 2px, 0px);
+        }
+
+        25% {
+            clip: rect(0px, 2px, 230px, 0px);
+        }
+
+        50% {
+            clip: rect(228px, 230px, 230px, 0px);
+        }
+
+        75% {
+            clip: rect(0px, 230px, 230px, 228px);
+        }
     }
 
     .single-input-item {
@@ -101,6 +155,7 @@ body {
 
         .btn-default,
         .btn-confirm,
+        .btn-upload,
         .btn-reset {
             color: #fff;
             font-size: 16px;
@@ -111,12 +166,13 @@ body {
         }
 
         .btn-default:hover,
+        .btn-upload:hover,
         .btn-confirm:hover,
         .btn-reset:hover {
             color: #fff;
             background-color: #222222;
         }
-
+        
         input {
             color: #555555;
             border: 1px solid #ccc;
@@ -134,6 +190,10 @@ body {
 
         input.dangerous {
             border-color: red;
+        }
+        
+        input.upload {
+            margin-bottom: 20px;
         }
 
         select.form-control {

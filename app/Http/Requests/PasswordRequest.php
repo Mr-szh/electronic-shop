@@ -38,6 +38,7 @@ class PasswordRequest extends Request
 
     public function newValidator()
     {
+        // 自定义验证类
         Validator::extend('check_pwd', function ($attribute, $value, $parameters, $validator) {
             return Hash::check($value, Auth::user()->password);
         });

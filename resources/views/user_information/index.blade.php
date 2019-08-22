@@ -10,9 +10,15 @@
                 <div class="col-lg-6">
                     <div class="user-information-form-wrap">
                         <h4>用户头像</h4>
-                        <form action="#" method="post">
+                        <form action="{{ route('user_information.updateAvatar') }}" method="post" class="text-center" enctype="multipart/form-data">
+                            {{csrf_field()}}    
+                            <div class="box">
+                            
+                                <img class="img-thumbnail" src="{{ URL::asset($user->avatar) }}" />
+                            </div>
                             <div class="single-input-item">
-                                <button class="btn btn-default">上传头像</button>
+                                <input class="upload" type="file" name="avatar">
+                                <button class="btn btn-upload">上传头像</button>
                             </div>
                         </form>
                     </div>
@@ -22,7 +28,6 @@
                     <div class="user-information-form-wrap sign-up-form">
                         <h4>用户信息</h4>
                         <a href="{{ route('user_information.change') }}" class="float-right">更改密码</a>
-                        <!-- <form class="form-horizontal" role="form" action="{{ route('user_information.update') }}" method="post"> -->
                             {{ method_field('PUT') }}
                             {{ csrf_field() }}
                             <div class="single-input-item">
@@ -54,13 +59,12 @@
                             </div>
 
                             <div class="single-input-item">
-                                注册时间：{{ $user->created_at }}
+                                注册于：{{ $user->created_at->diffForHumans() }}
                             </div>
                             <div class="single-input-item">
                                 <button class="btn btn-reset">重置</button>
                                 <button class="btn btn-confirm">确定修改</button>
                             </div>
-                        <!-- </form> -->
                     </div>
                 </div>
             </div>
@@ -111,7 +115,9 @@
             $("#showSex option").removeAttr("selected");
             $("#showSex option[value='"+sex+"']").attr("selected","selected");
             $("input[name='birthday']").val(birthday);
-        })
+        });
+        
+        
     });
 </script>
 @endsection
