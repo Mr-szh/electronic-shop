@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\PasswordRequest;
+use App\Http\Requests\AvatarRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -54,11 +55,11 @@ class UserController extends Controller
         return [];
     }
 
-    public function updateAvatar(Request $request, ImageUploadHandler $uploader)
+    public function updateAvatar(AvatarRequest $request, ImageUploadHandler $uploader)
     {
         $path = '';
-        if ($request->file('avatar')) {
-            $result = $uploader->save($request->file('avatar'), 'avatars', 1);
+        if ($request->avatar) {
+            $result = $uploader->save($request->avatar, 'avatars', Auth::user()->id, 400);
             if ($result) {
                 $path = $result['path'];
             }

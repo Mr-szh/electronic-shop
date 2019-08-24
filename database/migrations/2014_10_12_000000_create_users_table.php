@@ -24,6 +24,12 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             // 密码
             $table->string('password');
+            // 性别
+            $table->enum('sex', ['', '男', '女'])->nullable()->default('');
+            // 生日
+            $table->date('birthday')->nullable();
+            // 头像
+            $table->string('avatar')->nullable();
             // 用于记住密码
             $table->rememberToken();
             // 时间戳,操作对应数据表的 created_at, updated_at 字段
