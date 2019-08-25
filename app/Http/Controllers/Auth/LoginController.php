@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Cookie;
 
 class LoginController extends Controller
 {
@@ -21,11 +23,14 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
+     * 成功之后的跳转路径
      *
      * @var string
      */
     protected $redirectTo = '/';
+
+    // 最多尝试次数，防暴力破解
+    protected $maxAttempts = 3;
 
     /**
      * Create a new controller instance.

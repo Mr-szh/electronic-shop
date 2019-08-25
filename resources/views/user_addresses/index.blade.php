@@ -16,7 +16,7 @@
                             <th>收货人</th>
                             <th>地址</th>
                             <th>邮编</th>
-                            <th>电话</th>
+                            <th>联系电话</th>
                             <th>操作</th>
                         </tr>
                     </thead>

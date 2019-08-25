@@ -26,8 +26,8 @@ class UserAddressRequest extends Request
             'district' => '地区',
             'address' => '详细地址',
             'zip' => '邮编',
-            'contact_name' => '姓名',
-            'contact_phone' => '电话',
+            'contact_name' => '收货人',
+            'contact_phone' => '联系电话',
         ];
     }
 }

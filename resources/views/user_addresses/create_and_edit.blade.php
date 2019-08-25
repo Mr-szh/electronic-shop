@@ -82,13 +82,13 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-form-label text-md-right col-sm-2">姓名</label>
+                                <label class="col-form-label text-md-right col-sm-2">收货人</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" name="contact_name" value="{{ old('contact_name', $address->contact_name) }}">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-form-label text-md-right col-sm-2">电话</label>
+                                <label class="col-form-label text-md-right col-sm-2">联系电话</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" name="contact_phone" value="{{ old('contact_phone', $address->contact_phone) }}">
                                 </div>
