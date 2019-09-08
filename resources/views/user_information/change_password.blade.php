@@ -34,11 +34,11 @@
                         </div>
                         <div class="single-input-item">
                             新密码：
-                            <input type="text" name="password" placeholder="请输入您的新密码" />
+                            <input type="password" name="password" placeholder="请输入您的新密码" />
                         </div>
                         <div class="single-input-item">
                             确认新密码：
-                            <input type="text" name="password_confirmation" placeholder="再次输入您的新密码" />
+                            <input type="password" name="password_confirmation" placeholder="再次输入您的新密码" />
                         </div>
                         <div class="single-input-item">
                             <button class="btn btn-reset">重置</button>
@@ -63,9 +63,7 @@
                     password: $("input[name='password']").val(),
                     password_confirmation: $("input[name='password_confirmation']").val(),
                 }).then(function() {
-                swal('密码更改成功', '', 'success').then(function() {
-                    location.reload();
-                });
+                swal('密码更改成功', '', 'success');
             }, function(error) {
                 $("input").removeClass('dangerous');
                 if (error.response.data.errors.oldPassword) {

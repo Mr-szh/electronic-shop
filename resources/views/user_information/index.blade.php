@@ -82,10 +82,8 @@
             var src = document.getElementById('show').src;
             document.getElementById('show').setAttribute('old-data', src);
             // 获取FileList的第一个元素
-            // alert(document.getElementById('show').src);
             var file = document.getElementById('pop_file').files[0];
             var img_src = window.URL.createObjectURL(file);
-            // alert(img_src);
             document.getElementById('show').src = img_src;
         });
 
@@ -98,10 +96,11 @@
                 name: $("input[name='name']").val(),
                 sex: $('#showSex').find("option:selected").val(),
                 birthday: $("input[name='birthday']").val(),
-            }).then(function() { // 请求成功会执行这个回调
+            }).then(function(res) { // 请求成功会执行这个回调
                 swal('修改成功', '', 'success').then(function () {
                     // 重新刷新页面
-                    location.reload();
+                    // location.reload();
+                    $('#user-name').text(res.data);
                 });
             }, function(error) { 
                 // 请求失败会执行这个回调
@@ -134,9 +133,11 @@
             var data = new FormData();
             data.append('avatar', file);
 
-            axios.post('{{ route('user_information.updateAvatar') }}', data).then(function() { // 请求成功会执行这个回调
+            axios.post('{{ route('user_information.updateAvatar') }}', data).then(function(res) { // 请求成功会执行这个回调
                 swal('上传成功', '', 'success').then(function () {
-                    location.reload();
+                    // location.reload();
+                    // console.log(res.data);
+                    $('#avatar').attr('src', res.data);
                 });
             }, function(error) { 
                 if (error.response.data.errors.avatar) {

@@ -32,14 +32,14 @@ class UserController extends Controller
         Auth::user()->name = $name;
         Auth::user()->birthday = $birthday;
         Auth::user()->sex = $sex;
-        // var_dump($sex);
 
         Auth::user()->save();
 
-        return [];
+        $name = Auth::user()->name;
+        return $name;
     }
 
-    public function change()
+    public function change(Request $request)
     {
         return view('user_information.change_password', ['user' => Auth::user()]);
     }
@@ -68,6 +68,7 @@ class UserController extends Controller
         Auth::user()->avatar = $path;
         Auth::user()->save();
         
-        return view('user_information.index', ['user' => Auth::user()]);
+        $avatar = Auth::user()->avatar;
+        return $avatar;
     }
 }

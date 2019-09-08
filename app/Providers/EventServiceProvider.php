@@ -14,14 +14,9 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    // protected $listen = [
-    //     Registered::class => [
-    //         SendEmailVerificationNotification::class,
-    //     ],
-    // ];
     protected $listen = [
-        'Illuminate\Auth\Events\Login' => [
-            'App\Listeners\SetCookieListener',
+        Registered::class => [
+            SendEmailVerificationNotification::class,
         ],
     ];
 

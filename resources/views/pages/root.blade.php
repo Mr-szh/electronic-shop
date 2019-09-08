@@ -2,10 +2,9 @@
 @section('title', '首页')
 
 @section('content')
-<h1>这里是首页</h1>
+<h6 id="timer"></h6>
 
 <div id="demo" class="carousel slide" data-ride="carousel">
-
   <!-- 指示符 -->
   <ul class="carousel-indicators">
     <li data-target="#demo" data-slide-to="0" class="active"></li>
@@ -49,3 +48,16 @@
 </div>
 
 @stop
+@section('scriptsAfterJs')
+<script>
+  let timer = document.getElementById("timer")
+
+  function update_time() {
+    timer.innerHTML = "北京时间 " + new Date().toTimeString().split(' ')[0]
+  }
+  update_time()
+  setInterval((e) => {
+    update_time()
+  }, 1000)
+</script>
+@endsection
