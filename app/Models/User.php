@@ -12,7 +12,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * The attributes that are mass assignable.
-     *
+     * 质量可分配的属性
+     * 
      * @var array
      */
     protected $fillable = [
@@ -21,7 +22,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * The attributes that should be hidden for arrays.
-     *
+     * 应该为数组隐藏的属性
+     * 
      * @var array
      */
     protected $hidden = [
@@ -30,7 +32,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * The attributes that should be cast to native types.
-     *
+     * 应该转换为本机类型的属性
+     * 
      * @var array
      */
     protected $casts = [
