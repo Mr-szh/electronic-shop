@@ -56,10 +56,10 @@ class UsersController extends AdminController
             // 去掉默认的id过滤器
             $filter->disableIdFilter();
             
-            $filter->like('name', '请输入用户名');
-            $filter->like('email', '请输入电子邮箱');
-            $filter->in('sex', '请选择性别')->multipleSelect(['0' => '暂无', '1' => '男', '2' => '女']);
-            $filter->between('created_at', '请选择注册时间的区间')->date();
+            $filter->like('name', '用户名')->placeholder('请输入用户名');
+            $filter->like('email', '电子邮箱')->email()->placeholder('请输入电子邮箱');
+            $filter->in('sex', '性别')->multipleSelect(['0' => '暂无', '1' => '男', '2' => '女']);
+            $filter->between('created_at', '注册时间')->date();
 
             $filter->scope('new', '最近注册/修改')
                 ->whereDate('created_at', date('Y-m-d'))
@@ -113,6 +113,24 @@ class UsersController extends AdminController
         $form->image('avatar', __('Avatar'))->default('http://electronic-shop/images/default.jpg');
         $form->text('remember_token', __('Remember token'));
         $form->text('status', __('Status'))->default('1');
+
+        $form->tools(function (Form\Tools $tools) {
+            // 去掉`列表`按钮
+            // $tools->disableList();
+            // 去掉`删除`按钮
+            // $tools->disableDelete();
+            // 去掉`查看`按钮
+            $tools->disableView();
+        });
+
+        $form->footer(function ($footer) {     
+            // 去掉`查看`checkbox
+            $footer->disableViewCheck();
+            // 去掉`继续编辑`checkbox
+            $footer->disableEditingCheck();
+            // 去掉`继续创建`checkbox
+            $footer->disableCreatingCheck();
+        });
 
         return $form;
     }

@@ -44,7 +44,6 @@ class LoginController extends Controller
 
      /**
      * 重写 showLoginForm 方法
-     * @url https://laravel-china.org/topics/16682?#reply73955
      * @param \App\Http\Requests\Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
