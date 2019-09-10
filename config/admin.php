@@ -143,7 +143,7 @@ return [
     'upload' => [
 
         // `config/filesystem.php`中设置的disk
-        'disk' => 'admin',
+        'disk' => 'public',
 
         // image和file类型表单元素的上传目录
         'directory' => [

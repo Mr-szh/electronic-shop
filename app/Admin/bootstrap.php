@@ -22,10 +22,10 @@ use Encore\Admin\Facades\Admin;
 
 Admin::navbar(function (\Encore\Admin\Widgets\Navbar $navbar) {
 
-    $navbar->left('html...');
+    // $navbar->left('html...');
 
     $navbar->right(new \App\Admin\Extensions\Nav\Links());
 
 });
 
-Encore\Admin\Form::forget(['map', 'editor']);
+Encore\Admin\Form::forget(['map']);
