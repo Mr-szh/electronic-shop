@@ -180,7 +180,7 @@ body {
             color: #fff;
             background-color: #222222;
         }
-        
+
         input {
             color: #555555;
             border: 1px solid #ccc;
@@ -199,7 +199,7 @@ body {
         input.dangerous {
             border-color: red;
         }
-        
+
         input.upload {
             margin-bottom: 20px;
         }
@@ -236,7 +236,7 @@ body {
                         margin-top: 5px;
                         font-size: 20px;
                         color: #ff0036;
-                        
+
                         b {
                             font-size: 14px;
                         }
@@ -245,7 +245,7 @@ body {
                     .title {
                         margin-top: 10px;
                         height: 32px;
-                        line-height: 12px;
+                        line-height: 16px;
                         max-height: 32px;
 
                         a {
@@ -270,7 +270,7 @@ body {
                         color: #38b;
                         font-weight: bold;
                     }
-                
+
                     &>div {
 
                         &:first-child {
@@ -285,5 +285,11 @@ body {
                 }
             }
         }
+    }
+
+    .search-form {
+        padding: 0 5px 10px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #eee;
     }
 }

@@ -120,7 +120,7 @@ class ProductsController extends AdminController
     {
         $form = new Form(new Product);
 
-        $form->text('title', '商品名称')->rules('required');
+        $form->text('title', '商品名称')->rules('required|unique:products');
         $form->textarea('description', '商品描述')->rules('required');
         $form->image('image', '封面图片')->rules('required|image');
         $form->radio('on_sale', '是否上架')->options(['1' => '是', '0'=> '否'])->default('0');
