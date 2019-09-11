@@ -2,7 +2,7 @@
     <div class="container">
         <!-- 品牌形象 -->
         <a class="navbar-brand " href="{{ url('/') }}">
-            电子产品商城
+            可定制电脑商城
         </a>
         <!-- data-target，data-toggle(单击显示，单击隐藏) -->
         <!-- aria-expanded表示展开状态，aria-controls表示控制的元素，aria-label表示给当前元素加上的标签描述，aria-hidden表示元素隐藏(不可见)，aria-haspopup表示点击时会出现菜单或是浮动元素 -->
