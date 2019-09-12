@@ -4,7 +4,7 @@
 @section('content')
 <div class="error-container">
     <div class="error">
-        <h2>页面错误</h2>
+        <h1>{{ $error }}</h1>
         <h3>{{ $msg }}</h3>
         <button type="button" class="btn btn-info" onclick="history.go(-1)">返回上一页</button>
     </div>

@@ -13,7 +13,7 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        //
+        InvalidRequestException::class,
     ];
 
     /**
@@ -44,16 +44,6 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return \Illuminate\Http\Response
      */
-    // public function render($request, Exception $exception)
-    // {
-    //     if ($this->isHttpException($exception)) {
-    //         if ($exception->getStatusCode() == 404) {
-    //             return response()->view('errors.' . '404', [], 404);
-    //         }
-    //     }
-
-    //     return parent::render($request, $exception);
-    // }
     public function render($request, Exception $exception)
     {
         if ($this->isHttpException($exception)) {
@@ -62,13 +52,13 @@ class Handler extends ExceptionHandler
 
             if ($exception->getStatusCode() == 404) {
                 $msg = '页面找不到！';
-                return response()->view('pages.error', ['error' => $error, 'msg' => $msg], 404);
+                return response()->view('pages.error-default', ['error' => $error, 'msg' => $msg], 404);
             } else if ($exception->getStatusCode() == 405) {
                 $msg = '页面错误！';
-                return response()->view('pages.error', ['error' => $error, 'msg' => $msg], 405);
+                return response()->view('pages.error-default', ['error' => $error, 'msg' => $msg], 405);
             }
 
-            return response()->view('pages.error', ['error' => $error, 'msg' => $msg]);
+            return response()->view('pages.error-default', ['error' => $error, 'msg' => $msg]);
         }
 
         return parent::render($request, $exception);
