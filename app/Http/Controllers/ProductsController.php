@@ -96,4 +96,21 @@ class ProductsController extends Controller
 
         return [];
     }
+
+    public function favorites(Request $request)
+    {
+        $products = $request->user()->favoriteProducts()->paginate(12);
+
+        return view('products.favorites', ['products' => $products]);
+    }
+
+    public function disfavors(Request $request)
+    {
+        $user = $request->user();
+        $product_id = $request->input('product_id');
+        // detach() 方法用于取消多对多的关联
+        $user->favoriteProducts()->detach($product_id);
+
+        return [];
+    }
 }

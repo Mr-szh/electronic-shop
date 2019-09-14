@@ -64,6 +64,7 @@
 @section('scriptsAfterJs')
 <script>
     $(document).ready(function() {
+        // 这个属性来启用 Bootstrap 的工具提示来美化样式
         $('[data-toggle="tooltip"]').tooltip({
             trigger: 'hover'
         });
@@ -78,10 +79,8 @@
             axios.post('{{ route('products.favor', ['product' => $product->id]) }}').then(function () {
                 swal('收藏成功', '', 'success').then(function () {
                     location.reload();
-                    // $('#favor').attr('class', 'btn btn-danger btn-disfavor');
-                    // $('#favor').text('取消收藏');
                 });
-            }, function(error) { // 请求失败会执行这个回调
+            }, function(error) {
                 // 返回码 401 代表没登录
                 if (error.response && error.response.status === 401) {
                     swal('请先登录', '', 'error');
@@ -98,8 +97,6 @@
             axios.delete('{{ route('products.disfavor', ['product' => $product->id]) }}').then(function () {
                 swal('取消收藏成功', '', 'success').then(function () {
                     location.reload();
-                    // $('#favor').attr('class', 'btn btn-success btn-favor');
-                    // $('#favor').text('❤ 收藏');
                 });
             });
         });
