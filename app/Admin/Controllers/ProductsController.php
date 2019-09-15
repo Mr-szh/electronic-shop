@@ -31,6 +31,7 @@ class ProductsController extends AdminController
         $grid->column('title', '商品名称');
         // $grid->column('description', __('Description'));
         // $grid->column('image', __('Image'));
+        // $grid->column('images', __('Images'));
         $grid->column('on_sale', '是否上架')->display(function ($value) {
             return $value ? '是' : '否';
         });
@@ -100,6 +101,7 @@ class ProductsController extends AdminController
         $show->field('title', __('Title'));
         $show->field('description', __('Description'));
         $show->field('image', __('Image'));
+        $show->field('images', __('Images'));
         $show->field('on_sale', __('On sale'));
         $show->field('rating', __('Rating'));
         $show->field('sold_count', __('Sold count'));
@@ -120,22 +122,27 @@ class ProductsController extends AdminController
     {
         $form = new Form(new Product);
 
-        $form->text('title', '商品名称')->rules('required')->creationRules('required|unique:products');
-        $form->textarea('description', '商品描述')->rules('required');
-        $form->image('image', '封面图片')->rules('required|image');
-        $form->radio('on_sale', '是否上架')->options(['1' => '是', '0'=> '否'])->default('0');
+        $form->tab('商品基本信息', function($form) {
+            $form->text('title', '商品名称')->rules('required')->creationRules('required|unique:products');
+            $form->textarea('description', '产品参数')->rules('required')->help('产品参数用逗号(" , ")分隔开');
+            $form->image('image', '封面图片')->rules('required|image')->move('cover');
+            $form->radio('on_sale', '是否上架')->options(['1' => '是', '0'=> '否'])->default('0');
+        })->tab('商品详情图', function($form) {
+            $form->multipleImage('images', '详情图')->rules('image')->removable()->sortable()->move('details/'.time());
+        })->tab('商品SKU', function($form) {
+            // 直接添加一对多的关联模型
+            $form->hasMany('skus', 'SKU 列表', function (Form\NestedForm $form) {
+                $form->text('title', 'SKU 名称')->rules('required');
+                $form->text('description', 'SKU 描述')->rules('required');
+                $form->text('price', '单价')->rules('required|numeric|min:0.01');
+                $form->text('stock', '剩余库存')->rules('required|integer|min:0');
+            });
+        });
+        
         // $form->decimal('rating', __('Rating'))->default(5.00);
         // $form->number('sold_count', __('Sold count'));
         // $form->number('review_count', __('Review count'));
         // $form->decimal('price', __('Price'));
-
-        // 直接添加一对多的关联模型
-        $form->hasMany('skus', 'SKU 列表', function (Form\NestedForm $form) {
-            $form->text('title', 'SKU 名称')->rules('required');
-            $form->text('description', 'SKU 描述')->rules('required');
-            $form->text('price', '单价')->rules('required|numeric|min:0.01');
-            $form->text('stock', '剩余库存')->rules('required|integer|min:0');
-        });
 
         $form->tools(function (Form\Tools $tools) {
             // 去掉`删除`按钮

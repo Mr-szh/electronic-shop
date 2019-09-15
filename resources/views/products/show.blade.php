@@ -50,7 +50,20 @@
                     </ul>
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="product-detail-tab">
-                            {!! $product->description !!}
+                            <!-- <div>{!! $product->description !!}</div> -->
+                            <h6>产品参数:</h6>
+                            <ul class="description">
+                                @foreach($description as $key => $value)
+                                <li>{!! $value !!}</li>
+                                @endforeach
+                            </ul>
+                            <div>
+                                @if($product->images)
+                                    @foreach($product->images as $img)
+                                    <img class="cover-min" src="{{ URL::asset('/upload/'.$img) }}" alt="">
+                                    @endforeach 
+                                @endif
+                            </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="product-reviews-tab">
                         </div>

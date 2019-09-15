@@ -21,6 +21,8 @@ class CreateProductsTable extends Migration
             $table->text('description');
             // 商品封面图片
             $table->string('image');
+            // 商品详情图片
+            $table->string('images');
             // 商品是否在售卖
             $table->boolean('on_sale')->default(true);
             // 商品平均评分

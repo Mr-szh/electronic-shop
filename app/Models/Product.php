@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 class Product extends Model
 {
     protected $fillable = [
-        'title', 'description', 'image', 'on_sale',
+        'title', 'description', 'image', 'images', 'on_sale',
         'rating', 'sold_count', 'review_count', 'price'
     ];
 
@@ -31,5 +31,24 @@ class Product extends Model
             return $this->attributes['image'];
         }
         return \Storage::disk('public')->url($this->attributes['image']);
+    }
+
+    public function getImagesUrlAttribute()
+    {
+        // 如果 image 字段本身就已经是完整的 url 就直接返回
+        if (Str::startsWith($this->attributes['images'], ['http://', 'https://'])) {
+            return $this->attributes['images'];
+        }
+        return \Storage::disk('public')->url($this->attributes['images']);
+    }
+
+    public function getImagesAttribute($value)
+    {
+        return explode(',', $value);
+    }
+
+    public function setImagesAttribute($value)
+    {
+        $this->attributes['images'] = implode(',', $value);
     }
 }
