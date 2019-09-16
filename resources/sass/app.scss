@@ -10,6 +10,8 @@
 @import '~@fortawesome/fontawesome-free/scss/solid';
 @import '~@fortawesome/fontawesome-free/scss/brands';
 
+@import "~@fortawesome/fontawesome-free/css/all.css";
+
 /* universal */
 
 body {
@@ -210,7 +212,8 @@ body {
     }
 }
 
-.products-index-page, .products-favorites-page {
+.products-index-page,
+.products-favorites-page {
     .pagination {
         margin-right: 5px;
     }
@@ -531,7 +534,7 @@ body {
     .pokeup {
         transition: all .3s ease;
     }
-    
+
     .pokeup:hover {
         transform: translateY(-10px);
         transition: .3s ease;
@@ -541,14 +544,14 @@ body {
         width: 400px;
         padding: 40px;
         text-align: center;
-    
+
         h1 {
             font-size: 125px;
             padding: 0;
             margin: 0;
             font-weight: 700;
         }
-    
+
         h2 {
             margin: -30px 0 0 0;
             padding: 0px;
@@ -556,76 +559,130 @@ body {
             letter-spacing: 12px;
         }
     }
-    
+
     .perspec {
         perspective: 1000px;
     }
-    
+
     .writeLine {
         animation: writeLine .4s linear forwards;
     }
-    
+
     .explode {
         animation: explode .5s ease-in-out forwards;
     }
-    
+
     .card {
         animation: tiltcard .5s ease-in-out 1s forwards;
         position: absolute;
     }
-    
+
     @keyframes tiltcard {
         0% {
             transform: rotateY(0deg);
         }
-    
+
         100% {
             transform: rotateY(-30deg);
         }
     }
-    
+
     @keyframes explode {
         0% {
             transform: translate(0, 0) scale(1);
         }
-    
+
         100% {
             transform: translate(var(--spreaddist), var(--vertdist)) scale(var(--scaledist));
         }
     }
-    
+
     @keyframes writeLine {
         0% {
             width: 0;
         }
-    
+
         100% {
             width: var(--linelength);
         }
     }
-    
+
     @media screen and (max-width: 1000px) {
         .error-container {
             transform: scale(.85);
         }
     }
-    
+
     @media screen and (max-width: 850px) {
         .error-container {
             transform: scale(.75);
         }
     }
-    
+
     @media screen and (max-width: 775px) {
         .error-container {
             flex-wrap: wrap-reverse;
             align-items: inherit;
         }
     }
-    
+
     @media screen and (max-width: 370px) {
         .error-container {
             transform: scale(.6);
+        }
+    }
+}
+
+.cart-index-page {
+    .product_list {
+        .preview {
+            img {
+                max-width: 80px;
+                max-height: 80px;
+            }
+
+            margin-right: 20px;
+        }
+
+        .product_info {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            font-size: 12px;
+
+            .product_title,
+            .sku_title,
+            .warning {
+                display: block;
+            }
+
+            .product_title a {
+                color: #3c3c3c;
+                font-size: 14px;
+            }
+
+            .not_on_sale {
+
+                .product_title,
+                .sku_title {
+                    text-decoration: line-through;
+                }
+
+                .warning {
+                    color: red;
+                }
+            }
+        }
+
+        .price {
+            font-size: 12px;
+            font-weight: 700;
+            color: #3c3c3c;
+        }
+
+        input.amount {
+            width: 60px;
+            border-radius: 0 !important;
         }
     }
 }

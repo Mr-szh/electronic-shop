@@ -582,9 +582,9 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@fortawesome/fontawesome-free@^5.10.1":
-  version "5.10.1"
-  resolved "https://registry.npm.taobao.org/@fortawesome/fontawesome-free/download/@fortawesome/fontawesome-free-5.10.1.tgz#dec28ee02c3fc51da46d53ce4da9d5787312fbd7"
+"@fortawesome/fontawesome-free@^5.10.2":
+  version "5.10.2"
+  resolved "https://registry.npm.taobao.org/@fortawesome/fontawesome-free/download/@fortawesome/fontawesome-free-5.10.2.tgz#27e02da1e34b50c9869179d364fb46627b521130"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
