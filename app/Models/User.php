@@ -12,7 +12,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * The attributes that are mass assignable.
-     * 质量可分配的属性
+     * 可分配的属性
      * 
      * @var array
      */
@@ -42,6 +42,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function addresses()
     {
+        // 一对多关系
         return $this->hasMany(UserAddress::class);
     }
 
@@ -55,5 +56,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Product::class, 'user_favorite_products')
             ->withTimestamps()
             ->orderBy('user_favorite_products.created_at', 'desc');
+    }
+
+    public function cartItems()
+    {
+        // 一对多关系
+        return $this->hasMany(CartItem::class);
     }
 }
