@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-static-top">
+<nav class="navbar navbar-expand-lg navbar-light navbar-static-top site-header sticky-top py-1" style="background-color:rgba(0,0,0,0);">
     <div class="container">
         <!-- 品牌形象 -->
         <a class="navbar-brand " href="{{ url('/') }}">
@@ -25,7 +25,12 @@
                 <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">注册</a></li>
                 @else
                 <li class="nav-item">
-                    <a class="nav-link mt-1" href="{{ route('cart.index') }}"><i class="fa fa-shopping-cart"></i></a>
+                    <a class="nav-link mt-1" href="{{ route('cart.index') }}">
+                        <i class="fa fa-shopping-cart"></i>
+                        @if(Auth::user()->cartItems()->count() != '0')
+                        <span class="badge badge-success">{{ Auth::user()->cartItems()->count() }}</span>
+                        @endif
+                    </a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

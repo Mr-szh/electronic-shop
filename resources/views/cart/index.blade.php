@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-lg-10 offset-lg-1">
         <div class="card">
-            <div class="card-header">{{Auth::user ()->name }} 的购物车 　　　　共 {{$cartItems->count () }} 件</div>
+            <div class="card-header">{{ Auth::user ()->name }} 的购物车 　　　　共 {{ $cartItems->count () }} 件</div>
             <div class="card-body">
                 <table class="table table-striped">
                     <thead>
@@ -26,7 +26,7 @@
                             <td class="product_info">
                                 <div class="preview">
                                     <a target="_blank" href="{{ route('products.show', [$item->productSku->product_id]) }}">
-                                        <img src="{{ $item->productSku->product->image_url }}">
+                                        <img src="{{ URL::asset('/upload/'.$item->productSku->product->image[0]) }}">
                                     </a>
                                 </div>
                                 <div @if(!$item->productSku->product->on_sale) class="not_on_sale" @endif>

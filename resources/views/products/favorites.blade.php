@@ -32,7 +32,7 @@
                             <div class="top">
                                 <div class="img">
                                     <a href="{{ route('products.show', ['product' => $product->id]) }}">
-                                        <img src="{{ $product->image_url }}" alt="">
+                                        <img src="{{ URL::asset('/upload/'.$product->image[0]) }}" alt="">
                                     </a>
                                 </div>
                                 <div class="price"><b>￥</b>{{ $product->price }}</div>

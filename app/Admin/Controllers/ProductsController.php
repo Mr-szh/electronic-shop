@@ -125,7 +125,8 @@ class ProductsController extends AdminController
         $form->tab('商品基本信息', function($form) {
             $form->text('title', '商品名称')->rules('required')->creationRules('required|unique:products');
             $form->textarea('description', '产品参数')->rules('required')->help('产品参数用逗号(" , ")分隔开');
-            $form->image('image', '封面图片')->rules('required|image')->move('cover');
+            // $form->image('image', '封面图片')->rules('required|image')->move('cover');
+            $form->multipleImage('image', '封面图片')->rules('required|image|max:3')->removable()->sortable()->move('cover');
             $form->radio('on_sale', '是否上架')->options(['1' => '是', '0'=> '否'])->default('0');
         })->tab('商品详情图', function($form) {
             $form->multipleImage('images', '详情图')->rules('image')->removable()->sortable()->move('details/'.time());

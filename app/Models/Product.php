@@ -24,22 +24,32 @@ class Product extends Model
     }
 
     // 修复页面无法显示商品封面图片的问题
-    public function getImageUrlAttribute()
+    // public function getImageUrlAttribute()
+    // {
+    //     // 如果 image 字段本身就已经是完整的 url 就直接返回
+    //     if (Str::startsWith($this->attributes['image'], ['http://', 'https://'])) {
+    //         return $this->attributes['image'];
+    //     }
+    //     return \Storage::disk('public')->url($this->attributes['image']);
+    // }
+
+    // public function getImagesUrlAttribute()
+    // {
+    //     // 如果 image 字段本身就已经是完整的 url 就直接返回
+    //     if (Str::startsWith($this->attributes['images'], ['http://', 'https://'])) {
+    //         return $this->attributes['images'];
+    //     }
+    //     return \Storage::disk('public')->url($this->attributes['images']);
+    // }
+
+    public function getImageAttribute($value)
     {
-        // 如果 image 字段本身就已经是完整的 url 就直接返回
-        if (Str::startsWith($this->attributes['image'], ['http://', 'https://'])) {
-            return $this->attributes['image'];
-        }
-        return \Storage::disk('public')->url($this->attributes['image']);
+        return explode(',', $value);
     }
 
-    public function getImagesUrlAttribute()
+    public function setImageAttribute($value)
     {
-        // 如果 image 字段本身就已经是完整的 url 就直接返回
-        if (Str::startsWith($this->attributes['images'], ['http://', 'https://'])) {
-            return $this->attributes['images'];
-        }
-        return \Storage::disk('public')->url($this->attributes['images']);
+        $this->attributes['image'] = implode(',', $value);
     }
 
     public function getImagesAttribute($value)

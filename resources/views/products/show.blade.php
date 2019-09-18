@@ -8,7 +8,15 @@
             <div class="card-body product-info">
                 <div class="row">
                     <div class="col-5">
-                        <img class="cover" src="{{ $product->image_url }}" alt="">
+                        <!-- <img class="cover" src="{{ URL::asset('/upload/'.$product->image[0]) }}" alt=""> -->
+                        <div id="bigImg" class="active">
+                            <img src="{{ URL::asset('/upload/'.$product->image[0]) }}" alt="" width="100%">
+                        </div>
+                        <div class="slider-1">
+                            @foreach($product->image as $image)
+                                <div class="li"><img src="{{ URL::asset('/upload/'.$image) }}" alt=""></div>
+                            @endforeach
+                        </div>
                     </div>
                     <div class="col-7">
                         <div class="title">{{ $product->title }}</div>
@@ -140,6 +148,64 @@
                 }
             })
         });
+
+        var bigImg = document.getElementById('bigImg');
+        // 该选择器类似于css选择器
+        var ul = document.querySelector('div.slider-1');
+        var lis = document.querySelectorAll('div.li');
+
+        var allPage = lis.length;
+        var page = 0;
+
+        var timer = null;
+
+        for (var i = 0; i < allPage; i++) {
+            lis[i].index = i;
+
+            lis[i].onclick = function () {
+                page = this.index;
+
+                slider();
+            }
+        }
+
+        function slider() {
+            bigImg.style.animation = "action 0.9s";
+
+            bigImg.getElementsByTagName('img')[0].src = lis[page].getElementsByTagName('img')[0].src;
+
+            setTimeout(function () {
+                bigImg.style.animation = "";
+            }, 900);
+
+            for (var i = 0; i < lis.length; i++) {
+                lis[i].style.opacity = 0.7;
+                if (i == page) {
+                    lis[i].style.opacity = 1;
+                }
+            }
+        }
+
+        ul.onmouseover = function () {
+            clearInterval(timer);
+            timer = null;
+        }
+
+        ul.onmouseout = function () {
+            lunbo();
+        }
+
+        function lunbo() {
+            timer = setInterval(function () {
+                page++;
+                if (page == allPage) {
+                    page = 0;
+                }
+                slider();
+            }, 1500);
+        }
+
+        lunbo();
     });
 </script>
 @endsection
