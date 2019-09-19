@@ -23,6 +23,11 @@ class Product extends Model
         return $this->hasMany(ProductSku::class);
     }
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     // 修复页面无法显示商品封面图片的问题
     // public function getImageUrlAttribute()
     // {
