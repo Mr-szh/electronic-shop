@@ -6,7 +6,8 @@
     <div class="col-lg-10 offset-lg-1">
         <div class="card">
             <div class="card-header">
-                {{Auth::user ()->name }} 的收藏 　　　　共 {{$products->count () }} 件
+                {{Auth::user ()->name }} 的收藏
+                <span class="float-right">共 {{ $products->count () }} 件</span>
             </div>
             <div class="card-body">
                 <div class="row products-list">

@@ -5,7 +5,10 @@
 <div class="row">
     <div class="col-lg-10 offset-lg-1">
         <div class="card">
-            <div class="card-header">{{ Auth::user ()->name }} 的购物车 　　　　共 {{ $cartItems->count () }} 件</div>
+            <div class="card-header">
+                {{ Auth::user ()->name }} 的购物车
+                <span class="float-right">共 {{ $cartItems->count () }} 件</span>
+            </div>
             <div class="card-body">
                 <table class="table table-striped">
                     <thead>
