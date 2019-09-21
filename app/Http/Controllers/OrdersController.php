@@ -8,6 +8,7 @@ use App\Models\UserAddress;
 use App\Models\Order;
 use Carbon\Carbon;
 use App\Exceptions\InvalidRequestException;
+use App\Jobs\CloseOrder;
 
 class OrdersController extends Controller
 {
@@ -65,6 +66,9 @@ class OrdersController extends Controller
 
             return $order;
         });
+
+        // 第二个参数延迟时间从配置文件中读取
+        $this->dispatch(new CloseOrder($order, config('app.order_ttl')));
 
         return $order;
     }
