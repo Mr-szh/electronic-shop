@@ -128,7 +128,15 @@
                 sku_id: $('label.active input[name=skus]').val(),
                 amount: $('.cart_amount input').val(),
             }).then(function () {
-                swal('加入购物车成功', '', 'success');
+                swal('加入购物车成功', '', 'success').then(function () {
+                    var count = parseInt($('.badge-success').text());
+                    if (isNaN(count)){ 
+                        $('.badge-success').text('1');
+                    } else {
+                        count = count + 1;
+                        $('.badge-success').text(count);
+                    }
+                });
             }, function (error) { // 请求失败执行此回调
                 if (error.response.status === 401) {
                     swal('请先登录', '', 'error');

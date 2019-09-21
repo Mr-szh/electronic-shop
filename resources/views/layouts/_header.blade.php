@@ -27,9 +27,11 @@
                 <li class="nav-item">
                     <a class="nav-link mt-1" href="{{ route('cart.index') }}">
                         <i class="fa fa-shopping-cart"></i>
+                        <span class="badge badge-success">
                         @if(Auth::user()->cartItems()->count() != '0')
-                        <span class="badge badge-success">{{ Auth::user()->cartItems()->count() }}</span>
+                            {{ Auth::user()->cartItems()->count() }}
                         @endif
+                        </span>
                     </a>
                 </li>
                 <li class="nav-item dropdown">
