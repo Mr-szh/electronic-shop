@@ -25,6 +25,17 @@ class OrdersController extends Controller
         return view('orders.index', ['orders' => $orders]);
     }
     
+    public function show(Order $order)
+    {
+        /* 延迟预加载
+         * load()：在已经查询出来的模型上调用
+         * with()：在 ORM 查询构造器上调用
+         */
+        $this->authorize('own', $order);
+
+        return view('orders.show', ['order' => $order->load(['items.productSku', 'items.product'])]);
+    }
+
     public function store(OrderRequest $request)
     {
         $user  = $request->user();

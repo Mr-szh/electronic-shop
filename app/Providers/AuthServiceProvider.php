@@ -25,6 +25,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        // 模型策略的自动加载逻辑
         // 使用 Gate::guessPolicyNamesUsing 方法来自定义策略文件的寻找逻辑
         Gate::guessPolicyNamesUsing(function ($class) {
             // class_basename 是 Laravel 提供的一个辅助函数，可以获取类的简短名称
