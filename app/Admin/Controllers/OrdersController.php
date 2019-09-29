@@ -12,6 +12,8 @@ use Encore\Admin\Show;
 use Encore\Admin\Layout\Content;
 use Illuminate\Http\Request;
 use App\Exceptions\InvalidRequestException;
+use App\Jobs\AutoReceive;
+use App\Jobs\CloseOrder;
 
 class OrdersController extends Controller
 {
@@ -194,6 +196,8 @@ class OrdersController extends Controller
             'ship_data' => $data, 
         ]);
 
+        // 加入三十天后自动收货的逻辑
+        $this->dispatch(new AutoReceive($order,config('app.auto_receive_ttl')));
         // 返回上一页
         return redirect()->back();
     }
