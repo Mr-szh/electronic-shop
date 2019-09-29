@@ -11,8 +11,8 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use App\Models\Order;
 
-// 支付成功事件
-class OrderPaid
+// 更新商品评分
+class OrderReviewed
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
