@@ -75,6 +75,23 @@
                                         @endif
                                     </tr>
                                     @endforeach
+                                    @if($order->paid_at)
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="6" style="font-size:15px;">
+                                                物流状态：
+                                                <!-- {{ $order->ship_status }} -->
+                                                @if($order->ship_status === \App\Models\Order::SHIP_STATUS_PENDING)
+                                                    未发货
+                                                @elseif($order->ship_status === \App\Models\Order::SHIP_STATUS_DELIVERED)
+                                                    已发货
+                                                @else
+                                                    已收货
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                    @endif
                                 </table>
                             </div>
                         </div>
