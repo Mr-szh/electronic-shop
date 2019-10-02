@@ -75,7 +75,7 @@
                                         @endif
                                     </tr>
                                     @endforeach
-                                    @if($order->paid_at)
+                                    @if($order->paid_at && !$order->refund_status === \App\Models\Order::REFUND_STATUS_SUCCESS)
                                     <tfoot>
                                         <tr>
                                             <td colspan="6" style="font-size:15px;">
