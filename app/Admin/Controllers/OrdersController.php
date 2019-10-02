@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Exceptions\InvalidRequestException;
 use App\Jobs\AutoReceive;
 use App\Jobs\CloseOrder;
+use App\Http\Requests\Admin\HandleRefundRequest;
 
 class OrdersController extends Controller
 {
@@ -200,5 +201,27 @@ class OrdersController extends Controller
         $this->dispatch(new AutoReceive($order,config('app.auto_receive_ttl')));
         // 返回上一页
         return redirect()->back();
+    }
+
+    public function handleRefund(Order $order, HandleRefundRequest $request)
+    {
+        if ($order->refund_status !== Order::REFUND_STATUS_APPLIED) {
+            throw new InvalidRequestException('订单状态有误');
+        }
+
+        if ($request->input('agree')) {
+            // 同意退款的逻辑这里先留空
+            // todo
+        } else {
+            $extra = $order->extra ?: [];
+            $extra['refund_disagree_reason'] = $request->input('reason');
+
+            $order->update([
+                'refund_status' => Order::REFUND_STATUS_PENDING,
+                'extra' => $extra,
+            ]);
+        }
+
+        return $order;
     }
 }

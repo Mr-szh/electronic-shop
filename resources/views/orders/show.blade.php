@@ -21,29 +21,31 @@
                             <th class="text-right item-amount">小计</th>
                         </tr>
                     </thead>
-                    @foreach($order->items as $index => $item)
-                    <tr>
-                        <td class="product-info">
-                            <div class="preview">
-                                <a target="_blank" href="{{ route('products.show', [$item->product_id]) }}">
-                                    <img src="{{ URL::asset('/upload/'.$item->product->image[0]) }}">
-                                </a>
-                            </div>
-                            <div>
-                                <span class="product-title">
-                                    <a target="_blank" href="{{ route('products.show', [$item->product_id]) }}">{{ $item->product->title }}</a>
-                                </span>
-                                <span class="sku-title">{{ $item->productSku->title }}</span>
-                            </div>
-                        </td>
-                        <td class="sku-price text-center vertical-middle">￥{{ $item->price }}</td>
-                        <td class="sku-amount text-center vertical-middle">{{ $item->amount }}</td>
-                        <td class="item-amount text-right vertical-middle">￥{{ number_format($item->price * $item->amount, 2, '.', '') }}</td>
-                    </tr>
-                    @endforeach
-                    <tr>
-                        <td colspan="4"></td>
-                    </tr>
+                    <tbody>
+                        @foreach($order->items as $index => $item)
+                        <tr>
+                            <td class="product-info">
+                                <div class="preview">
+                                    <a target="_blank" href="{{ route('products.show', [$item->product_id]) }}">
+                                        <img src="{{ URL::asset('/upload/'.$item->product->image[0]) }}">
+                                    </a>
+                                </div>
+                                <div>
+                                    <span class="product-title">
+                                        <a target="_blank" href="{{ route('products.show', [$item->product_id]) }}">{{ $item->product->title }}</a>
+                                    </span>
+                                    <span class="sku-title">{{ $item->productSku->title }}</span>
+                                </div>
+                            </td>
+                            <td class="sku-price text-center vertical-middle">￥{{ $item->price }}</td>
+                            <td class="sku-amount text-center vertical-middle">{{ $item->amount }}</td>
+                            <td class="item-amount text-right vertical-middle">￥{{ number_format($item->price * $item->amount, 2, '.', '') }}</td>
+                        </tr>
+                        @endforeach
+                        <tr>
+                            <td colspan="4"></td>
+                        </tr>
+                    </tbody>
                 </table>
                 <div class="order-bottom">
                     <div class="order-info">
@@ -116,6 +118,12 @@
 
                             </div>
                         </div>
+                        @if(isset($order->extra['refund_disagree_reason']))
+                        <div>
+                            <span>拒绝退款理由：</span>
+                            <div class="value">{{ $order->extra['refund_disagree_reason'] }}</div>
+                        </div>
+                        @endif
 
                         @if(!$order->paid_at && !$order->closed)
                         <div class="payment-buttons">
