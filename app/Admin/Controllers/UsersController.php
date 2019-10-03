@@ -29,7 +29,7 @@ class UsersController extends AdminController
     {
         $grid = new Grid(new User);
 
-        $grid->column('id', 'Id')->sortable();
+        $grid->column('id', 'ID')->sortable();
         $grid->column('avatar', '头像')->image(50, 50);
         $grid->column('name', '用户名');
         $grid->column('email', '电子邮箱');
@@ -79,7 +79,7 @@ class UsersController extends AdminController
     {
         $show = new Show(User::findOrFail($id));
 
-        $show->field('id', __('Id'));
+        $show->field('id', __('ID'));
         $show->field('name', __('Name'));
         $show->field('email', __('Email'));
         $show->field('email_verified_at', __('Email verified at'));
