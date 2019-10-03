@@ -21,7 +21,7 @@
 
 LOCK TABLES `admin_menu` WRITE;
 /*!40000 ALTER TABLE `admin_menu` DISABLE KEYS */;
-INSERT INTO `admin_menu` VALUES (1,0,1,'首页','fa-bar-chart','/',NULL,NULL,'2019-09-01 15:06:21'),(2,0,7,'系统管理','fa-tasks',NULL,NULL,NULL,'2019-10-03 12:36:41'),(3,2,8,'管理员','fa-users','auth/users',NULL,NULL,'2019-10-03 12:36:41'),(4,2,9,'角色','fa-user','auth/roles',NULL,NULL,'2019-10-03 12:36:41'),(5,2,10,'权限设置','fa-ban','auth/permissions',NULL,NULL,'2019-10-03 12:36:41'),(6,2,11,'菜单','fa-bars','auth/menu',NULL,NULL,'2019-10-03 12:36:41'),(7,2,12,'操作日志','fa-history','auth/logs',NULL,NULL,'2019-10-03 12:36:41'),(8,0,3,'用户管理','fa-users','/users',NULL,'2019-09-01 23:41:11','2019-10-03 12:36:41'),(9,0,4,'商品管理','fa-cubes','/products',NULL,'2019-09-09 19:13:37','2019-10-03 12:36:41'),(10,0,5,'订单管理','fa-rmb','/orders',NULL,'2019-09-28 20:34:14','2019-10-03 12:36:41'),(11,0,2,'数据报表','fa-calculator','/reports',NULL,'2019-09-30 12:24:57','2019-10-03 12:36:41'),(12,0,6,'优惠券管理','fa-tags','/coupon_codes',NULL,'2019-10-03 12:36:28','2019-10-03 12:36:41');
+INSERT INTO `admin_menu` VALUES (1,0,1,'首页','fa-bar-chart','/',NULL,NULL,'2019-09-01 15:06:21'),(2,0,8,'系统管理','fa-tasks',NULL,NULL,NULL,'2019-10-03 21:56:42'),(3,2,9,'管理员','fa-users','auth/users',NULL,NULL,'2019-10-03 21:56:42'),(4,2,10,'角色','fa-user','auth/roles',NULL,NULL,'2019-10-03 21:56:42'),(5,2,11,'权限设置','fa-ban','auth/permissions',NULL,NULL,'2019-10-03 21:56:42'),(6,2,12,'菜单','fa-bars','auth/menu',NULL,NULL,'2019-10-03 21:56:42'),(7,2,13,'操作日志','fa-history','auth/logs',NULL,NULL,'2019-10-03 21:56:42'),(8,0,3,'用户管理','fa-users','/users',NULL,'2019-09-01 23:41:11','2019-10-03 12:36:41'),(9,0,5,'商品管理','fa-cubes','/products',NULL,'2019-09-09 19:13:37','2019-10-03 21:56:42'),(10,0,6,'订单管理','fa-rmb','/orders',NULL,'2019-09-28 20:34:14','2019-10-03 21:56:42'),(11,0,2,'数据报表','fa-calculator','/reports',NULL,'2019-09-30 12:24:57','2019-10-03 12:36:41'),(12,0,7,'优惠券管理','fa-tags','/coupon_codes',NULL,'2019-10-03 12:36:28','2019-10-03 21:56:42'),(13,0,4,'类目管理','fa-bars','/categories',NULL,'2019-10-03 21:56:30','2019-10-03 21:56:42');
 /*!40000 ALTER TABLE `admin_menu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -103,4 +103,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-03 12:00:59
+-- Dump completed on 2019-10-03 14:31:34

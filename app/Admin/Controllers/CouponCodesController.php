@@ -131,18 +131,13 @@ class CouponCodesController extends AdminController
         $form->radio('enabled', '启用')->options(['1' => '是', '0' => '否']);
 
         $form->tools(function (Form\Tools $tools) {
-            // 去掉`删除`按钮
             $tools->disableDelete();
-            // 去掉`查看`按钮
             $tools->disableView();
         });
 
         $form->footer(function ($footer) {     
-            // 去掉`查看`checkbox
             $footer->disableViewCheck();
-            // 去掉`继续编辑`checkbox
             $footer->disableEditingCheck();
-            // 去掉`继续创建`checkbox
             $footer->disableCreatingCheck();
         });
 
