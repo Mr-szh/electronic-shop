@@ -8,6 +8,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Layout\Content;
+use App\Models\Category;
 
 class ProductsController extends AdminController
 {
@@ -27,11 +28,16 @@ class ProductsController extends AdminController
     {
         $grid = new Grid(new Product);
 
+        $grid->model()->with(['category']);
+
         $grid->column('id', 'ID')->sortable();
         $grid->column('title', '商品名称');
         // $grid->column('description', __('Description'));
         // $grid->column('image', __('Image'));
         // $grid->column('images', __('Images'));
+
+        $grid->column('category.name', '类目');
+
         $grid->column('on_sale', '是否上架')->display(function ($value) {
             return $value ? '是' : '否';
         });
@@ -124,6 +130,14 @@ class ProductsController extends AdminController
 
         $form->tab('商品基本信息', function($form) {
             $form->text('title', '商品名称')->rules('required')->creationRules('required|unique:products');
+
+            $form->select('category_id', '类目')->options(function ($id) {
+                $category = Category::find($id);
+                if ($category) {
+                    return [$category->id => $category->full_name];
+                }
+            })->ajax('/admin/api/categories?is_directory=0');
+
             $form->textarea('description', '产品参数')->rules('required')->help('产品参数用逗号(" , ")分隔开');
             // $form->image('image', '封面图片')->rules('required|image')->move('cover');
             $form->multipleImage('image', '封面图片')->rules('required|image|max:3')->removable()->sortable()->move('cover');

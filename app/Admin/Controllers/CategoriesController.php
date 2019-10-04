@@ -32,7 +32,7 @@ class CategoriesController extends Controller
         $grid->column('id', 'ID')->sortable();
         $grid->column('name', '名称');
         // $grid->column('parent_id', __('Parent id'));
-        $grid->column('is_directory', '是否启用目录')->display(function ($value) {
+        $grid->column('is_directory', '是否拥有子类目')->display(function ($value) {
             return $value ? '是' : '否';
         });
         $grid->column('level', '层级');
@@ -49,7 +49,7 @@ class CategoriesController extends Controller
             $filter->disableIdFilter();
             
             $filter->like('name', '名称')->placeholder('请输入类目名称');
-            $filter->in('is_directory', '是否启用目录')->multipleSelect(['1' => '是', '0' => '否']);
+            $filter->in('is_directory', '是否拥有子类目')->multipleSelect(['1' => '是', '0' => '否']);
             $filter->between('created_at', '创建时间')->date();
             
             $filter->scope('new', '最近创建/修改')
@@ -93,13 +93,13 @@ class CategoriesController extends Controller
         $form->text('name', '类目名称')->rules('required');
 
         if ($isEditing) {
-            $form->display('is_directory', '是否启用目录')->with(function ($value) {
+            $form->display('is_directory', '是否拥有子类目')->with(function ($value) {
                 return $value ? '是' :'否';
             });
 
             $form->display('parent.name', '父类目');
         } else {
-            $form->radio('is_directory', '是否启用目录')
+            $form->radio('is_directory', '是否拥有子类目')
                 ->options(['1' => '是', '0' => '否'])
                 ->default('0')
                 ->rules('required');
@@ -142,7 +142,7 @@ class CategoriesController extends Controller
         // 用户输入的值通过 q 参数获取
         $search = $request->input('q');
         $result = Category::query()
-            ->where('is_directory', true)
+            ->where('is_directory', boolval($request->input('is_directory', true)))
             ->where('name', 'like', '%'.$search.'%')
             ->paginate();
 
