@@ -130,6 +130,7 @@ class ProductsController extends AdminController
 
         $form->tab('商品基本信息', function($form) {
             $form->text('title', '商品名称')->rules('required')->creationRules('required|unique:products');
+            $form->text('long_title', '商品长标题')->rules('required');
 
             $form->select('category_id', '类目')->options(function ($id) {
                 $category = Category::find($id);
