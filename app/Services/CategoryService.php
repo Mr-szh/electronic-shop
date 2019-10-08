@@ -1,12 +1,13 @@
 <?php
+
 namespace App\Services;
 
 use App\Models\Category;
 
 class CategoryService
 {
-    // $parentId 代表要获取子类目的父类目 ID，null 代表获取所有根类目
-    // $allCategories 代表数据库中所有的类目，如果是 null 代表需要从数据库中查询
+    // $parentId 代表要获取父类目 ID，null 代表获取所有根类目
+    // $allCategories 代表所有的类目，需要从数据库中查询
     public function getCategoryTree($parentId = null, $allCategories = null)
     {
         if (is_null($allCategories)) {
@@ -23,6 +24,7 @@ class CategoryService
                     return $data;
                 }
                 
+                // 递归调用本方法，将返回值放入 children 字段中
                 $data['children'] = $this->getCategoryTree($category->id, $allCategories);
 
                 return $data;

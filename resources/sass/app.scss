@@ -1070,3 +1070,11 @@ body {
         width: auto;
     }
 }
+
+.navbar-collapse .nav-style {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.navbar-collapse .nav-style:hover {
+    color: rgba(0, 0, 0, 0.7);
+}

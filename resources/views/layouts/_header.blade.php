@@ -1,9 +1,10 @@
 <nav class="navbar navbar-expand-lg navbar-light navbar-static-top site-header sticky-top py-1" style="background-color:rgba(0,0,0,0);">
     <div class="container">
         <!-- 品牌形象 -->
-        <a class="navbar-brand " href="{{ url('/') }}">
+        <a class="navbar-brand" href="{{ url('/') }}">
             可定制电脑商城
         </a>
+
         <!-- data-target，data-toggle(单击显示，单击隐藏) -->
         <!-- aria-expanded表示展开状态，aria-controls表示控制的元素，aria-label表示给当前元素加上的标签描述，aria-hidden表示元素隐藏(不可见)，aria-haspopup表示点击时会出现菜单或是浮动元素 -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -12,20 +13,35 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- 导航条的左侧 -->
-            <ul class="navbar-nav mr-auto">
+            <a class="nav-link nav-style" href="{{ url('/products') }}">
+                所有商品
+            </a>
+
+            <ul class="navbar-nav">
                 @if(isset($categoryTree))
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="categoryTree">
-                        所有类目 
+                        所有分类 
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="categoryTree">
                         <!-- 遍历 $categoryTree 集合，将集合中的每一项以 $category 变量注入 layouts._category_item 模板中并渲染 -->
+                        <!-- 第一个参数是模板名称，第二个参数是要遍历的数组，第三个参数是遍历的项在模板中的变量名 -->
                         @each('layouts._category_item', $categoryTree, 'category')
                     </ul>
                 </li>
                 @endif
             </ul>
+
+            <a class="nav-link nav-style" href="{{ url('/') }}">
+                关于我们
+            </a>
+            <a class="nav-link nav-style" href="{{ url('/') }}">
+                联系我们
+            </a>
+            <a class="nav-link mr-auto nav-style" href="{{ url('/') }}">
+                社区
+            </a>
 
             <!-- 导航条的右侧 -->
             <ul class="navbar-nav navbar-right">

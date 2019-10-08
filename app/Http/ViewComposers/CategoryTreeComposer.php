@@ -8,7 +8,7 @@ class CategoryTreeComposer
 {
     protected $categoryService;
 
-    // 使用 Laravel 的依赖注入，自动注入我们所需要的 CategoryService 类
+    // 使用依赖注入，自动注入 CategoryService 类
     public function __construct(CategoryService $categoryService)
     {
         $this->categoryService = $categoryService;
