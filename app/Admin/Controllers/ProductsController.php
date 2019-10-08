@@ -138,12 +138,10 @@ class ProductsController extends AdminController
                 }
             })->ajax('/admin/api/categories?is_directory=0');
 
-            $form->textarea('description', '产品参数')->rules('required')->help('产品参数用逗号(" , ")分隔开');
+            $form->textarea('description', '产品参数')->rules('required');
             // $form->image('image', '封面图片')->rules('required|image')->move('cover');
             $form->multipleImage('image', '封面图片')->rules('required|image|max:3')->removable()->sortable()->move('cover');
             $form->radio('on_sale', '是否上架')->options(['1' => '是', '0'=> '否'])->default('0');
-        })->tab('商品详情图', function($form) {
-            $form->multipleImage('images', '详情图')->rules('image')->removable()->sortable()->move('details/'.time());
         })->tab('商品SKU', function($form) {
             // 直接添加一对多的关联模型
             $form->hasMany('skus', 'SKU 列表', function (Form\NestedForm $form) {
@@ -152,6 +150,13 @@ class ProductsController extends AdminController
                 $form->text('price', '单价')->rules('required|numeric|min:0.01');
                 $form->text('stock', '剩余库存')->rules('required|integer|min:0');
             });
+        })->tab('商品属性', function($form) {
+            $form->hasMany('properties', '商品属性', function (Form\NestedForm $form) {
+                $form->text('name', '属性名')->rules('required');
+                $form->text('value', '属性值')->rules('required');
+            });
+        })->tab('商品详情图', function($form) {
+            $form->multipleImage('images', '详情图')->rules('image')->removable()->sortable()->move('details/'.time());
         });
         
         // $form->decimal('rating', __('Rating'))->default(5.00);

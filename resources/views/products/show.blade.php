@@ -58,12 +58,27 @@
                     </ul>
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="product-detail-tab"> 
-                            <h6>产品参数:</h6>
+                            <!-- <h6>产品参数:</h6>
                             <ul class="description">
                                 @foreach($description as $key => $value)
                                 <li>{!! $value !!}</li>
                                 @endforeach
-                            </ul>
+                            </ul> -->
+
+                            <!-- 商品属性开始 -->
+                            <div class="properties-list">
+                                <div class="properties-list-title">产品参数：</div>
+                                <ul class="properties-list-body">
+                                @foreach($product->grouped_properties as $name => $values)
+                                    <li>{{ $name }}：{{ join(' ', $values) }}</li>
+                                @endforeach
+                                </ul>
+                            </div>
+                            <!-- 商品属性结束 -->
+                            <div class="product-description">
+                                {!! $product->description !!}
+                            </div>
+
                             <div>
                                 @if($product->images)
                                     @foreach($product->images as $img)
