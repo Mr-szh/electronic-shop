@@ -9,38 +9,84 @@ use App\Exceptions\InvalidRequestException;
 use App\Models\OrderItem;
 use App\Models\Category;
 use App\Services\CategoryService;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ProductsController extends Controller
 {
-    // 使用 Laravel 的依赖注入，自动创建 $categoryService 对象
-    public function index(Request $request, CategoryService $categoryService)
+    public function index(Request $request)
     {
         // 创建一个查询构造器
-        $builder = Product::query()->where('on_sale', true);
+        // $builder = Product::query()->where('on_sale', true);
 
-        // 判断是否有提交 search 参数，如果有就赋值给 $search 变量
-        // search 参数用来模糊搜索商品
-        if ($search = $request->input('search', '')) {
-            $like = '%'.$search.'%';
-            // 模糊搜索商品标题、商品详情、SKU 标题、SKU描述
-            $builder->where(function ($query) use ($like) {
-                $query->where('title', 'like', $like)
-                    ->orWhere('description', 'like', $like)
-                    ->orWhereHas('skus', function ($query) use ($like) {
-                        $query->where('title', 'like', $like)
-                            ->orWhere('description', 'like', $like);
-                    });
-            });
-        }
+        $page = $request->input('page', 1);
+        $perPage = 12;
+
+        // 构建查询
+        $params = [
+            'index' => 'products',
+            'type' => '_doc',
+            'body'  => [
+                'from' => ($page - 1) * $perPage,
+                'size' => $perPage,
+                'query' => [
+                    'bool' => [
+                        'filter' => [
+                            ['term' => ['on_sale' => true]],
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
         if ($request->input('category_id') && $category = Category::find($request->input('category_id'))) {
             if ($category->is_directory) {
                 // 筛选出该父类目下所有子类目的商品
-                $builder->whereHas('category', function ($query) use ($category) {
-                    $query->where('path', 'like', $category->path.$category->id.'-%');
-                });
+                // $builder->whereHas('category', function ($query) use ($category) {
+                //     $query->where('path', 'like', $category->path.$category->id.'-%');
+                // });
+                $params['body']['query']['bool']['filter'][] = [
+                    // prefix 类似 MySQL 中的 like
+                    'prefix' => ['category_path' => $category->path.$category->id.'-'],
+                ];
             } else {
-                $builder->where('category_id', $category->id);
+                // $builder->where('category_id', $category->id);
+                // term 为精确匹配
+                $params['body']['query']['bool']['filter'][] = ['term' => ['category_id' => $category->id]];
+            }
+        }
+
+        if ($search = $request->input('search', '')) {
+            // $like = '%'.$search.'%';
+            // 模糊搜索商品标题、商品详情、SKU 标题、SKU描述
+            // $builder->where(function ($query) use ($like) {
+            //     $query->where('title', 'like', $like)
+            //         ->orWhere('description', 'like', $like)
+            //         ->orWhereHas('skus', function ($query) use ($like) {
+            //             $query->where('title', 'like', $like)
+            //                 ->orWhere('description', 'like', $like);
+            //         });
+            // });
+
+            // 将搜索词根据空格拆分成数组，并过滤掉空项
+            $keywords = array_filter(explode(' ', $search));
+            $params['body']['query']['bool']['must'] = [];
+
+            // 遍历搜索词数组，分别添加到 must 查询中
+            foreach ($keywords as $keyword) {
+                $params['body']['query']['bool']['must'][] = [
+                    'multi_match' => [
+                        'query' => $keyword,
+                        'fields' => [
+                            'title^2',
+                            'long_title^2',
+                            'category^2',
+                            'description',
+                            'skus_title',
+                            'skus_description',
+                            'properties_value',
+                        ],
+                    ],
+                ];
             }
         }
 
@@ -52,22 +98,34 @@ class ProductsController extends Controller
                 // 如果字符串的开头是这 3 个字符串之一，说明是一个合法的排序值
                 if (in_array($m[1], ['price', 'sold_count', 'rating'])) {
                     // 根据传入的排序值来构造排序参数
-                    $builder->orderBy($m[1], $m[2]);
+                    // $builder->orderBy($m[1], $m[2]);
+                    $params['body']['sort'] = [[$m[1] => $m[2]]];
                 }
             }
         }
-    
-        // paginate() 分页取出数据
-        $products = $builder->paginate(12);
+
+        $result = app('es')->search($params);
+
+        // 通过 collect 函数将返回结果转为集合，并通过集合的 pluck 方法取到返回的商品 ID 数组
+        $productIds = collect($result['hits']['hits'])->pluck('_id')->all();
+        $products = Product::query()
+            ->whereIn('id', $productIds)
+            // orderByRaw 可以让我们用原生的 SQL 来给查询结果排序
+            ->orderByRaw(sprintf("FIND_IN_SET(id, '%s')", join(',', $productIds)))
+            ->get();
+
+        // 返回一个 LengthAwarePaginator 对象
+        $pager = new LengthAwarePaginator($products, $result['hits']['total'], $perPage, $page, [
+            'path' => route('products.index', false),
+        ]);
 
         return view('products.index', [
-            'products' => $products,
+            'products' => $pager,
             'filters'  => [
                 'search' => $search,
                 'order'  => $order,
             ],
             'category' => $category ?? null,
-            'categoryTree' => $categoryService->getCategoryTree(),
         ]);
     }
 
