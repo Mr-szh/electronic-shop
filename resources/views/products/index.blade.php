@@ -126,23 +126,21 @@
         $('.search-form select[name=order]').on('change', function() {
             // 解析当前查询参数
             var searches = parseSearch();
-            // 如果有属性筛选
+
             if (searches['filters']) {
-                // 将属性筛选值放入隐藏字段中
                 $('.search-form input[name=filters]').val(searches['filters']);
             }
             $('.search-form').submit();
         });
     })
 
-    // 定义一个函数，用于解析当前 Url 里的参数，并以 Key-Value 对象形式返回
+    // 解析当前 Url 里的参数，并以 Key-Value 对象形式返回
     function parseSearch() {
         // 初始化一个空对象
         var searches = {};
         // location.search 会返回 Url 中 ? 以及后面的查询参数
         // substr(1) 将 ? 去除，然后以符号 & 分割成数组，然后遍历这个数组
         location.search.substr(1).split('&').forEach(function (str) {
-            // 将字符串以符号 = 分割成数组
             var result = str.split('=');
             // 将数组的第一个值解码之后作为 Key，第二个值解码后作为 Value 放到之前初始化的对象中
             searches[decodeURIComponent(result[0])] = decodeURIComponent(result[1]);
@@ -153,9 +151,8 @@
 
     // 根据 Key-Value 对象构建查询参数
     function buildSearch(searches) {
-        // 初始化字符串
         var query = '?';
-        // 遍历 searches 对象
+
         _.forEach(searches, function (value, key) {
             query += encodeURIComponent(key) + '=' + encodeURIComponent(value) + '&';
         });
@@ -164,16 +161,13 @@
         return query.substr(0, query.length - 1);
     }
 
-    // 将新的 filter 追加到当前的 Url 中
     function appendFilterToQuery(name, value) {
         // 解析当前 Url 的查询参数
         var searches = parseSearch();
-        // 如果已经有了 filters 查询
+
         if (searches['filters']) {
-            // 则在已有的 filters 后追加
             searches['filters'] += '|' + name + ':' + value;
         } else {
-            // 否则初始化 filters
             searches['filters'] = name + ':' + value;
         }
 
@@ -181,7 +175,6 @@
         location.search = buildSearch(searches);
     }
 
-    // 将某个属性 filter 从当前查询中移除
     function removeFilterFromQuery(name) {
         // 解析当前 Url 的查询参数
         var searches = parseSearch();
@@ -190,21 +183,17 @@
             return;
         }
 
-        // 初始化一个空数组
         var filters = [];
-        // 将 filters 字符串拆解
         searches['filters'].split('|').forEach(function (filter) {
-            // 解析出属性名和属性值
             var result = filter.split(':');
-            // 如果当前属性名与要移除的属性名一致，则退出
+
             if (result[0] === name) {
-            return;
+                return;
             }
-            // 否则将这个 filter 放入之前初始化的数组中
+
             filters.push(filter);
         });
 
-        // 重建 filters 查询
         searches['filters'] = filters.join('|');
         // 重新构建查询参数，并触发浏览器跳转
         location.search = buildSearch(searches);
