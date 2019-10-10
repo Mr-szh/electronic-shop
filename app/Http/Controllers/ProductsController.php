@@ -10,6 +10,7 @@ use App\Models\OrderItem;
 use App\Models\Category;
 use App\Services\CategoryService;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\SearchBuilders\ProductSearchBuilder;
 
 class ProductsController extends Controller
 {
@@ -21,38 +22,44 @@ class ProductsController extends Controller
         $page = $request->input('page', 1);
         $perPage = 12;
 
+        // 新建查询构造器对象，设置只搜索上架商品，设置分页
+        $builder = (new ProductSearchBuilder())->onSale()->paginate($perPage, $page);
+
         // 构建查询
-        $params = [
-            'index' => 'products',
-            'type' => '_doc',
-            'body'  => [
-                'from' => ($page - 1) * $perPage,
-                'size' => $perPage,
-                'query' => [
-                    'bool' => [
-                        'filter' => [
-                            ['term' => ['on_sale' => true]],
-                        ],
-                    ],
-                ],
-            ],
-        ];
+        // $params = [
+        //     'index' => 'products',
+        //     'type' => '_doc',
+        //     'body'  => [
+        //         'from' => ($page - 1) * $perPage,
+        //         'size' => $perPage,
+        //         'query' => [
+        //             'bool' => [
+        //                 'filter' => [
+        //                     ['term' => ['on_sale' => true]],
+        //                 ],
+        //             ],
+        //         ],
+        //     ],
+        // ];
 
         if ($request->input('category_id') && $category = Category::find($request->input('category_id'))) {
-            if ($category->is_directory) {
-                // 筛选出该父类目下所有子类目的商品
-                // $builder->whereHas('category', function ($query) use ($category) {
-                //     $query->where('path', 'like', $category->path.$category->id.'-%');
-                // });
-                $params['body']['query']['bool']['filter'][] = [
-                    // prefix 类似 MySQL 中的 like
-                    'prefix' => ['category_path' => $category->path.$category->id.'-'],
-                ];
-            } else {
-                // $builder->where('category_id', $category->id);
-                // term 为精确匹配
-                $params['body']['query']['bool']['filter'][] = ['term' => ['category_id' => $category->id]];
-            }
+            // if ($category->is_directory) {
+            //     // 筛选出该父类目下所有子类目的商品
+            //     // $builder->whereHas('category', function ($query) use ($category) {
+            //     //     $query->where('path', 'like', $category->path.$category->id.'-%');
+            //     // });
+            //     $params['body']['query']['bool']['filter'][] = [
+            //         // prefix 类似 MySQL 中的 like
+            //         'prefix' => ['category_path' => $category->path.$category->id.'-'],
+            //     ];
+            // } else {
+            //     // $builder->where('category_id', $category->id);
+            //     // term 为精确匹配
+            //     $params['body']['query']['bool']['filter'][] = ['term' => ['category_id' => $category->id]];
+            // }
+
+            // 调用查询构造器的类目筛选
+            $builder->category($category);
         }
 
         if ($search = $request->input('search', '')) {
@@ -69,24 +76,78 @@ class ProductsController extends Controller
 
             // 将搜索词根据空格拆分成数组，并过滤掉空项
             $keywords = array_filter(explode(' ', $search));
-            $params['body']['query']['bool']['must'] = [];
+            
+            // $params['body']['query']['bool']['must'] = [];
 
             // 遍历搜索词数组，分别添加到 must 查询中
-            foreach ($keywords as $keyword) {
-                $params['body']['query']['bool']['must'][] = [
-                    'multi_match' => [
-                        'query' => $keyword,
-                        'fields' => [
-                            'title^2',
-                            'long_title^2',
-                            'category^2',
-                            'description',
-                            'skus_title',
-                            'skus_description',
-                            'properties_value',
-                        ],
-                    ],
-                ];
+            // foreach ($keywords as $keyword) {
+            //     $params['body']['query']['bool']['must'][] = [
+            //         'multi_match' => [
+            //             'query' => $keyword,
+            //             'fields' => [
+            //                 'title^3',
+            //                 'long_title^2',
+            //                 'category^2',
+            //                 'description',
+            //                 'skus_title',
+            //                 'skus_description',
+            //                 'properties_value',
+            //             ],
+            //         ],
+            //     ];
+            // }
+
+            $builder->keywords($keywords);
+        }
+
+        // 只有当用户有输入搜索词或者使用了类目筛选的时候才会做聚合
+        if ($search || isset($category)) {
+            // $params['body']['aggs'] = [
+            //     'properties' => [
+            //         'nested' => [
+            //             'path' => 'properties',
+            //         ],
+            //         'aggs' => [
+            //             'properties' => [
+            //                 'terms' => [
+            //                     'field' => 'properties.name',
+            //                 ],
+            //                 'aggs'  => [
+            //                     'value' => [
+            //                         'terms' => [
+            //                             'field' => 'properties.value',
+            //                         ],
+            //                     ],
+            //                 ],
+            //             ],
+            //         ],
+            //     ],
+            // ];
+
+            $builder->aggregateProperties();
+        }
+
+        $propertyFilters = [];
+
+        if ($filterString = $request->input('filters')) {
+            $filterArray = explode('|', $filterString);
+            foreach ($filterArray as $filter) {
+                list($name, $value) = explode(':', $filter);
+                $propertyFilters[$name] = $value;
+
+                // $params['body']['query']['bool']['filter'][] = [
+                //     'nested' => [
+                //         'path' => 'properties',
+                //         'query' => [
+                //             // ['term' => ['properties.name' => $name]],
+                //             // ['term' => ['properties.value' => $value]],
+                //             ['term' => ['properties.search_value' => $filter]], 
+                //         ],
+                //     ],
+                // ];
+
+                // 调用查询构造器的属性筛选
+                $builder->propertyFilter($name, $value);
             }
         }
 
@@ -99,58 +160,18 @@ class ProductsController extends Controller
                 if (in_array($m[1], ['price', 'sold_count', 'rating'])) {
                     // 根据传入的排序值来构造排序参数
                     // $builder->orderBy($m[1], $m[2]);
-                    $params['body']['sort'] = [[$m[1] => $m[2]]];
+                    // $params['body']['sort'] = [[$m[1] => $m[2]]];
+
+                    // 调用查询构造器的排序
+                    $builder->orderBy($m[1], $m[2]);
                 }
             }
         }
 
-        // 只有当用户有输入搜索词或者使用了类目筛选的时候才会做聚合
-        if ($search || isset($category)) {
-            $params['body']['aggs'] = [
-                'properties' => [
-                    'nested' => [
-                        'path' => 'properties',
-                    ],
-                    'aggs' => [
-                        'properties' => [
-                            'terms' => [
-                                'field' => 'properties.name',
-                            ],
-                            'aggs'  => [
-                                'value' => [
-                                    'terms' => [
-                                        'field' => 'properties.value',
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ];
-        }
+        // $result = app('es')->search($params);
 
-        $propertyFilters = [];
-
-        if ($filterString = $request->input('filters')) {
-            $filterArray = explode('|', $filterString);
-            foreach ($filterArray as $filter) {
-                list($name, $value) = explode(':', $filter);
-                $propertyFilters[$name] = $value;
-
-                $params['body']['query']['bool']['filter'][] = [
-                    'nested' => [
-                        'path' => 'properties',
-                        'query' => [
-                            // ['term' => ['properties.name' => $name]],
-                            // ['term' => ['properties.value' => $value]],
-                            ['term' => ['properties.search_value' => $filter]], 
-                        ],
-                    ],
-                ];
-            }
-        }
-
-        $result = app('es')->search($params);
+        // 通过 getParams() 方法取回构造好的查询参数
+        $result = app('es')->search($builder->getParams());
 
         // 通过 collect 函数将返回结果转为集合，并通过集合的 pluck 方法取到返回的商品 ID 数组
         $productIds = collect($result['hits']['hits'])->pluck('_id')->all();
