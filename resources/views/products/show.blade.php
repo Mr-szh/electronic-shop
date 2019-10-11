@@ -58,12 +58,6 @@
                     </ul>
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="product-detail-tab"> 
-                            <!-- <h6>产品参数:</h6>
-                            <ul class="description">
-                                @foreach($description as $key => $value)
-                                <li>{!! $value !!}</li>
-                                @endforeach
-                            </ul> -->
 
                             <!-- 商品属性开始 -->
                             <div class="properties-list">
@@ -113,6 +107,35 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- 推荐商品 -->
+                @if(count($similar) > 0)
+                <div class="similar-products">
+                    <div class="title">猜你喜欢</div>
+                    <div class="row products-list">
+                        @foreach($similar as $p)
+                        <div class="col-3 product-item">
+                            <div class="product-content">
+                                <div class="top">
+                                    <div class="img">
+                                        <a href="{{ route('products.show', ['product' => $p->id]) }}">
+                                            <img src="{{ URL::asset('/upload/'.$p->image[0]) }}" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="price">
+                                        <b>￥</b>{{ $p->price }}
+                                    </div>
+                                    <div class="title">
+                                    <a href="{{ route('products.show', ['product' => $p->id]) }}">{{ $p->title }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
             </div>
         </div>
     </div>

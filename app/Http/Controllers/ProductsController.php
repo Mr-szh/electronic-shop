@@ -11,6 +11,7 @@ use App\Models\Category;
 use App\Services\CategoryService;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\SearchBuilders\ProductSearchBuilder;
+use App\Services\ProductService;
 
 class ProductsController extends Controller
 {
@@ -214,7 +215,8 @@ class ProductsController extends Controller
         ]);
     }
 
-    public function show(Product $product, Request $request)
+    // 利用 Laravel 的自动注入来初始化 ProductService 对象
+    public function show(Product $product, Request $request, ProductService $service)
     {
         // 判断商品是否已经上架，如果没有上架则抛出异常。
         if (!$product->on_sale) {
@@ -239,13 +241,39 @@ class ProductsController extends Controller
             ->limit(10)
             ->get();
         
+        // 创建一个查询构造器，只搜索上架的商品，取搜索结果的前 4 个商品
+        // $builder = (new ProductSearchBuilder())->onSale()->paginate(4, 1);
+
+        // foreach ($product->properties as $property) {
+        //     // 添加到 should 条件中
+        //     $builder->propertyFilter($property->name, $property->value, 'should');
+        // }
+
+        // 设置最少匹配一半的属性
+        // $builder->minShouldMatch(ceil(count($product->properties) / 2));
+        // $params = $builder->getParams();
+        // 同时将当前商品的 ID 排除
+        // $params['body']['query']['bool']['must_not'] = [['term' => ['_id' => $product->id]]];
+        // 实现搜索
+        // $result = app('es')->search($params);
+        // $similarProductIds = collect($result['hits']['hits'])->pluck('_id')->all();
+
+        $similarProductIds = $service->getSimilarProductIds($product, 4);
+
+        // 根据 Elasticsearch 搜索出来的商品 ID 从数据库中读取商品数据
+        $similarProducts = Product::query()
+            ->whereIn('id', $similarProductIds)
+            ->orderByRaw(sprintf("FIND_IN_SET(id, '%s')", join(',', $similarProductIds)))
+            ->get();
+
         // return view('products.show', ['product' => $product, 'favored' => $favored]);
         // return view('products.show', ['product' => $product, 'favored' => $favored, 'description' => $description]);
         return view('products.show', [
             'product' => $product,
             'favored' => $favored,
-            'description' => $description,
-            'reviews' => $reviews
+            // 'description' => $description,
+            'reviews' => $reviews,
+            'similar' => $similarProducts,
         ]);
     }
 
