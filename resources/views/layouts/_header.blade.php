@@ -36,9 +36,6 @@
             <a class="nav-link nav-style" href="{{ url('/') }}">
                 关于我们
             </a>
-            <a class="nav-link nav-style" href="{{ url('/') }}">
-                联系我们
-            </a>
             <a class="nav-link mr-auto nav-style" href="{{ url('/') }}">
                 社区
             </a>

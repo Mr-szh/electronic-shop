@@ -43,24 +43,62 @@ body {
     margin-bottom: 60px;
 }
 
+#app > .container {
+    margin-bottom: 300px;
+}
+
 .footer {
     position: absolute;
     bottom: 0;
     width: 100%;
-    /* Set the fixed height of the footer here */
-    height: 60px;
+    height: 240px;
     background-color: #000;
+    overflow: hidden;
 
     .container {
         padding-right: 15px;
         padding-left: 15px;
 
-        p {
-            margin: 19px 0;
-            color: #c1c1c1;
+        .row {
+            color: white;
+            padding-top: 30px;
+            padding-left: 30px;
+            max-height: 170px;
 
-            a {
-                color: inherit;
+            h5 {
+                margin-bottom: 15px;
+            }
+
+            .footer-item {
+                list-style-type: none;
+
+                i {
+                    margin-right: 5px;
+                }
+
+                a {
+                    color: white;
+                    text-decoration:none;
+                }
+
+                a:hover {
+                    color: #9ABD31;
+                }
+            }
+        }
+
+        .bottom {
+            border-width: 5px;
+            border-top-style: solid;
+            max-height: 23px;
+
+            p {
+                margin: 19px 0;
+                color: #c1c1c1;
+    
+                a {
+                    color: inherit;
+                }
             }
         }
     }
