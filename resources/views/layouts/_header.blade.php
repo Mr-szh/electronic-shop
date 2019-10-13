@@ -33,7 +33,7 @@
                 @endif
             </ul>
 
-            <a class="nav-link nav-style" href="{{ url('/') }}">
+            <a class="nav-link nav-style" href="{{ url('/about') }}">
                 关于我们
             </a>
             <a class="nav-link mr-auto nav-style" href="{{ url('/') }}">
@@ -63,7 +63,7 @@
                         <img src="{{ URL::asset(Auth::user()->avatar) }}" id="avatar" class="img-responsive img-circle" width="30px" height="30px">
                         <span id="user-name">{{ Auth::user()->name }}</span>
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <div class="dropdown-menu"  aria-labelledby="navbarDropdown">
                         <a href="{{ route('user_information.index') }}" class="dropdown-item">个人信息</a>
                         <a href="{{ route('user_addresses.index') }}" class="dropdown-item">收货地址</a>
                         <a href="{{ route('products.index') }}" class="dropdown-item">商品列表</a>

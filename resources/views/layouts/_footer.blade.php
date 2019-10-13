@@ -23,15 +23,15 @@
                 <ul class="footer-item">
                     <li>
                         <i class="fas fa-arrow-right"></i>
-                        <a href="./about.php">关于我们</a>
+                        <a href="{{ url('/about') }}">关于我们</a>
                     </li>
                     <li>
                         <i class="fas fa-arrow-right"></i>
-                        <a href="./mail.php">联系我们</a>
+                        <a href="{{ url('/about') }}">联系我们</a>
                     </li>
                     <li>
                         <i class="fas fa-arrow-right"></i>
-                        <a href="./faq.php">购买须知与工作机会</a>
+                        <a href="{{ url('/about') }}">购买须知与工作机会</a>
                     </li>
                 </ul>
             </div>
@@ -61,7 +61,7 @@
                 <ul class="footer-item">
                     <li>
                         <i class="fas fa-arrow-right"></i>
-                        <a href="/">首页</a>
+                        <a href="{{ url('/') }}">首页</a>
                     </li>
                     <li>
                         <i class="fas fa-user-circle"></i>
@@ -73,7 +73,7 @@
                     </li>
                     <li>
                         <i class="fas fa-users"></i>
-                        <a href="/">社区</a>
+                        <a href="{{ url('/about') }}">社区</a>
                     </li>
                 </ul>
             </div>
