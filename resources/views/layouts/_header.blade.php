@@ -36,7 +36,7 @@
             <a class="nav-link nav-style" href="{{ url('/about') }}">
                 关于我们
             </a>
-            <a class="nav-link mr-auto nav-style" href="{{ url('/') }}">
+            <a class="nav-link mr-auto nav-style" href="{{ url('/topics') }}">
                 社区
             </a>
 

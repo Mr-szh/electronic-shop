@@ -73,7 +73,7 @@
                     </li>
                     <li>
                         <i class="fas fa-users"></i>
-                        <a href="{{ url('/about') }}">社区</a>
+                        <a href="{{ url('/topics') }}">社区</a>
                     </li>
                 </ul>
             </div>

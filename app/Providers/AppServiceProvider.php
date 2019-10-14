@@ -68,5 +68,8 @@ class AppServiceProvider extends ServiceProvider
     {
         // 渲染模板时通过 CategoryTreeComposer 注入类目树变量
         \View::composer(['products.index', 'products.show'], \App\Http\ViewComposers\CategoryTreeComposer::class);
+
+        \App\Models\User::observe(\App\Observers\UserObserver::class);
+		\App\Models\Topic::observe(\App\Observers\TopicObserver::class);
     }
 }
