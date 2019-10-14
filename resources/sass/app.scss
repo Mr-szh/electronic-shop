@@ -357,6 +357,43 @@ body {
     }
 }
 
+.scroll-top {
+    bottom: 50px;
+    cursor: pointer;
+    height: 50px;
+    position: fixed;
+    right: 20px;
+    text-align: center;
+    width: 50px;
+    z-index: 9999;
+    transition: 0.4s;
+    border-radius: 50%;
+    background-color: #00b0ff;
+    box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+@media only screen and (max-width: 767.98px) {
+    .scroll-top {
+        display: none;
+    }
+}
+
+.scroll-top i {
+    line-height: 50px;
+    color: #fff;
+    font-size: 25px;
+}
+
+.scroll-top.not-visible {
+    bottom: -50px;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.scroll-top:hover {
+    background-color: #87b106;
+}
+
 .carousel-inner {
     text-align: center;
 }

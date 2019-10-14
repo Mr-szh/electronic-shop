@@ -30,7 +30,12 @@
         @include('layouts._footer') 
     </div>
 
+    <div class="scroll-top not-visible">
+        <i class="fa fa-angle-up"></i>
+    </div>
+
     <script src="{{ mix('js/app.js') }}"></script>
+    <script src="{{ URL::asset('/js/scroll-top.js') }}"></script>
     @yield('scriptsAfterJs')
 </body>
 
