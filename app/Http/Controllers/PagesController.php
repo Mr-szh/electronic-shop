@@ -22,4 +22,14 @@ class PagesController extends Controller
     {
         return view('pages.about');
     }
+
+    public function faq()
+    {
+        return view('pages.faq');
+    }
+
+    public function mail()
+    {
+        return view('pages.mail');
+    }
 }

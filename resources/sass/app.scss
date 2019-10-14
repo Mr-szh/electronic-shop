@@ -52,6 +52,254 @@ body {
     margin-bottom: 300px;
 }
 
+.about>.container>.row {
+    .clearfix {
+        clear: both;
+    }
+
+    .about_grid_left {
+        p {
+            color: #999;
+            line-height: 1.8em;
+            margin-bottom: 2em;
+        }
+
+        .about_grid_left1 {
+            width: 20%;
+            text-align: center;
+            float: left;
+
+            i {
+                color: #ff5063;
+                font-size: 1.5em;
+                // top: 1em;
+                position: relative;
+                top: 50%;
+            }
+        }
+
+        .about_grid_left2 {
+            p {
+                color: #999;
+                line-height: 1.8em;
+            }
+        }
+    }
+
+    .about_grid_right {
+        margin: 2em 0 0;
+
+        .img-responsive {
+            margin: 0 auto;
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+    }
+}
+
+.team {
+    padding: 5em 0;
+
+    h3 {
+        font-size: 2em;
+        color: #212121;
+        position: relative;
+        padding-bottom: 1em;
+        text-align: center;
+    }
+
+    h3:before {
+        content: '';
+        position: absolute;
+        top: 27%;
+        left: 29%;
+        background: #ff5063;
+        height: 1px;
+        width: 10%;
+    }
+
+    h3:after {
+        content: '';
+        position: absolute;
+        bottom: 79%;
+        right: 43%;
+        background: #212121;
+        height: 1px;
+        width: 10%;
+        transform: rotate(135deg);
+    }
+
+    .team_grids {
+        margin: 3em 0 0;
+
+        .piclist {
+            width: 100%;
+            height: 7rem;
+            line-height: 7rem;
+            background: black;
+
+            li {
+                width: 160px;
+                margin-left: 0.1rem;
+                display: inline-block;
+                cursor: pointer;
+
+                img {
+                    width: 100%;
+                }
+            }
+        }
+
+        p {
+            width: 65%;
+            margin: 3em auto 0;
+            text-align: center;
+            line-height: 1.8em;
+            color: #999;
+        }
+    }
+}
+
+.team-bottom {
+    padding: 5em 0;
+    text-align: center;
+
+    h3 {
+        font-size: 1.7em;
+        color: #212121;
+        line-height: 1.5em;
+    }
+
+    a {
+        text-align: right;
+        text-decoration: none;
+        text-transform: uppercase;
+        font-size: 1em;
+        letter-spacing: 2px;
+        color: #ff5063;
+        padding: 0 45px 0 0;
+    }
+
+    a:hover {
+        color: #212121;
+    }
+
+    img {
+        width: 100%;
+    }
+}
+
+.faq {
+    padding: 5em 0;
+
+    .faq_grids {
+        width: 70%;
+        margin: 0 auto;
+
+        .faq_grid {
+            margin-bottom: 2em;
+
+            h3 {
+                font-size: 1.3em;
+                color: #212121;
+                line-height: 1.5em;
+                margin-bottom: 1em;
+            }
+
+            p {
+                color: #999;
+                line-height: 1.8em;
+            }
+        }
+    }
+}
+
+.mail {
+    padding: 5em 0;
+
+    h3 {
+        font-size: 2em;
+        color: #212121;
+        position: relative;
+        padding-bottom: 1em;
+        text-align: center;
+    }
+
+    h3:before {
+        content: '';
+        position: absolute;
+        top: 27%;
+        left: 29%;
+        background: #ff5063;
+        height: 1px;
+        width: 10%;
+    }
+
+    h3:after {
+        content: '';
+        position: absolute;
+        bottom: 79%;
+        right: 43%;
+        background: #212121;
+        height: 1px;
+        width: 10%;
+        transform: rotate(135deg);
+    }
+
+    .mail_grids {
+        margin: 3em 0 0;
+
+        .contact-left {
+            h4 {
+                font-size: 1.5em;
+                color: #3c43a4;
+                margin: 0 0 1em;
+            }
+
+            p {
+                color: #999;
+                line-height: 1.8em;
+                margin: 0;
+                text-transform: capitalize;
+
+                span {
+                    color: #212121;
+                    font-weight: 700;
+                }
+            }
+
+            ul {
+                padding: 1em 0 0;
+                margin: 0;
+            }
+
+            li {
+                list-style-type: none;
+                margin: 0 0 1em;
+                font-size: 14px;
+                color: #999;
+
+                a {
+                    color: #999;
+                    text-decoration: none;
+                }
+
+                a:hover {
+                    color: #3c43a4;
+                }
+            }
+        }
+
+        .contact-right {
+            iframe {
+                width: 100%;
+                min-height: 400px;
+            }
+        }
+    }
+}
+
 .footer {
     position: absolute;
     bottom: 0;

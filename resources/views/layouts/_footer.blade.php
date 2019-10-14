@@ -27,11 +27,11 @@
                     </li>
                     <li>
                         <i class="fas fa-arrow-right"></i>
-                        <a href="{{ url('/about') }}">联系我们</a>
+                        <a href="{{ url('/mail') }}">联系我们</a>
                     </li>
                     <li>
                         <i class="fas fa-arrow-right"></i>
-                        <a href="{{ url('/about') }}">购买须知与工作机会</a>
+                        <a href="{{ url('/faq') }}">购买须知与工作机会</a>
                     </li>
                 </ul>
             </div>
