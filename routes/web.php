@@ -51,10 +51,10 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
 
     Route::get('coupon_codes/{code}', 'CouponCodesController@show')->name('coupon_codes.show');
     
-    Route::resource('topics', 'TopicsController', ['only' => ['index', 'show', 'create', 'store', 'update', 'edit', 'destroy']]); 
-    Route::resource('categories', 'CategoriesController', ['only' => ['show']]);
-    
 });
+
+Route::resource('topics', 'TopicsController', ['only' => ['index', 'show', 'create', 'store', 'update', 'edit', 'destroy']]); 
+Route::resource('categories', 'CategoriesController', ['only' => ['show']]);
 
 Route::get('products/{product}', 'ProductsController@show')->name('products.show');
 

@@ -21,7 +21,7 @@
                 @if(isset($categoryTree))
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="categoryTree">
-                        所有分类 
+                        所有分类
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="categoryTree">
@@ -36,15 +36,33 @@
             <a class="nav-link nav-style" href="{{ url('/about') }}">
                 关于我们
             </a>
-            <a class="nav-link mr-auto nav-style" href="{{ url('/topics') }}">
-                社区
-            </a>
+
+            <ul class="nav navbar-nav mr-auto">
+                <li class="dropdown">
+                    <a href="" class="nav-link nav-style dropdown-toggle" data-toggle="dropdown">
+                        社区
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <!-- <li class="nav-item {{ active_class(if_route('topics.index')) }}"><a class="nav-link" href="{{ route('topics.index') }}">话题</a></li>
+                        <li class="nav-item {{ active_class((if_route('categories.show') && if_route_param('category', 1))) }}"><a class="nav-link" href="{{ route('categories.show', 1) }}">分享</a></li>
+                        <li class="nav-item {{ active_class((if_route('categories.show') && if_route_param('category', 2))) }}"><a class="nav-link" href="{{ route('categories.show', 2) }}">问答</a></li>
+                        <li class="nav-item {{ active_class((if_route('categories.show') && if_route_param('category', 3))) }}"><a class="nav-link" href="{{ route('categories.show', 3) }}">公告</a></li>
+                        <li class="nav-item {{ active_class((if_route('categories.show') && if_route_param('category', 4))) }}"><a class="nav-link" href="{{ route('categories.show', 4) }}">定制</a></li> -->
+                        
+                        <li class="{{ active_class(if_route('topics.index')) }} nav-item"><a class="nav-link" href="{{ route('topics.index') }}">话题</a></li>
+                        @foreach ($categories as $category)
+                        <li class="{{ active_class((if_route('categories.show') && if_route_param('category', $category->id))) }} nav-item"><a class="nav-link" href="{{ route('categories.show', $category->id) }}">{{ $category->name }}</a></li>
+                        @endforeach
+                    </ul>
+                </li>
+            </ul>
 
             <!-- 导航条的右侧 -->
             <ul class="navbar-nav navbar-right">
                 <!-- 登录注册链接开始 -->
                 @guest
-                <!-- 身份验证链接 --> 
+                <!-- 身份验证链接 -->
                 <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">登录</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">注册</a></li>
                 @else
@@ -52,9 +70,9 @@
                     <a class="nav-link mt-1" href="{{ route('cart.index') }}">
                         <i class="fa fa-shopping-cart"></i>
                         <span class="badge badge-success">
-                        @if(Auth::user()->cartItems()->count() != '0')
+                            @if(Auth::user()->cartItems()->count() != '0')
                             {{ Auth::user()->cartItems()->count() }}
-                        @endif
+                            @endif
                         </span>
                     </a>
                 </li>
@@ -63,7 +81,7 @@
                         <img src="{{ URL::asset(Auth::user()->avatar) }}" id="avatar" class="img-responsive img-circle" width="30px" height="30px">
                         <span id="user-name">{{ Auth::user()->name }}</span>
                     </a>
-                    <div class="dropdown-menu"  aria-labelledby="navbarDropdown">
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a href="{{ route('user_information.index') }}" class="dropdown-item">个人信息</a>
                         <a href="{{ route('user_addresses.index') }}" class="dropdown-item">收货地址</a>
                         <a href="{{ route('products.index') }}" class="dropdown-item">商品列表</a>

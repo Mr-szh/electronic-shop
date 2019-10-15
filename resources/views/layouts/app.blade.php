@@ -23,7 +23,7 @@
 <body>
     <!-- 自定义的辅助方法 -->
     <div id="app" class="{{ route_class() }}-page">
-        @include('layouts._header')
+        @include('layouts._header', ['categories' => app(\App\Models\TopicsCategory::class)->categories()])
         <div class="container">
             @yield('content')
         </div>
