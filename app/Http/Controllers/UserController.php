@@ -71,4 +71,11 @@ class UserController extends Controller
         $avatar = Auth::user()->avatar;
         return $avatar;
     }
+
+    public function topicsShow()
+    {
+        $user = Auth::user();
+        
+        return view('users.show', compact('user'));
+    }
 }

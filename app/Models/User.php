@@ -63,4 +63,9 @@ class User extends Authenticatable implements MustVerifyEmail
         // 一对多关系
         return $this->hasMany(CartItem::class);
     }
+
+    public function topics()
+    {
+        return $this->hasMany(Topic::class);
+    }
 }

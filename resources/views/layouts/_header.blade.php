@@ -49,7 +49,7 @@
                         <li class="nav-item {{ active_class((if_route('categories.show') && if_route_param('category', 2))) }}"><a class="nav-link" href="{{ route('categories.show', 2) }}">问答</a></li>
                         <li class="nav-item {{ active_class((if_route('categories.show') && if_route_param('category', 3))) }}"><a class="nav-link" href="{{ route('categories.show', 3) }}">公告</a></li>
                         <li class="nav-item {{ active_class((if_route('categories.show') && if_route_param('category', 4))) }}"><a class="nav-link" href="{{ route('categories.show', 4) }}">定制</a></li> -->
-                        
+
                         <li class="{{ active_class(if_route('topics.index')) }} nav-item"><a class="nav-link" href="{{ route('topics.index') }}">话题</a></li>
                         @foreach ($categories as $category)
                         <li class="{{ active_class((if_route('categories.show') && if_route_param('category', $category->id))) }} nav-item"><a class="nav-link" href="{{ route('categories.show', $category->id) }}">{{ $category->name }}</a></li>
@@ -87,6 +87,7 @@
                         <a href="{{ route('products.index') }}" class="dropdown-item">商品列表</a>
                         <a href="{{ route('products.favorites') }}" class="dropdown-item">我的收藏</a>
                         <a href="{{ route('orders.index') }}" class="dropdown-item">历史订单</a>
+                        <a href="{{ route('users.topicsShow') }}" class="dropdown-item">我的社区信息</a>
                         <!-- event.preventDefault() 阻止元素发生默认的行为 -->
                         <a class="dropdown-item" id="logout" href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();">退出登录</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
