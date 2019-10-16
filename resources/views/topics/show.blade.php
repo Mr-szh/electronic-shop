@@ -42,6 +42,8 @@
                     {!! $topic->body !!}
                 </div>
 
+                @guest
+                @else
                 <div class="operate">
                     <hr>
                     <a href="{{ route('topics.edit', $topic->id) }}" class="btn btn-outline-secondary btn-sm" role="button">
@@ -51,6 +53,7 @@
                         <i class="far fa-trash-alt"></i> 删除
                     </a>
                 </div>
+                @endguest
 
             </div>
         </div>
