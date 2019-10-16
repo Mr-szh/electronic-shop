@@ -76,6 +76,7 @@
                         </span>
                     </a>
                 </li>
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img src="{{ URL::asset(Auth::user()->avatar) }}" id="avatar" class="img-responsive img-circle" width="30px" height="30px">
@@ -83,11 +84,11 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a href="{{ route('user_information.index') }}" class="dropdown-item">个人信息</a>
+                        <a href="{{ route('users.topicsShow') }}" class="dropdown-item">我的社区信息</a>
                         <a href="{{ route('user_addresses.index') }}" class="dropdown-item">收货地址</a>
                         <a href="{{ route('products.index') }}" class="dropdown-item">商品列表</a>
                         <a href="{{ route('products.favorites') }}" class="dropdown-item">我的收藏</a>
                         <a href="{{ route('orders.index') }}" class="dropdown-item">历史订单</a>
-                        <a href="{{ route('users.topicsShow') }}" class="dropdown-item">我的社区信息</a>
                         <!-- event.preventDefault() 阻止元素发生默认的行为 -->
                         <a class="dropdown-item" id="logout" href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();">退出登录</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
