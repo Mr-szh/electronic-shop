@@ -12,6 +12,8 @@
     
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <link rel="shortcut icon" href="{{ URL::asset('/images/favicon.ico') }}" />
+
+    @yield('styles')
     <!--<link rel="stylesheet" href="{{ URL::asset('/css/bootstrap.min.css') }}">
   
     <script src="{{ URL::asset('/js/jquery.min.js') }}"></script>
@@ -36,6 +38,7 @@
 
     <script src="{{ mix('js/app.js') }}"></script>
     <script src="{{ URL::asset('/js/scroll-top.js') }}"></script>
+    @yield('scripts')
     @yield('scriptsAfterJs')
 </body>
 
