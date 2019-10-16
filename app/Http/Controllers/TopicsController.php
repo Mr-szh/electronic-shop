@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TopicRequest;
 use App\Models\TopicsCategory;
 use Illuminate\Support\Facades\Auth;
+use App\Handlers\ImageUploadHandler;
 
 class TopicsController extends Controller
 {
@@ -39,6 +40,28 @@ class TopicsController extends Controller
         return view('topics.show', compact('topic'));
     }
 
+    public function uploadImage(Request $request, ImageUploadHandler $uploader)
+    {
+        $data = [
+            'success' => false,
+            'msg' => '上传失败!',
+            'file_path' => ''
+        ];
+
+        // 判断是否有上传图片，并赋值给 $file
+        if ($file = $request->upload_file) {
+            // 保存图片到本地
+            $result = $uploader->save($request->upload_file, 'topics', \Auth::id(), 1024);
+            // 图片保存成功后
+            if ($result) {
+                $data['file_path'] = $result['path'];
+                $data['msg'] = '上传成功!';
+                $data['success'] = true;
+            }
+        }
+
+        return $data;
+    }
     // public function store(TopicRequest $request)
     // {
     //     $topic = Topic::create($request->all());
