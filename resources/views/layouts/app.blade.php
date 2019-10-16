@@ -9,6 +9,7 @@
     <!-- 该令牌用于验证授权用户和发起请求者是否是同一个人 -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', '可定制电脑商城')</title>
+    <meta name="description" content="@yield('description', 'Electronic-shop 社区')" />
     
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <link rel="shortcut icon" href="{{ URL::asset('/images/favicon.ico') }}" />
