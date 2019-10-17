@@ -52,6 +52,7 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
     Route::get('coupon_codes/{code}', 'CouponCodesController@show')->name('coupon_codes.show');
     Route::get('/users/topics', 'UserController@topicsShow')->name('users.topicsShow');
     Route::post('upload_image', 'TopicsController@uploadImage')->name('topics.upload_image');
+    Route::resource('replies', 'RepliesController', ['only' => ['store', 'destroy']]);
     
 });
 

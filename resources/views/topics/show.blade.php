@@ -16,9 +16,7 @@
 
                 <div class="media">
                     <div align="center">
-                        <a href="{{ route('users.topicsShow') }}">
-                            <img class="thumbnail img-fluid" src="{{ $topic->user->avatar }}" width="300px" height="300px">
-                        </a>
+                        <img class="thumbnail img-fluid" src="{{ $topic->user->avatar }}" width="300px" height="300px">
                     </div>
                 </div>
             </div>
@@ -66,7 +64,8 @@
 
         <div class="card topic-reply mt-4">
             <div class="card-body">
-                @include('topics._reply_box', ['topic' => $topic])
+                <!-- 视条件加载子模板 -->
+                @includeWhen(Auth::check(), 'topics._reply_box', ['topic' => $topic])
                 @include('topics._reply_list', ['replies' => $topic->replies()->with('user')->get()])
             </div>
         </div>
