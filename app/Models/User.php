@@ -5,10 +5,23 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Auth;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
+
+    public function topicNotify($instance)
+    {
+        // 如果要通知的人是当前用户，就不必通知了！
+        if ($this->id == Auth::id()) {
+            return;
+        }
+
+        $this->increment('notification_count');
+
+        $this->notify($instance);
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -17,7 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'avatar', 
+        'name', 'email', 'password', 'avatar',
     ];
 
     /**
@@ -68,7 +81,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Topic::class);
     }
-    
+
     public function isAuthorOf($model)
     {
         return $this->id == $model->user_id;
