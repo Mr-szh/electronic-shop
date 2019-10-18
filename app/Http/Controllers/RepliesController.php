@@ -17,7 +17,8 @@ class RepliesController extends Controller
 
         $reply->save();
 
-        return redirect()->route('topics.show', [$request->topic_id])->with('success', '评论创建成功！');
+        // return redirect()->route('topics.show', [$request->topic_id])->with('success', '评论创建成功！');
+        return redirect()->to($reply->topic->link())->with('success', '评论创建成功！');
     }
 
     public function destroy(Reply $reply) {

@@ -28,6 +28,7 @@ class TopicReplied extends Notification
     public function toDatabase($notifiable)
     {
         $topic = $this->reply->topic;
+        $link =  $topic->link(['#reply' . $this->reply->id]);
 
         // 存入数据库里的数据
         return [
@@ -36,6 +37,7 @@ class TopicReplied extends Notification
             'user_id' => $this->reply->user->id,
             'user_name' => $this->reply->user->name,
             'user_avatar' => $this->reply->user->avatar,
+            'topic_link' => $link,
             'topic_id' => $topic->id,
             'topic_title' => $topic->title,
         ];
