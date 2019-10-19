@@ -13,11 +13,17 @@
                 <span class="text-secondary"> • </span>
                 <span class="meta text-secondary" title="{{ $reply->created_at }}">{{ $reply->created_at->diffForHumans() }}</span>
 
+                @can('destroy', $reply)
                 <span class="meta float-right">
-                    <a title="删除回复">
-                        <i class="far fa-trash-alt"></i>
-                    </a>
+                    <form action="{{ route('replies.destroy', $reply->id) }}" onsubmit="return confirm('确定要删除此评论？');" method="post">
+                        {{ csrf_field() }}
+                        {{ method_field('DELETE') }}
+                        <button type="submit" class="btn btn-default btn-xs pull-left text-secondary">
+                            <i class="far fa-trash-alt"></i>
+                        </button>
+                    </form>
                 </span>
+                @endcan
             </div>
 
             <div class="reply-content text-secondary">
@@ -27,8 +33,8 @@
     </li>
 
     @if ( ! $loop->last)
-      <hr>
+    <hr>
     @endif
-    
+
     @endforeach
 </ul>
