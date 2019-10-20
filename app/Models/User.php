@@ -9,6 +9,8 @@ use Auth;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
+    use Traits\ActiveUserHelper;
+    
     use Notifiable;
 
     public function topicNotify($instance)
