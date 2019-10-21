@@ -22,7 +22,7 @@ class ProductsController extends Controller
      */
     use HasResourceActions;
 
-    protected $title = '商品列表';
+    protected $title = '商品管理';
 
     public function index(Content $content)
     {

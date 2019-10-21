@@ -42,4 +42,12 @@ Route::group([
     
     $router->get('reports', 'ReportsController@index');
     
+    $router->get('topics', 'TopicsController@index');
+    $router->get('topics/create', 'TopicsController@create');
+    $router->post('topics', 'TopicsController@store');
+    $router->get('topics/{id}/edit', 'TopicsController@edit');
+    $router->put('topics/{id}', 'TopicsController@update');
+    
+    Route::post('/uploadimg', 'UploadsController@uploadimg');
+
 });

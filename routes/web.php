@@ -58,6 +58,7 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
 
 });
 
+Route::resource('users', 'UserController', ['only' => ['show']]);
 Route::resource('topics', 'TopicsController', ['only' => ['index', 'create', 'store', 'update', 'edit', 'destroy']]);
 Route::resource('categories', 'CategoriesController', ['only' => ['show']]);
 

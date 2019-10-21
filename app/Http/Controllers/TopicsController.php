@@ -10,6 +10,8 @@ use App\Models\TopicsCategory;
 use Illuminate\Support\Facades\Auth;
 use App\Handlers\ImageUploadHandler;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Facades\Schema;
 
 class TopicsController extends Controller
 {
@@ -19,7 +21,6 @@ class TopicsController extends Controller
 
         // return view('topics.index', compact('topics'));
         $active_users = $user->getActiveUsers();
-        // dd($active_users);
         
         return view('topics.index', compact('topics', 'active_users'));
     }
@@ -35,8 +36,13 @@ class TopicsController extends Controller
     {
         $topic->fill($request->all());
         $topic->user_id = Auth::user()->id;
-        $topic->save();
 
+        $id = DB::table('topics')->max('id') + 1;
+        $url = $request->url().'/'.$id; 
+        $topic->url = $url;
+
+        $topic->save();
+        
         // return redirect()->route('topics.show', $topic->id)->with('success', '帖子创建成功！');
         return redirect()->to($topic->link())->with('success', '帖子创建成功！');
     }
