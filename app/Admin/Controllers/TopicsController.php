@@ -70,7 +70,7 @@ class TopicsController extends Controller
             'required' => '帖子标题不能为空',
             'min' => '帖子标题不能少于两个字符',
         ]);
-        $form->select('category_id', '分类')->options([1 => '分享', 2 => '问答', '3' => '公告', '4' => '定制']);
+        $form->select('category_id', '分类')->options(['3' => '公告']);
         $form->UEditor('body', '帖子内容')->rules('required|min:3');
 
         $form->tools(function (Form\Tools $tools) {
@@ -92,11 +92,11 @@ class TopicsController extends Controller
         $form->saving(function (Form $form) {
             $id = DB::table('topics')->max('id') + 1;
             $url = 'http://electronic-shop/topics/'.$id;
-            $user_id = Auth::guard('admin')->user()->toArray()['id'];
+            $user_id = 1;
 
             $form->model()->user_id = $user_id;
-            $form->model()->url = $url;
             $form->model()->role = 'admin';
+            $form->model()->url = $url;
         });
 
         return $form;

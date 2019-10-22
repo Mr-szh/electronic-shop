@@ -7,10 +7,14 @@
 <div class="row">
     <div class="col-lg-3 col-md-3 hidden-sm hidden-xs author-info">
         <div class="card ">
-            <div class="card-body">
+            <div class="card-body" style="{{ $topic->role == 'admin' ? 'border:3px dotted orange' : '' }};">
                 <div class="text-center">
                     楼主：{{ $topic->user->name }}
                 </div>
+
+                @if($topic->user->id == '1')
+                <div class="badge badge-danger" style="margin-left:40%;">管理员</div>
+                @endif
 
                 <hr>
 
@@ -27,7 +31,7 @@
 
     <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 topic-content">
         <div class="card ">
-            <div class="card-body">
+            <div class="card-body" style="{{ $topic->role == 'admin' ? 'border:3px dotted orange' : '' }};">
                 <h1 class="text-center mt-3 mb-3">
                     {{ $topic->title }}
                 </h1>

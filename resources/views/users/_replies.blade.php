@@ -1,5 +1,5 @@
 @if(count($replies))
-<ul class="list-group mt-4 border-0">
+<ul class="list-group border-0">
     @foreach($replies as $reply)
     <li class="list-group-item pl-2 pr-2 border-right-0 border-left-0 @if($loop->first) border-top-0 @endif">
         <a href="{{ $reply->topic->link(['#reply' . $reply->id]) }}">

@@ -1,7 +1,7 @@
 @if (count($topics))
 <ul class="media-list">
     @foreach ($topics as $topic)
-    <li class="media">
+    <li class="media" style="{{ $topic->role == 'admin' ? 'border:3px dotted orange' : '' }};">
         <div class="media-left">
             <a href="{{ route('users.show', [$topic->user_id]) }}">
                 <img class="media-object img-thumbnail mr-3" style="width: 52px; height: 52px;" src="{{ $topic->user->avatar }}" title="{{ $topic->user->name }}">
@@ -10,11 +10,11 @@
 
         <div class="media-body">
             <div class="media-heading mt-0 mb-1">
-                <a href="{{ route('topics.show', [$topic->id]) }}" title="{{ $topic->title }}">
+                <a href="{{ route('topics.show', [$topic->id]) }}" title="{{ $topic->title }}" style="font-palette: light">
                     {{ $topic->title }}
                 </a>
                 <a class="float-right" href="{{ route('topics.show', [$topic->id]) }}">
-                    <span class="badge badge-secondary badge-pill"> {{ $topic->reply_count }} </span>
+                    <span class="badge badge-secondary badge-pill" style="{{ $topic->role == 'admin' ? 'background-color:#38c172' : '' }};"> {{ $topic->reply_count }} </span>
                 </a>
             </div>
 
@@ -26,7 +26,7 @@
                 <span> • </span>
                 <a class="text-secondary" href="{{ route('users.show', [$topic->user_id]) }}" title="{{ $topic->user->name }}">
                     <i class="far fa-user"></i>
-                    {{ $topic->user->name }}
+                    <span style="{{ $topic->role == 'admin' ? 'color:red' : '' }};">{{ $topic->user->name }}</span>
                 </a>
                 <span> • </span>
                 <i class="far fa-clock"></i>
@@ -35,7 +35,7 @@
         </div>
     </li>
 
-    @if ( ! $loop->last)
+    @if (!$loop->last)
     <hr>
     @endif
 

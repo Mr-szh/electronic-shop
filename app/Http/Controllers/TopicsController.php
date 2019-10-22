@@ -10,12 +10,13 @@ use App\Models\TopicsCategory;
 use Illuminate\Support\Facades\Auth;
 use App\Handlers\ImageUploadHandler;
 use App\Models\User;
+use App\Models\Admin;
 use Illuminate\Support\Facades\DB;
 // use Illuminate\Support\Facades\Schema;
 
 class TopicsController extends Controller
 {
-    public function index(Request $request, Topic $topic, User $user)
+    public function index(Request $request, Topic $topic, User $user, Admin $admin)
     {
         $topics = $topic->withOrder($request->order)->paginate(20);
 
@@ -28,8 +29,9 @@ class TopicsController extends Controller
     public function create(Topic $topic)
     {
         $categories = TopicsCategory::all();
+        $user = Auth::user();
 
-        return view('topics.create_and_edit', compact('topic', 'categories'));
+        return view('topics.create_and_edit', compact('topic', 'categories', 'user'));
     }
 
     public function store(TopicRequest $request, Topic $topic)
@@ -38,6 +40,13 @@ class TopicsController extends Controller
         $topic->user_id = Auth::user()->id;
 
         $id = DB::table('topics')->max('id') + 1;
+
+        if (Auth::user()->id == '1') {
+            $topic->role = 'admin';
+        } else {
+            $topic->role = 'user';
+        }
+
         $url = $request->url().'/'.$id; 
         $topic->url = $url;
 
@@ -80,12 +89,13 @@ class TopicsController extends Controller
         return $data;
     }
 
-    public function edit(Topic $topic)
+    public function edit(Topic $topic, User $user)
     {
+        $user = Auth::user();
         $this->authorize('update', $topic);
         $categories = TopicsCategory::all();
 
-        return view('topics.create_and_edit', compact('topic', 'categories'));
+        return view('topics.create_and_edit', compact('topic', 'categories', 'user'));
     }
 
     public function update(TopicRequest $request, Topic $topic)

@@ -5,21 +5,28 @@
 @section('content')
 <div class="row">
     <div class="col-lg-3 col-md-3 hidden-sm hidden-xs user-info">
-        <div class="card ">
-            <img class="card-img-top" src="{{ URL::asset($user->avatar) }}" alt="{{ $user->name }}" style="border: 2px solid black;">
+        <div class="card">
+            <img class="card-img-top" src="{{ URL::asset($user->avatar) }}" alt="{{ $user->name }}" style="width:100%; height:100%;{{ $user->id == '1' ? 'border:3px solid #38c172' : 'border: 2px solid black;' }};">
             <div class="card-body">
-                <h5><strong>{{ $user->name }}</strong></h5>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
-                <hr>
+                <h5>
+                    <strong>{{ $user->name }}</strong>
+                    @if($user->id == '1')
+                    <span class="badge badge-danger float-md-right">管理员</span>
+                    @endif
+                </h5>
+                <p>{{ $user->id == '1' ? '可发送信息至管理员邮箱' : '' }}</p>
+                @if($user->id != '1')
+                <hr>     
                 <h5><strong>注册于</strong></h5>
                 <p>{{ $user->created_at->format('Y-m-d') }}</p>
+                @endif
             </div>
         </div>
     </div>
     <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div class="card ">
             <div class="card-body">
-                <h1 class="mb-0" style="font-size:22px;">{{ $user->name }} <small>{{ $user->email }}</small></h1>
+                <h1 class="mb-0" style="font-size:22px;">{{ $user->name }} <small><{{ $user->email }}></small></h1>
             </div>
         </div>
         <hr>

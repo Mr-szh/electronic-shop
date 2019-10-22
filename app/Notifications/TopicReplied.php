@@ -22,7 +22,8 @@ class TopicReplied extends Notification implements ShouldQueue
     public function via($notifiable)
     {
         // 开启通知的频道
-        return ['database', 'mail'];
+        return ['database'];
+        // return ['database', 'mail'];
     }
 
     public function toDatabase($notifiable)
@@ -43,15 +44,15 @@ class TopicReplied extends Notification implements ShouldQueue
         ];
     }
 
-    public function toMail($notifiable)
-    {
-        $url = $this->reply->topic->link(['#reply' . $this->reply->id]);
+    // public function toMail($notifiable)
+    // {
+    //     $url = $this->reply->topic->link(['#reply'.$this->reply->id]);
         
-        return (new MailMessage)
-            ->subject('您有一条社区的新回复！')
-            ->greeting($this->reply->user->name.' 您好：')
-            ->line('你的话题有新回复！')
-            ->action('查看回复', $url)
-            ->success();
-    }
+    //     return (new MailMessage)
+    //         ->subject('您有一条社区的新回复！')
+    //         ->greeting($this->reply->user->name.' 您好：')
+    //         ->line('你的话题有新回复！')
+    //         ->action('查看回复', $url)
+    //         ->success();
+    // }
 }

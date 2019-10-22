@@ -75,6 +75,10 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => \Encore\Admin\Auth\Database\Administrator::class,
+        ],
     ],
 
     /*

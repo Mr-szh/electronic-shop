@@ -35,9 +35,17 @@
                         <select class="form-control" name="category_id" required>
                             <option value="" hidden disabled {{ $topic->id ? '' : 'selected' }}>请选择分类</option>
                             @foreach ($categories as $value)
-                            <option value="{{ $value->id }}" {{ $topic->category_id == $value->id ? 'selected' : '' }}>
-                                {{ $value->name }}
-                            </option>
+                                @if($user->id != '1')
+                                    @if($value->id <= 3)
+                                    <option value="{{ $value->id }}" {{ $topic->category_id == $value->id ? 'selected' : '' }}>
+                                        {{ $value->name }}
+                                    </option>
+                                    @endif
+                                @else 
+                                    <option value="{{ $value->id }}" {{ $topic->category_id == $value->id ? 'selected' : '' }}>
+                                        {{ $value->name }}
+                                    </option>
+                                @endif
                             @endforeach
                         </select>
                     </div>
