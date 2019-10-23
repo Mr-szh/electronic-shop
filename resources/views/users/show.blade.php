@@ -10,16 +10,11 @@
             <div class="card-body">
                 <h5>
                     <strong>{{ $user->name }}</strong>
-                    @if($user->id == '1')
-                    <span class="badge badge-danger float-md-right">管理员</span>
-                    @endif
                 </h5>
-                <p>{{ $user->id == '1' ? '可发送信息至管理员邮箱' : '' }}</p>
-                @if($user->id != '1')
-                <hr>     
+                <hr>   
+                  
                 <h5><strong>注册于</strong></h5>
                 <p>{{ $user->created_at->format('Y-m-d') }}</p>
-                @endif
             </div>
         </div>
     </div>

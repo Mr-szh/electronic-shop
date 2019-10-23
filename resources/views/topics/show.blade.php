@@ -7,12 +7,16 @@
 <div class="row">
     <div class="col-lg-3 col-md-3 hidden-sm hidden-xs author-info">
         <div class="card ">
-            <div class="card-body" style="{{ $topic->role == 'admin' ? 'border:3px dotted orange' : '' }};">
+            <div class="card-body" style="{{ isset($topic->admin_id) ? 'border:3px dotted orange' : '' }};">
+                @if(isset($topic->user_id))
                 <div class="text-center">
                     楼主：{{ $topic->user->name }}
                 </div>
+                @else
+                <div class="text-center">
+                    楼主：{{ $topic->admin['name'] }}
+                </div>
 
-                @if($topic->user->id == '1')
                 <div class="badge badge-danger" style="margin-left:40%;">管理员</div>
                 @endif
 
@@ -20,9 +24,15 @@
 
                 <div class="media">
                     <div align="center">
+                        @if(isset($topic->user_id))
                         <a href="{{ route('users.show', $topic->user->id) }}">
                             <img class="thumbnail img-fluid" src="{{ $topic->user->avatar }}" width="300px" height="300px">
                         </a>
+                        @else
+                        <a href="#">
+                            <img class="thumbnail img-fluid" src="{{ $topic->admin['avatar'] }}" width="300px" height="300px">
+                        </a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -31,7 +41,7 @@
 
     <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 topic-content">
         <div class="card ">
-            <div class="card-body" style="{{ $topic->role == 'admin' ? 'border:3px dotted orange' : '' }};">
+            <div class="card-body" style="{{ isset($topic->admin_id) ? 'border:3px dotted orange' : '' }};">
                 <h1 class="text-center mt-3 mb-3">
                     {{ $topic->title }}
                 </h1>
@@ -68,6 +78,7 @@
             </div>
         </div>
 
+        @if(isset($topic->user_id))
         <div class="card topic-reply mt-4">
             <div class="card-body">
                 <!-- 视条件加载子模板 -->
@@ -75,6 +86,7 @@
                 @include('topics._reply_list', ['replies' => $topic->replies()->with('user')->get()])
             </div>
         </div>
+        @endif
 
     </div>
 </div>

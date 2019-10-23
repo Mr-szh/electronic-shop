@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Encore\Admin\Auth\Database\Administrator;
 
 class Topic extends Model
 {
     protected $fillable = [
-        'title', 'body', 'category_id', 'excerpt', 'slug'
+        'title', 'body', 'category_id', 'excerpt', 'slug', 'admin_id'
     ];
     
     public function category()
@@ -18,6 +19,11 @@ class Topic extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function admin()
+    {
+        return $this->belongsTo(Administrator::class);
     }
 
     public function replies()

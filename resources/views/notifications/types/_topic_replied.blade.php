@@ -10,9 +10,6 @@
             <a href="{{ route('users.show', $notification->data['user_id']) }}">
                 {{ $notification->data['user_name'] }}
             </a>
-            @if($notification->data['user_id'] == '1')
-                <span class="badge badge-danger">管理员</span>
-            @endif
             评论了
             <a href="{{ $notification->data['topic_link'] }}">{{ $notification->data['topic_title'] }}</a>
 

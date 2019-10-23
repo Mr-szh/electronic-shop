@@ -12,9 +12,6 @@
                 <a href="{{ route('users.show', [$reply->user_id]) }}" title="{{ $reply->user->name }}">
                     {{ $reply->user->name }}
                 </a>
-                @if($reply->user->id == '1')
-                <span class="badge badge-danger">管理员</span>
-                @endif
                 <span class="text-secondary"> • </span>
                 <span class="meta text-secondary" title="{{ $reply->created_at }}">{{ $reply->created_at->diffForHumans() }}</span>
 

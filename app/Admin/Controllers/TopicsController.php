@@ -35,7 +35,7 @@ class TopicsController extends Controller
         $grid->column('id', 'ID')->sortable();
         $grid->column('title', '帖子标题');
         $grid->column('category.name', '分类');
-        $grid->column('user.name', '楼主');
+        $grid->column('user.name', '用户名');
         $grid->column('role', '角色')->using(['user' => '用户', 'admin' => '管理员']);
         $grid->column('reply_count', '回复数');
         $grid->column('url', 'URL');
@@ -70,7 +70,7 @@ class TopicsController extends Controller
             'required' => '帖子标题不能为空',
             'min' => '帖子标题不能少于两个字符',
         ]);
-        $form->select('category_id', '分类')->options(['3' => '公告']);
+        $form->select('category_id', '分类')->options(['4' => '公告']);
         $form->UEditor('body', '帖子内容')->rules('required|min:3');
 
         $form->tools(function (Form\Tools $tools) {
@@ -92,9 +92,9 @@ class TopicsController extends Controller
         $form->saving(function (Form $form) {
             $id = DB::table('topics')->max('id') + 1;
             $url = 'http://electronic-shop/topics/'.$id;
-            $user_id = 1;
+            $admin_id = 1;
 
-            $form->model()->user_id = $user_id;
+            $form->model()->admin_id = $admin_id;
             $form->model()->role = 'admin';
             $form->model()->url = $url;
         });

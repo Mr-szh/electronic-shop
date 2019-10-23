@@ -18,6 +18,11 @@ class Reply extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class);
+    }
+
     public function scopeRecent($query)
     {
         return $query->orderBy('id', 'desc');

@@ -11,19 +11,25 @@ use Illuminate\Support\Facades\Auth;
 use App\Handlers\ImageUploadHandler;
 use App\Models\User;
 use App\Models\Admin;
+use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Support\Facades\DB;
 // use Illuminate\Support\Facades\Schema;
 
 class TopicsController extends Controller
 {
-    public function index(Request $request, Topic $topic, User $user, Admin $admin)
+    public function index(Request $request, Topic $topic, User $user)
     {
-        $topics = $topic->withOrder($request->order)->paginate(20);
+        $topics = $topic->withOrder($request->order)->paginate(10);
+        // $topics_admin = $topic->where('admin_id', '1')->paginate(2);
 
-        // return view('topics.index', compact('topics'));
+        // // return view('topics.index', compact('topics'));
         $active_users = $user->getActiveUsers();
         
         return view('topics.index', compact('topics', 'active_users'));
+
+        // $comments = App\Administrator::find(1);
+
+        // dd($admin);
     }
 
     public function create(Topic $topic)

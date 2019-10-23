@@ -10,8 +10,4 @@ class Admin extends Administrator
     {
         return $this->hasMany(Topic::class);
     }
-
-    // public function a() {
-    //     return \App\Models\Admin::find(1);
-    // }
 }
