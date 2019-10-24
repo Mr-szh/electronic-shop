@@ -39,4 +39,7 @@
     @endif
 
     @endforeach
+    <hr>
+
+    {!! $replies->appends(Request::except('page'))->render() !!}
 </ul>

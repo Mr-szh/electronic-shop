@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Reply;
+use App\Models\User;
 use App\Notifications\TopicReplied;
 
 class ReplyObserver
@@ -16,10 +17,14 @@ class ReplyObserver
         // 通知话题作者有新的评论
         $topic->user->topicNotify(new TopicReplied($reply));
     }
-    
-    public function creating(Reply $reply)
+
+    public function saving(Reply $reply)
     {
-        $reply->content = clean($reply->content, 'user_topic_body');
+        // fixme只能@一个用户
+        $username = $reply->get_between($reply->content, '@', ' ');
+        $uid = User::query()->where('name', $username)->pluck('id')->toArray();
+        $replace = "<a style='color:blue;text-decoration:none' href='/users/" . $uid[0] . "' title='" . "$username'>@" . $username . "</a>";
+        $reply->content = str_replace('@' . $username, $replace, $reply->content);
     }
 
     public function deleted(Reply $reply)

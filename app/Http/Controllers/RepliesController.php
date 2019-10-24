@@ -12,16 +12,12 @@ use App\Models\User;
 class RepliesController extends Controller
 {
     public function store(ReplyRequest $request, Reply $reply) {
-        $content = clean($request->get('content'));
+        // $content = clean($request->post('content'), 'user_topic_body');
+        // 避免与 Request 对象本身的 public 属性冲突，比如 attributes / query 可以很方便地使用 input() 的第二个参数来返回默认值
+        $content = clean($request->input('content'), 'user_topic_body');
         if (empty($content)) {
             return redirect()->back()->with('danger', '回复内容错误！');
         }
-        
-        // fixme只能@一个用户
-        $username = $this->get_between($content, '@', ' ');
-        $uid = User::query()->where('name', $username)->pluck('id')->toArray();
-        $replace = "<a style='color:blue' href='/users/" . $uid[0] . "' title='" . "$username'>@" . $username . "</a>";
-        $content = str_replace('@' . $username, $replace, $content);
 
         $reply->content = $request->content;
         $reply->user_id = Auth::id();
@@ -47,11 +43,5 @@ class RepliesController extends Controller
         $users = User::query()->where('name', 'like', $name . '%')->pluck('name');
         // laravel集合可以当做数组用，laravel默认返回的是json响应
         return $users;
-    }
-
-    public function get_between($input, $start, $end)
-    {
-        $substr = substr($input, strlen($start) + strpos($input, $start), (strlen($input) - strpos($input, $end)) * (-1));
-        return $substr;
     }
 }

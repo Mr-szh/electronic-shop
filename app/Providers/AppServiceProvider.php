@@ -70,7 +70,7 @@ class AppServiceProvider extends ServiceProvider
         \View::composer(['products.index', 'products.show'], \App\Http\ViewComposers\CategoryTreeComposer::class);
 
         \App\Models\User::observe(\App\Observers\UserObserver::class);
-        \App\Models\Topic::observe(\App\Observers\TopicObserver::class);
-        \App\Models\Reply::observe(\App\Observers\ReplyObserver::class);
+		\App\Models\Reply::observe(\App\Observers\ReplyObserver::class);
+		\App\Models\Topic::observe(\App\Observers\TopicObserver::class);
     }
 }

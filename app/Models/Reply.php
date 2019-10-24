@@ -27,4 +27,10 @@ class Reply extends Model
     {
         return $query->orderBy('id', 'desc');
     }
+
+    public function get_between($input, $start, $end)
+    {
+        $substr = substr($input, strlen($start) + strpos($input, $start), (strlen($input) - strpos($input, $end)) * (-1));
+        return $substr;
+    }
 }
