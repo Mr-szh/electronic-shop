@@ -53,9 +53,10 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
     Route::get('/users/topics', 'UserController@topicsShow')->name('users.topicsShow');
     Route::post('upload_image', 'TopicsController@uploadImage')->name('topics.upload_image');
     Route::resource('replies', 'RepliesController', ['only' => ['store', 'destroy']]);
-    
-    Route::resource('notifications', 'NotificationsController', ['only' => ['index']]);
+    Route::get('atwho', 'RepliesController@atwho')->name('replies.atwho');
 
+    Route::resource('notifications', 'NotificationsController', ['only' => ['index']]);
+    
 });
 
 Route::resource('users', 'UserController', ['only' => ['show']]);

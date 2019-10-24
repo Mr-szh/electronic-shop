@@ -10,17 +10,12 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', '可定制电脑商城')</title>
     <meta name="description" content="@yield('description', 'Electronic-shop 社区')" />
-    
+
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <link rel="shortcut icon" href="{{ URL::asset('/images/favicon.ico') }}" />
 
     @yield('styles')
-    <!--<link rel="stylesheet" href="{{ URL::asset('/css/bootstrap.min.css') }}">
-  
-    <script src="{{ URL::asset('/js/jquery.min.js') }}"></script>
-    <script src="{{ URL::asset('/js/popper.min.js') }}"></script>
-    <script src="{{ URL::asset('/js/bootstrap.min.js') }}"></script> -->
-    
+
 </head>
 
 <body>
@@ -29,10 +24,10 @@
         @include('layouts._header', ['categories' => app(\App\Models\TopicsCategory::class)->categories()])
         <div class="container">
             @include('shared._messages')
-            
+
             @yield('content')
         </div>
-        @include('layouts._footer') 
+        @include('layouts._footer')
     </div>
 
     <div class="scroll-top not-visible">

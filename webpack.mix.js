@@ -16,4 +16,7 @@ mix.js('resources/js/app.js', 'public/js')
    // 使 Mix 每次生成的静态文件后面加上一个类似版本号的参数，避免浏览器缓存
    .version()
    .copyDirectory('resources/editor/js', 'public/js')
-   .copyDirectory('resources/editor/css', 'public/css');
+   .copyDirectory('resources/editor/css', 'public/css')
+   .copyDirectory('resources/assets/editor/css', 'public/css')
+   .copyDirectory('resources/assets/atwho/js', 'public/js')
+   .copyDirectory('resources/assets/atwho/css', 'public/css');

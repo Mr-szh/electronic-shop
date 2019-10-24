@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Topic;
 use App\Jobs\TranslateSlug;
+use App\Models\TimeOuts;
 
 class TopicObserver
 {
@@ -18,11 +19,21 @@ class TopicObserver
 
     public function saved(Topic $topic)
     {
+        // 添加话题时间间隔
+        $key = 'topic_create_' . \Auth::id();
+        if (!app(TimeOuts::class)->get($key)) {
+            TimeOuts::put($key, Topic::TTL);
+        }
+        
         // 如 slug 字段无内容，即使用翻译器对 title 进行翻译
         if ( ! $topic->slug) {
 
             // 推送任务到队列
             dispatch(new TranslateSlug($topic));
+
+            if (trim($topic->slug) === 'edit') {
+                $topic->slug = 'edit-slug';
+            }
         }
     }
 

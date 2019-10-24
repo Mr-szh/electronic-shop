@@ -83,4 +83,12 @@ class UserController extends Controller
     {
         return view('users.show', compact('user'));
     }
+
+    public function usersjson(Request $request)
+    {
+        $name = $request->q;
+        $users = User::where('name','like',$name."%")->pluck('name')->toArray();
+
+        return response()->json($users);
+    }
 }

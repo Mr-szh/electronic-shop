@@ -14,6 +14,7 @@ use App\Models\Admin;
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Support\Facades\DB;
 // use Illuminate\Support\Facades\Schema;
+use App\Models\TimeOuts;
 
 class TopicsController extends Controller
 {
@@ -24,7 +25,7 @@ class TopicsController extends Controller
 
         // // return view('topics.index', compact('topics'));
         $active_users = $user->getActiveUsers();
-        
+
         return view('topics.index', compact('topics', 'active_users'));
 
         // $comments = App\Administrator::find(1);
@@ -40,8 +41,31 @@ class TopicsController extends Controller
         return view('topics.create_and_edit', compact('topic', 'categories', 'user'));
     }
 
-    public function store(TopicRequest $request, Topic $topic)
+    public function store(TopicRequest $request, Topic $topic, TimeOuts $timeOuts)
     {
+        // 获取最后发布的话题
+        $lastTopic = Topic::query()
+            ->where(['user_id' => Auth::user()->id])
+            ->where(['category_id' => $request->category_id])
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        if (isset($lastTopic)) {
+            // 检查频率
+            $key = 'topic_create_' . \Auth::id();
+
+            if ($timeOuts->get($key)) {
+                return redirect()->to($topic->link())->with('danger', '你发帖时间过短！');
+            }
+
+            // 检查雷同
+            similar_text($lastTopic->title, $request->title, $percent);
+
+            if ($percent > 80) {
+                return redirect()->to($topic->link())->with('danger', '请勿重复发布雷同内容！');
+            }
+        }
+
         $topic->fill($request->all());
         $topic->user_id = Auth::user()->id;
 
@@ -53,11 +77,11 @@ class TopicsController extends Controller
             $topic->role = 'user';
         }
 
-        $url = $request->url().'/'.$id; 
+        $url = $request->url() . '/' . $id;
         $topic->url = $url;
 
         $topic->save();
-        
+
         // return redirect()->route('topics.show', $topic->id)->with('success', '帖子创建成功！');
         return redirect()->to($topic->link())->with('success', '帖子创建成功！');
     }
@@ -112,7 +136,7 @@ class TopicsController extends Controller
         // return redirect()->route('topics.show', $topic->id)->with('success', '更新成功！');
         return redirect()->to($topic->link())->with('success', '帖子更新成功！');
     }
-    
+
     public function destroy(Topic $topic)
     {
         $this->authorize('destroy', $topic);
