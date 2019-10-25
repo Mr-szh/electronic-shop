@@ -10,8 +10,17 @@
             <a href="{{ route('users.show', $notification->data['user_id']) }}">
                 {{ $notification->data['user_name'] }}
             </a>
-            评论了
+            <!-- 评论了
+            <a href="{{ $notification->data['topic_link'] }}">{{ $notification->data['topic_title'] }}</a> -->
+            {{-- 通知分为话题被评论；话题评论中被提及 --}}
+            @if ($notification->data['type'] == 'reply')
+            •回复了你的话题：
             <a href="{{ $notification->data['topic_link'] }}">{{ $notification->data['topic_title'] }}</a>
+            @else
+            •在
+            <a href="{{ $notification->data['topic_link'] }}">{{ $notification->data['topic_title'] }}</a>
+              的评论中提及到了你
+            @endif
 
             <span class="meta float-right" title="{{ $notification->created_at }}">
                 <i class="far fa-clock"></i>

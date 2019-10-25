@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
+    use Traits\MentionHelper;
+    
     protected $fillable = ['content'];
 
     public function topic()

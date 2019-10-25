@@ -1730,3 +1730,20 @@ body {
         background-color: #d15b47 !important;
     }
 }
+
+.media-body {
+    .reply-content a {
+        color: #f08779 !important;
+    }
+    
+    .reply-content a:link {
+        text-decoration: underline !important;
+        color: #f08779 !important;
+    }
+    
+    .reply-content a:hover {
+        text-decoration: none !important;
+        color: #c46b61 !important;
+    }
+}
+

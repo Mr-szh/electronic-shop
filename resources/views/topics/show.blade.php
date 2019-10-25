@@ -82,7 +82,7 @@
         <div class="card topic-reply mt-4">
             <div class="card-body">
                 <!-- 视条件加载子模板 -->
-                @includeWhen(Auth::check(), 'topics._reply_box', ['topic' => $topic])
+                @includeWhen(Auth::check(), 'topics._reply_box', ['topic' => $topic, 'replies' => $topic->replies()->with('user', 'topic')->get()])
                 @include('topics._reply_list', ['replies'=>$topic->replies()->with('user','topic')->recent()->paginate(5)])
             </div>
         </div>

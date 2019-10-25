@@ -9,6 +9,11 @@
         </div>
         <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-share mr-1"></i> 回复</button>
     </form>
+
+    {{-- 得到已经评论的所有人隐藏 --}}
+    @foreach ($replies as $reply)
+        <input type="text" hidden="hidden" value="{{ $reply->user->name }}" id="{{ $reply->user_id }}" name="replies">
+    @endforeach
 </div>
 
 <hr>
@@ -20,17 +25,19 @@
 <script src="{{asset('js/jquery.atwho.min.js')}}"></script>
 <script src="{{asset('js/jquery.caret.min.js')}}"></script>
 <script>
+    // 获取已有评论的所有人名
+    var nameValues = [];
+    $("input[name='replies']").each(function () {
+        var name = $(this).val();
+        if ($.inArray(name, nameValues) == -1) {
+            nameValues.push(name);
+        }  
+    });
+
     $('.inputor').atwho({
         at: "@",
-        callbacks: {
-            remoteFilter: function(query, callback) {
-                $.getJSON("/atwho", {
-                    q: query
-                }, function(data) {
-                    callback(data)
-                })
-            }
-        }
-    })
+        data: nameValues,
+        limit: 100
+    });
 </script>
 @endsection

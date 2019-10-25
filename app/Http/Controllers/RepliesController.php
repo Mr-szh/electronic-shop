@@ -19,7 +19,9 @@ class RepliesController extends Controller
             return redirect()->back()->with('danger', '回复内容错误！');
         }
 
-        $reply->content = $request->content;
+        // $reply->content = $request->content;
+        $reply->content = $reply->parse($request->content);
+        $reply->mention_ids = $reply->mentionUserIds();
         $reply->user_id = Auth::id();
         $reply->topic_id = $request->topic_id;
 

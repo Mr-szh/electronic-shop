@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\Topic;
 use App\Jobs\TranslateSlug;
 use App\Models\TimeOuts;
+use App\Handlers\SlugTranslateHandler;
 
 class TopicObserver
 {

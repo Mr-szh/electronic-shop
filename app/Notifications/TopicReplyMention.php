@@ -8,36 +8,33 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use App\Models\Reply;
 
-class TopicReplied extends Notification implements ShouldQueue
+// 评论提及 @ 到的人通知
+class TopicReplyMention extends Notification
 {
     use Queueable;
 
     public $reply;
-    public $type;
 
-    public function __construct(Reply $reply, $type)
+    public function __construct(Reply $reply)
     {
         // 注入回复实体，方便 toDatabase 方法中的使用
         $this->reply = $reply;
-        $this->type = $type;
     }
 
     public function via($notifiable)
     {
         // 开启通知的频道
         return ['database'];
-        // return ['database', 'mail'];
     }
 
     public function toDatabase($notifiable)
     {
         $topic = $this->reply->topic;
         $link =  $topic->link(['#reply' . $this->reply->id]);
-
-        // 存入数据库里的数据
+        
+        // 存入数据库里的数据 给 data 字段
         return [
-            // 'type' => 'reply',
-            'type' => $this->type,
+            'type' => 'mention',
             'reply_id' => $this->reply->id,
             'reply_content' => $this->reply->content,
             'user_id' => $this->reply->user->id,
@@ -47,17 +44,5 @@ class TopicReplied extends Notification implements ShouldQueue
             'topic_id' => $topic->id,
             'topic_title' => $topic->title,
         ];
-    }
-
-    public function toMail($notifiable)
-    {
-        $url = $this->reply->topic->link(['#reply'.$this->reply->id]);
-        
-        return (new MailMessage)
-            ->subject($this->reply->user->name.'评论了您的文章')
-            ->line($this->reply->user->name."评论了您的文章:")
-            ->action($this->reply->post->title, $url)
-            ->line("评论内容如下: ")
-            ->line($this->reply->body);
     }
 }
