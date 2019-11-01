@@ -33,6 +33,10 @@
                 @endif
             </ul>
 
+            <a class="nav-link nav-style" href="{{ url('/custom') }}">
+                定制
+            </a>
+
             <a class="nav-link nav-style" href="{{ url('/about') }}">
                 关于我们
             </a>
@@ -44,12 +48,6 @@
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
-                        <!-- <li class="nav-item {{ active_class(if_route('topics.index')) }}"><a class="nav-link" href="{{ route('topics.index') }}">话题</a></li>
-                        <li class="nav-item {{ active_class((if_route('categories.show') && if_route_param('category', 1))) }}"><a class="nav-link" href="{{ route('categories.show', 1) }}">分享</a></li>
-                        <li class="nav-item {{ active_class((if_route('categories.show') && if_route_param('category', 2))) }}"><a class="nav-link" href="{{ route('categories.show', 2) }}">问答</a></li>
-                        <li class="nav-item {{ active_class((if_route('categories.show') && if_route_param('category', 3))) }}"><a class="nav-link" href="{{ route('categories.show', 3) }}">公告</a></li>
-                        <li class="nav-item {{ active_class((if_route('categories.show') && if_route_param('category', 4))) }}"><a class="nav-link" href="{{ route('categories.show', 4) }}">定制</a></li> -->
-
                         <li class="{{ active_class(if_route('topics.index')) }} nav-item"><a class="nav-link" href="{{ route('topics.index') }}">话题</a></li>
                         @foreach ($categories as $category)
                         <li class="{{ active_class((if_route('categories.show') && if_route_param('category', $category->id))) }} nav-item"><a class="nav-link" href="{{ route('categories.show', $category->id) }}">{{ $category->name }}</a></li>

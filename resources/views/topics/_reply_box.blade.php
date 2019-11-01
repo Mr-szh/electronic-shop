@@ -10,9 +10,11 @@
         <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-share mr-1"></i> 回复</button>
     </form>
 
-    {{-- 得到已经评论的所有人隐藏 --}}
+    {{-- 得到已经评论的所有人 --}}
     @foreach ($replies as $reply)
+        @if($reply->user_id != Auth::id())
         <input type="text" hidden="hidden" value="{{ $reply->user->name }}" id="{{ $reply->user_id }}" name="replies">
+        @endif
     @endforeach
 </div>
 

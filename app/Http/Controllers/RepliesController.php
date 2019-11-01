@@ -12,9 +12,8 @@ use App\Models\User;
 class RepliesController extends Controller
 {
     public function store(ReplyRequest $request, Reply $reply) {
-        // $content = clean($request->post('content'), 'user_topic_body');
-        // 避免与 Request 对象本身的 public 属性冲突，比如 attributes / query 可以很方便地使用 input() 的第二个参数来返回默认值
         $content = clean($request->input('content'), 'user_topic_body');
+        
         if (empty($content)) {
             return redirect()->back()->with('danger', '回复内容错误！');
         }

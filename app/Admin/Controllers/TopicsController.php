@@ -89,6 +89,12 @@ class TopicsController extends Controller
             $footer->disableCreatingCheck();
         });
 
+        $form->submitted(function (Form $form) {
+            if ($validationMessages = $this->validationMessages($data)) {
+                return back()->withInput()->withErrors($validationMessages);
+            }
+        });
+
         $form->saving(function (Form $form) {
             $id = DB::table('topics')->max('id') + 1;
             $url = 'http://electronic-shop/topics/'.$id;

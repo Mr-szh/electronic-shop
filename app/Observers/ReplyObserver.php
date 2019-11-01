@@ -32,15 +32,6 @@ class ReplyObserver
         }
     }
 
-    // public function saving(Reply $reply)
-    // {
-    //     // fixme只能@一个用户
-    //     $username = $reply->get_between($reply->content, '@', ' ');
-    //     $uid = User::query()->where('name', $username)->pluck('id')->toArray();
-    //     $replace = "<a style='color:blue;text-decoration:none' href='/users/" . $uid[0] . "' title='" . "$username'>@" . $username . "</a>";
-    //     $reply->content = str_replace('@' . $username, $replace, $reply->content);
-    // }
-
     public function deleted(Reply $reply)
     {
         // $reply->topic->reply_count = $reply->topic->replies->count();

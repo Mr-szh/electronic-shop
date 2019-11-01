@@ -47,11 +47,11 @@ class CategoriesController extends Controller
         $grid->filter(function ($filter) {
             // 去掉默认的id过滤器
             $filter->disableIdFilter();
-            
+
             $filter->like('name', '名称')->placeholder('请输入类目名称');
             $filter->in('is_directory', '是否拥有子类目')->multipleSelect(['1' => '是', '0' => '否']);
             $filter->between('created_at', '创建时间')->date();
-            
+
             $filter->scope('new', '最近创建/修改')
                 ->whereDate('created_at', date('Y-m-d'));
         });
@@ -94,7 +94,7 @@ class CategoriesController extends Controller
 
         if ($isEditing) {
             $form->display('is_directory', '是否拥有子类目')->with(function ($value) {
-                return $value ? '是' :'否';
+                return $value ? '是' : '否';
             });
 
             $form->display('parent.name', '父类目');
@@ -103,7 +103,7 @@ class CategoriesController extends Controller
                 ->options(['1' => '是', '0' => '否'])
                 ->default('0')
                 ->rules('required');
-            
+
             // 代表下拉框的值通过 /admin/api/categories 接口搜索获取
             $form->select('parent_id', '父类目')->ajax('/admin/api/categories');
         }
@@ -113,7 +113,7 @@ class CategoriesController extends Controller
             $tools->disableView();
         });
 
-        $form->footer(function ($footer) {     
+        $form->footer(function ($footer) {
             $footer->disableViewCheck();
             $footer->disableEditingCheck();
             $footer->disableCreatingCheck();
@@ -143,7 +143,7 @@ class CategoriesController extends Controller
         $search = $request->input('q');
         $result = Category::query()
             ->where('is_directory', boolval($request->input('is_directory', true)))
-            ->where('name', 'like', '%'.$search.'%')
+            ->where('name', 'like', '%' . $search . '%')
             ->paginate();
 
         // 把查询出来的结果重新组装成 Laravel-Admin 需要的格式

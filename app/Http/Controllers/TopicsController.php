@@ -18,7 +18,7 @@ use App\Models\TimeOuts;
 
 class TopicsController extends Controller
 {
-    public function index(Request $request, Topic $topic, User $user)
+    public function index(Request $request, Topic $topic, User $user)   
     {
         $topics = $topic->withOrder($request->order)->paginate(10);
         // $topics_admin = $topic->where('admin_id', '1')->paginate(2);

@@ -56,7 +56,9 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
     Route::get('atwho', 'RepliesController@atwho')->name('replies.atwho');
 
     Route::resource('notifications', 'NotificationsController', ['only' => ['index']]);
-    
+
+    Route::get('custom', 'ProductsController@custom')->name('custom.index');
+
 });
 
 Route::resource('users', 'UserController', ['only' => ['show']]);

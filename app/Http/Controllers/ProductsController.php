@@ -304,4 +304,11 @@ class ProductsController extends Controller
 
         return [];
     }
+
+    public function custom(Request $request, Category $categories)
+    {
+        $categories = Category::query()->get();
+        
+        return view('custom.index', ['categories' => $categories]);
+    }
 }

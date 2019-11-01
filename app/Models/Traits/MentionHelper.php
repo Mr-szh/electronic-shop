@@ -39,6 +39,7 @@ trait MentionHelper
             $href = route('users.show', $user->id);
             // 替换成超链接 <a href=""></a> 格式
             $place = '<a href=' . $href . '>' . $search . '</a>';
+
             $this->body_parsed = str_replace($search, $place, $this->body_parsed);
         }
     }
@@ -46,9 +47,12 @@ trait MentionHelper
     public function parse($body)
     {
         $this->body_original = $body;
+
         // $this->usernames = $this->getMentionedUsername();
         $this->usernames = $this->getMentionedUsername($this->body_original);
+
         count($this->usernames) > 0 && $this->users = User::whereIn('name', $this->usernames)->get();
+        
         $this->replace();
 
         return $this->body_parsed;
