@@ -10,7 +10,7 @@
 
                 @foreach ($categories as $category)
                 @if($category->parent_id == '1')
-                <button type="button" class="btn btn-default category-choose">{{ $category->name }}</button>
+                <button type="button" class="btn btn-default category-choose category">{{ $category->name }}</button>
                 @endif
                 @endforeach
 
@@ -23,7 +23,7 @@
                     <ul class="dropdown-menu dropdown-menu-right category-more" aria-labelledby="dropdownMenu1">
                         @foreach ($categories as $category)
                         @if($category->parent_id == '9')
-                        <li class="dropdown-header"><a href="#">{{ $category->name }}</a></li>
+                        <li class="dropdown-header"><a href="#" class="category">{{ $category->name }}</a></li>
                         <hr>
                         @endif
                         @endforeach
@@ -86,10 +86,12 @@
 
     <div class="col-lg-6 col-md-6 topic-list custom-right">
         <div class="panel panel-primary">
+            @if(isset($category_name))
             <div class="panel-heading">
                 请选择
-                <font>CPU*</font>
+                <font id="change">{{ $category_name }}</font>
             </div>
+            @endif
             <div class="panel-choose">
                 <form action="{{ route('custom.index') }}" class="search-form">
                     <div class="form-row">
@@ -110,6 +112,7 @@
                                 <option value="rating_asc">评价从低到高</option>
                             </select>
                         </div>
+                        <input type="hidden" name="category" value="">
                     </div>
                 </form>
             </div>
@@ -122,15 +125,22 @@
 @endsection
 @section('scriptsAfterJs')
 <script>
-    var filters = {!! json_encode($filters) !!};
+    var filters = {!!json_encode($filters) !!};
 
     $(document).ready(function() {
         $('.search-form input[name=search]').val(filters.search);
         $('.search-form select[name=order]').val(filters.order);
+        $("input[name=category]").val(filters.category);
+        $("#change").text(filters.category);
 
         $('.search-form select[name=order]').on('change', function() {
-        $('.search-form').submit();
-      });
+            $('.search-form').submit();
+        });
+
+        $(".category").click(function() {
+            $("input[name=category]").val(this.innerHTML);
+            $('.search-form').submit();
+        });
     })
 </script>
 @endsection

@@ -311,6 +311,11 @@ class ProductsController extends Controller
 
         $builder = Product::query()->where('on_sale', true);
 
+        if ($category = $request->input('category', '')) {
+            $category_id = Category::query()->where('name', $category)->get();
+            $builder->where('category_id', '=', $category_id[0]['id']);
+        }
+
         if ($search = $request->input('search', '')) {
             $like = '%' . $search . '%';
             $builder->where(function ($query) use ($like) {
@@ -325,9 +330,7 @@ class ProductsController extends Controller
 
         if ($order = $request->input('order', '')) {
             if (preg_match('/^(.+)_(asc|desc)$/', $order, $m)) {
-                // 如果字符串的开头是这 3 个字符串之一，说明是一个合法的排序值
                 if (in_array($m[1], ['price', 'sold_count', 'rating'])) {
-                    // 根据传入的排序值来构造排序参数
                     $builder->orderBy($m[1], $m[2]);
                 }
             }
@@ -339,6 +342,7 @@ class ProductsController extends Controller
             'categories' => $categories,
             'products' => $products,
             'filters'  => [
+                'category' => $category,
                 'search' => $search,
                 'order'  => $order,
             ],
