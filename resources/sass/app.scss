@@ -560,7 +560,8 @@ body {
                     padding: 5px;
 
                     img {
-                        width: 100%;
+                        width: 197.5px;
+                        height: 197.5px;
                     }
 
                     .price {
@@ -1903,7 +1904,7 @@ body {
             line-height: 45px;
             height: 46.8px;
 
-            span>font {
+            font {
                 color: #f33;
                 font-weight: bolder;
             }
@@ -1925,6 +1926,102 @@ body {
                     font-size: 0.9rem;
                     border-radius: 0.2rem;
                     margin-right: 10px;
+                }
+            }
+        }
+
+        .panel-choose {
+            padding: 0px 10px;
+            border: 1px solid rgba(0, 0, 0, 0.125);
+            line-height: 45px;
+            height: 46.8px;
+
+            .margin-style {
+                margin-top: 0.55rem;
+            }
+        }
+
+        .panel-body {
+            .image {
+                width: 110px;
+                float: left;
+                padding: 10px;
+
+                img {
+                    width: 90px;
+                    height: 90px;
+                }
+            }
+
+            .pro-intro {
+                padding: 0px;
+                float: left;
+
+                h3 {
+                    height: 32px;
+                    overflow: hidden;
+                    display: block;
+                    word-break: break-all;
+                    word-wrap: break-word;
+                    margin-bottom: 24px;
+
+                    a {
+                        font-size: 14px;
+                        font-weight: 700;
+                        display: inline-block;
+                        margin-right: 10px;
+                        color: #0a50a1;
+                    }
+
+                    a:hover {
+                        color: red;
+                    }
+                }
+
+                .item-box {
+                    font-size: 12px;
+                    padding: 10px 20px 10px 5px;
+                    line-height: 12px;
+                    flex-grow: 1;
+                    float: left;
+
+                    span {
+                        color: #38b;
+                        font-weight: bold;
+                    }
+                }
+            }
+
+            .price-box {
+                float: right;
+                width: 106px;
+                position: relative;
+
+                .price {
+                    display: block;
+                    color: #f33;
+                    font-size: 16px;
+                    text-align: center;
+                    margin-bottom: 34px;
+                }
+
+                .insert {
+                    display: block;
+                    width: 106px;
+                    height: 36px;
+                    color: #fff;
+                    font-size: 14px;
+                    background-color: #3891ed;
+                    border-radius: 3px;
+                    line-height: 36px;
+                    text-decoration: none;
+
+                    i {
+                        display: inline-block;
+                        width: 10px;
+                        height: 10px;
+                        margin: 0 5px 0 10px;
+                    }
                 }
             }
         }
