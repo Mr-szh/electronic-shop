@@ -25,6 +25,6 @@
             </div>
         </div>
         @endforeach
-        <div class="float-left">{{ $products->appends($filters)->render() }}</div>
+        <div class="paging float-left">{{ $products->appends($filters)->render() }}</div>
     </div>
 </div>

@@ -311,10 +311,10 @@ class ProductsController extends Controller
 
         $builder = Product::query()->where('on_sale', true);
 
-        if ($category = $request->input('category', '')) {
-            $category_id = Category::query()->where('name', $category)->get();
-            $builder->where('category_id', '=', $category_id[0]['id']);
-        }
+        // if ($category = $request->input('category', '')) {
+        //     $category_id = Category::query()->where('name', $category)->get();
+        //     $builder->where('category_id', '=', $category_id[0]['id']);
+        // }
 
         if ($search = $request->input('search', '')) {
             $like = '%' . $search . '%';
@@ -328,6 +328,16 @@ class ProductsController extends Controller
             });
         }
 
+        if ($request->input('category_id') && $category = Category::find($request->input('category_id'))) {
+            if ($category->is_directory) {
+                $builder->whereHas('category', function ($query) use ($category) {
+                    $query->where('path', 'like', $category->path . $category->id . '-%');
+                });
+            } else {
+                $builder->where('category_id', $category->id);
+            }
+        }
+
         if ($order = $request->input('order', '')) {
             if (preg_match('/^(.+)_(asc|desc)$/', $order, $m)) {
                 if (in_array($m[1], ['price', 'sold_count', 'rating'])) {
@@ -336,16 +346,18 @@ class ProductsController extends Controller
             }
         }
 
-        $products = $builder->paginate(4);
+        $products = $builder->paginate(9);
 
         return view('custom.index', [
             'categories' => $categories,
             'products' => $products,
             'filters'  => [
-                'category' => $category,
+                // 'category' => $category,
                 'search' => $search,
                 'order'  => $order,
             ],
+            // 等价于 isset($category) ? $category : null
+            'category' => $category ?? null,
         ]);
     }
 }

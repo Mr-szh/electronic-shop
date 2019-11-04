@@ -8,9 +8,9 @@
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups" style="margin-top:10px;">
             <div class="btn-group" role="group">
 
-                @foreach ($categories as $category)
-                @if($category->parent_id == '1')
-                <button type="button" class="btn btn-default category-choose category">{{ $category->name }}</button>
+                @foreach ($categories as $item)
+                @if($item->parent_id == '1')
+                <button type="button" class="btn btn-default category-choose category-name">{{ $item->name }}</button>
                 @endif
                 @endforeach
 
@@ -21,9 +21,9 @@
                     </button>
 
                     <ul class="dropdown-menu dropdown-menu-right category-more" aria-labelledby="dropdownMenu1">
-                        @foreach ($categories as $category)
-                        @if($category->parent_id == '9')
-                        <li class="dropdown-header"><a href="#" class="category">{{ $category->name }}</a></li>
+                        @foreach ($categories as $item)
+                        @if($item->parent_id == '9')
+                        <li class="dropdown-header"><a href="#" class="category-name">{{ $item->name }}</a></li>
                         <hr>
                         @endif
                         @endforeach
@@ -42,12 +42,12 @@
             </div>
             <div class="panel panel-body">
                 <ul class="list-group">
-                    @foreach ($categories as $category)
-                    @if(isset($category->parent_id))
+                    @foreach ($categories as $item)
+                    @if(isset($item->parent_id))
                     <li class="list-group-item">
                         <h3>
-                            {{ $category->name }}
-                            @if($category->parent_id == '1')
+                            {{ $item->name }}
+                            @if($item->parent_id == '1')
                             <i class="important">*</i>
                             @endif
                         </h3>
@@ -86,36 +86,60 @@
 
     <div class="col-lg-6 col-md-6 topic-list custom-right">
         <div class="panel panel-primary">
-            @if(isset($category_name))
-            <div class="panel-heading">
-                请选择
-                <font id="change">{{ $category_name }}</font>
-            </div>
-            @endif
-            <div class="panel-choose">
-                <form action="{{ route('custom.index') }}" class="search-form">
+            <form action="{{ route('custom.index') }}" class="search-form">
+                <div class="panel-heading">
+                    <span class="float-left">请选择</span>
+                    <font id="change" class="float-left">CPU</font>
+                    <div class="col-md-4 float-right" style="margin-top:0.5rem;">
+                        <select name="order" class="form-control form-control-sm float-right margin-style">
+                            <option value="">排序方式</option>
+                            <option value="price_asc">价格从低到高</option>
+                            <option value="price_desc">价格从高到低</option>
+                            <option value="sold_count_desc">销量从高到低</option>
+                            <option value="sold_count_asc">销量从低到高</option>
+                            <option value="rating_desc">评价从高到低</option>
+                            <option value="rating_asc">评价从低到高</option>
+                        </select>
+                    </div>
+                </div>
+
+
+                @if ($category && $category->is_directory)
+                <div class="category-items">
+                    <div class="filters">
+                        <div class="col-2 filter-key float-left">子子类目：</div>
+                        <div class="col-11 filter-values float-left">
+                            @foreach($category->children as $child)
+                            <a href="{{ route('custom.index', ['category_id' => $child->id]) }}">{{ $child->name }}</a>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                <div class="panel-choose">
                     <div class="form-row">
                         <div class="col-md-9">
                             <div class="form-row">
-                                <div class="col-auto margin-style"><input type="text" class="form-control form-control-sm" name="search" placeholder="搜索"></div>
+                                <div class="col-auto category-breadcrumb">
+                                    <a class="all-products" href="{{ route('custom.index') }}">全部</a> >
+                                    @if ($category)
+                                    @foreach($category->ancestors as $ancestor)
+                                        <span class="category">
+                                        <a href="{{ route('custom.index', ['category_id' => $ancestor->id]) }}">{{ $ancestor->name }}</a>
+                                        </span>
+                                        <span>&gt;</span>
+                                    @endforeach
+                                    @endif
+                                </div>
+                                <div class="col-auto margin-style"><input type="text" class="form-control form-control-sm" name="search" placeholder="搜索" AUTOCOMPLETE="off"></div>
                                 <div class="col-auto"><button class="btn btn-primary btn-sm">搜索</button></div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <select name="order" class="form-control form-control-sm float-right margin-style">
-                                <option value="">排序方式</option>
-                                <option value="price_asc">价格从低到高</option>
-                                <option value="price_desc">价格从高到低</option>
-                                <option value="sold_count_desc">销量从高到低</option>
-                                <option value="sold_count_asc">销量从低到高</option>
-                                <option value="rating_desc">评价从高到低</option>
-                                <option value="rating_asc">评价从低到高</option>
-                            </select>
-                        </div>
                         <input type="hidden" name="category" value="">
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
             <div class="panel panel-body">
                 @include('custom._product')
             </div>
@@ -125,19 +149,19 @@
 @endsection
 @section('scriptsAfterJs')
 <script>
-    var filters = {!!json_encode($filters) !!};
+    var filters = {!! json_encode($filters) !!};
 
     $(document).ready(function() {
         $('.search-form input[name=search]').val(filters.search);
         $('.search-form select[name=order]').val(filters.order);
         $("input[name=category]").val(filters.category);
-        $("#change").text(filters.category);
+        // $("#change").text(filters.category);
 
         $('.search-form select[name=order]').on('change', function() {
             $('.search-form').submit();
         });
 
-        $(".category").click(function() {
+        $(".category-name").click(function() {
             $("input[name=category]").val(this.innerHTML);
             $('.search-form').submit();
         });
