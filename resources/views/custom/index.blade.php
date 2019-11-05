@@ -10,20 +10,20 @@
 
                 @foreach ($categories as $item)
                 @if($item->parent_id == '1')
-                <button type="button" class="btn btn-default category-choose category-name">{{ $item->name }}</button>
+                <a href="{{ route('custom.index', ['category_id' => $item->id]) }}" class="btn btn-default category-choose category-name" >{{ $item->name }}</a>
                 @endif
                 @endforeach
 
                 <div class="dropdown">
                     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        更多
+                        配件
                         <span class="caret"></span>
                     </button>
 
                     <ul class="dropdown-menu dropdown-menu-right category-more" aria-labelledby="dropdownMenu1">
                         @foreach ($categories as $item)
                         @if($item->parent_id == '9')
-                        <li class="dropdown-header"><a href="#" class="category-name">{{ $item->name }}</a></li>
+                        <li class="dropdown-header"><a href="{{ route('custom.index', ['category_id' => $item->id]) }}" class="category-name" >{{ $item->name }}</a></li>
                         <hr>
                         @endif
                         @endforeach
@@ -88,8 +88,14 @@
         <div class="panel panel-primary">
             <form action="{{ route('custom.index') }}" class="search-form">
                 <div class="panel-heading">
-                    <span class="float-left">请选择</span>
-                    <font id="change" class="float-left">CPU</font>
+                    @if ($category)
+                    <span class="float-left">已选择</span>
+                    <font id="change" class="float-left">
+                        {{ $category->name }}
+                    </font>
+                    @else
+                    <span class="float-left">以下为所有商品：</span>
+                    @endif
                     <div class="col-md-4 float-right" style="margin-top:0.5rem;">
                         <select name="order" class="form-control form-control-sm float-right margin-style">
                             <option value="">排序方式</option>
@@ -103,43 +109,58 @@
                     </div>
                 </div>
 
-
-                @if ($category && $category->is_directory)
-                <div class="category-items">
-                    <div class="filters">
-                        <div class="col-2 filter-key float-left">子子类目：</div>
-                        <div class="col-11 filter-values float-left">
-                            @foreach($category->children as $child)
-                            <a href="{{ route('custom.index', ['category_id' => $child->id]) }}">{{ $child->name }}</a>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-                @endif
-
                 <div class="panel-choose">
                     <div class="form-row">
                         <div class="col-md-9">
                             <div class="form-row">
                                 <div class="col-auto category-breadcrumb">
                                     <a class="all-products" href="{{ route('custom.index') }}">全部</a> >
-                                    @if ($category)
+                                    @if (isset($category))
                                     @foreach($category->ancestors as $ancestor)
                                         <span class="category">
-                                        <a href="{{ route('custom.index', ['category_id' => $ancestor->id]) }}">{{ $ancestor->name }}</a>
+                                            <a href="{{ route('custom.index', ['category_id' => $ancestor->id]) }}">{{ $ancestor->name }}</a>
                                         </span>
                                         <span>&gt;</span>
                                     @endforeach
+                                    <input type="hidden" name="category_id" value="{{ $category->id }}">
                                     @endif
                                 </div>
                                 <div class="col-auto margin-style"><input type="text" class="form-control form-control-sm" name="search" placeholder="搜索" AUTOCOMPLETE="off"></div>
                                 <div class="col-auto"><button class="btn btn-primary btn-sm">搜索</button></div>
                             </div>
                         </div>
-                        <input type="hidden" name="category" value="">
                     </div>
                 </div>
             </form>
+
+            @if ($category && $category->is_directory)
+            <div class="category-items">
+                <div class="filters">
+                    <div class="col-4 filter-key float-left">子类目：</div>
+                    <div class="col-9 filter-values float-left">
+                        @foreach($category->children as $child)
+                        <a href="{{ route('custom.index', ['category_id' => $child->id]) }}">{{ $child->name }}</a>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            @endif
+
+            @if($properties)
+            <div class="category-items">
+                <div class="filters">
+                    @foreach($properties as $property)
+                    <div class="col-4 filter-key float-left">{{ $property['key'] }}：</div>
+                    <div class="col-9 filter-values float-left">
+                        @foreach($property['values'] as $value)
+                        <a href="javascript: appendFilterToQuery('{{ $property['key'] }}', '{{ $value }}')">{{ $value }}</a>
+                        @endforeach
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
             <div class="panel panel-body">
                 @include('custom._product')
             </div>
@@ -154,8 +175,6 @@
     $(document).ready(function() {
         $('.search-form input[name=search]').val(filters.search);
         $('.search-form select[name=order]').val(filters.order);
-        $("input[name=category]").val(filters.category);
-        // $("#change").text(filters.category);
 
         $('.search-form select[name=order]').on('change', function() {
             $('.search-form').submit();

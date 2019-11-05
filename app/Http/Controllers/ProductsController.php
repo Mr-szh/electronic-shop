@@ -309,55 +309,124 @@ class ProductsController extends Controller
     {
         $categories = Category::query()->get();
 
-        $builder = Product::query()->where('on_sale', true);
+        $page = $request->input('page', 1);
+        $perPage = 6;
 
-        // if ($category = $request->input('category', '')) {
-        //     $category_id = Category::query()->where('name', $category)->get();
-        //     $builder->where('category_id', '=', $category_id[0]['id']);
-        // }
-
-        if ($search = $request->input('search', '')) {
-            $like = '%' . $search . '%';
-            $builder->where(function ($query) use ($like) {
-                $query->where('title', 'like', $like)
-                    ->orWhere('description', 'like', $like)
-                    ->orWhereHas('skus', function ($query) use ($like) {
-                        $query->where('title', 'like', $like)
-                            ->orWhere('description', 'like', $like);
-                    });
-            });
-        }
+        $params = [
+            'index' => 'products',
+            'type' => '_doc',
+            'body' => [
+                'from' => ($page - 1) * $perPage,
+                'size' => $perPage,
+                'query' => [
+                    'bool' => [
+                        'filter' => [
+                            ['term' => ['on_sale' => true]],
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
         if ($request->input('category_id') && $category = Category::find($request->input('category_id'))) {
             if ($category->is_directory) {
-                $builder->whereHas('category', function ($query) use ($category) {
-                    $query->where('path', 'like', $category->path . $category->id . '-%');
-                });
+                $params['body']['query']['bool']['filter'][] = [
+                    'prefix' => ['category_path' => $category->path . $category->id . '-'],
+                ];
             } else {
-                $builder->where('category_id', $category->id);
+                $params['body']['query']['bool']['filter'][] = ['term' => ['category_id' => $category->id]];
             }
         }
 
         if ($order = $request->input('order', '')) {
             if (preg_match('/^(.+)_(asc|desc)$/', $order, $m)) {
                 if (in_array($m[1], ['price', 'sold_count', 'rating'])) {
-                    $builder->orderBy($m[1], $m[2]);
+                    $params['body']['sort'] = [[$m[1] => $m[2]]];
                 }
             }
         }
 
-        $products = $builder->paginate(9);
+        if ($search = $request->input('search', '')) {
+            $keywords = array_filter(explode(' ', $search));
+
+            $params['body']['query']['bool']['must'] = [];
+
+            foreach ($keywords as $keyword) {
+                $params['body']['query']['bool']['must'][] = [
+                    'multi_match' => [
+                        'query' => $keyword,
+                        'fields' => [
+                            'title^2',
+                            'long_title^2',
+                            'category^2',
+                            'description',
+                            'skus_title',
+                            'skus_description',
+                            'properties_value',
+                        ],
+                    ],
+                ];
+            }
+        }
+
+        if ($search || isset($category)) {
+            $params['body']['aggs'] = [
+                'properties' => [
+                    'nested' => [
+                        'path' => 'properties',
+                    ],
+                    'aggs' => [
+                        'properties' => [
+                            'terms' => [
+                                'field' => 'properties.name',
+                            ],
+                            'aggs' => [
+                                'value' => [
+                                    'terms' => [
+                                        'field' => 'properties.value',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ];
+        }
+
+        $result = app('es')->search($params);
+
+        $productIds = collect($result['hits']['hits'])->pluck('_id')->all();
+
+        $products = Product::query()
+            ->whereIn('id', $productIds)
+            ->orderByRaw(sprintf("FIND_IN_SET(id, '%s')", join(',', $productIds)))
+            ->get();
+
+        $pager = new LengthAwarePaginator($products, $result['hits']['total'], $perPage, $page, [
+            'path' => route('custom.index', false),
+        ]);
+
+        $properties = [];
+
+        if (isset($result['aggregations'])) {
+            $properties = collect($result['aggregations']['properties']['properties']['buckets'])
+                ->map(function ($bucket) {
+                    return [
+                        'key' => $bucket['key'],
+                        'values' => collect($bucket['value']['buckets'])->pluck('key')->all(),
+                    ];
+                });
+        }
 
         return view('custom.index', [
             'categories' => $categories,
-            'products' => $products,
+            'products' => $pager,
             'filters'  => [
-                // 'category' => $category,
                 'search' => $search,
                 'order'  => $order,
             ],
-            // 等价于 isset($category) ? $category : null
             'category' => $category ?? null,
+            'properties' => $properties,
         ]);
     }
 }

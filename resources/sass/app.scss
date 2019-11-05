@@ -1941,7 +1941,7 @@ body {
                 margin-bottom: 10px;
 
                 .filter-key {
-                    width: 70px;
+                    width: 140px;
                     padding: 0;
                     padding-top: 8px;
                     color: #666;
@@ -1951,11 +1951,17 @@ body {
                 .filter-values {
                     padding: 0;
                     padding-top: 8px;
-                    width: 445px;
+                    width: 375px;
 
                     a {
                         margin-right: 12px;
-                        color: #666;
+                        color: #0a50a1;
+                        text-decoration: none;
+                    }
+
+                    a:hover {
+                        background-color: #3891ed;
+                        color: #fff;
                     }
                 }
             }

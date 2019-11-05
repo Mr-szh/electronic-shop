@@ -33,7 +33,7 @@
                 @endif
             </ul>
 
-            <a class="nav-link nav-style" href="{{ url('/custom') }}">
+            <a class="nav-link nav-style" href="{{ route('custom.index', ['category_id' => '1']) }}">
                 定制
             </a>
 
