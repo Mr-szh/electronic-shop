@@ -150,7 +150,7 @@
             <div class="category-items">
                 <div class="filters">
                     @foreach($properties as $property)
-                    <div class="col-4 filter-key float-left">{{ $property['key'] }}：</div>
+                    <div class="col-4 filter-key float-left"`>{{ $property['key'] }}：</div>
                     <div class="col-9 filter-values float-left">
                         @foreach($property['values'] as $value)
                         <a href="javascript: appendFilterToQuery('{{ $property['key'] }}', '{{ $value }}')">{{ $value }}</a>
@@ -185,5 +185,37 @@
             $('.search-form').submit();
         });
     })
+
+    function parseSearch() {
+        var searches = {};
+        location.search.substr(1).split('&').forEach(function (str) {
+            var result = str.split('=');
+            searches[decodeURIComponent(result[0])] = decodeURIComponent(result[1]);
+        });
+
+        return searches;
+    }
+
+
+    function buildSearch(searches) {
+        var query = '?';
+        _.forEach(searches, function (value, key) {
+            query += encodeURIComponent(key) + '=' + encodeURIComponent(value) + '&';
+        });
+
+        return query.substr(0, query.length - 1);
+    }
+
+    function appendFilterToQuery(name, value) {
+        var searches = parseSearch();
+
+        if (searches['filters']) {
+            searches['filters'] += '|' + name + ':' + value;
+        } else {
+            searches['filters'] = name + ':' + value;
+        }
+
+        location.search = buildSearch(searches);
+    }
 </script>
 @endsection
