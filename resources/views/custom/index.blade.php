@@ -87,6 +87,7 @@
     <div class="col-lg-6 col-md-6 topic-list custom-right">
         <div class="panel panel-primary">
             <form action="{{ route('custom.index') }}" class="search-form">
+                <input type="hidden" name="filters">
                 <div class="panel-heading">
                     @if ($category)
                     <span class="float-left">已选择</span>
@@ -111,24 +112,28 @@
 
                 <div class="panel-choose">
                     <div class="form-row">
-                        <div class="col-md-9">
-                            <div class="form-row">
-                                <div class="col-auto category-breadcrumb">
-                                    <a class="all-products" href="{{ route('custom.index') }}">全部</a> >
-                                    @if (isset($category))
-                                    @foreach($category->ancestors as $ancestor)
-                                        <span class="category">
-                                            <a href="{{ route('custom.index', ['category_id' => $ancestor->id]) }}">{{ $ancestor->name }}</a>
-                                        </span>
-                                        <span>&gt;</span>
-                                    @endforeach
-                                    <input type="hidden" name="category_id" value="{{ $category->id }}">
-                                    @endif
-                                </div>
-                                <div class="col-auto margin-style"><input type="text" class="form-control form-control-sm" name="search" placeholder="搜索" AUTOCOMPLETE="off"></div>
-                                <div class="col-auto"><button class="btn btn-primary btn-sm">搜索</button></div>
-                            </div>
+                        <div class="col-auto category-breadcrumb">
+                            <a class="all-products" href="{{ route('custom.index') }}">全部</a> >
+                            @if (isset($category))
+                            @foreach($category->ancestors as $ancestor)
+                                <span class="category">
+                                    <a href="{{ route('custom.index', ['category_id' => $ancestor->id]) }}">{{ $ancestor->name }}</a>
+                                </span>
+                                <span>&gt;</span>
+                            @endforeach
+                            <span class="category">{{ $category->name }}</span>
+                            <span> ></span>
+                            <input type="hidden" name="category_id" value="{{ $category->id }}">
+                            @endif
+                            @foreach($propertyFilters as $name => $value)
+                            <span class="filter">{{ $name }}:
+                                <span class="filter-value">{{ $value }}</span>
+                                <a class="remove-filter" href="javascript: removeFilterFromQuery('{{ $name }}')">×</a>
+                            </span>
+                            @endforeach
                         </div>
+                        <div class="col-auto margin-style"><input type="text" class="form-control form-control-sm" name="search" placeholder="搜索" AUTOCOMPLETE="off"></div>
+                        <div class="col-auto"><button class="btn btn-primary btn-sm">搜索</button></div>
                     </div>
                 </div>
             </form>
@@ -177,11 +182,12 @@
         $('.search-form select[name=order]').val(filters.order);
 
         $('.search-form select[name=order]').on('change', function() {
-            $('.search-form').submit();
-        });
+            var searches = parseSearch();
 
-        $(".category-name").click(function() {
-            $("input[name=category]").val(this.innerHTML);
+            if (searches['filters']) {
+                $('.search-form input[name=filters]').val(searches['filters']);
+            }
+
             $('.search-form').submit();
         });
     })
@@ -215,6 +221,28 @@
             searches['filters'] = name + ':' + value;
         }
 
+        location.search = buildSearch(searches);
+    }
+
+    function removeFilterFromQuery(name) {
+        var searches = parseSearch();
+
+        if(!searches['filters']) {
+            return;
+        }
+
+        var filters = [];
+        searches['filters'].split('|').forEach(function (filter) {
+            var result = filter.split(':');
+
+            if (result[0] === name) {
+                return;
+            }
+
+            filters.push(filter);
+        });
+
+        searches['filters'] = filters.join('|');
         location.search = buildSearch(searches);
     }
 </script>

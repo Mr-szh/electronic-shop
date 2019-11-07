@@ -1970,11 +1970,10 @@ body {
         .panel-choose {
             padding: 0px 10px;
             border: 1px solid rgba(0, 0, 0, 0.125);
-            line-height: 45px;
-            height: 46.8px;
+            line-height: 36px;
 
             .margin-style {
-                margin-top: 0.55rem;
+                margin-top: 0.25rem;
             }
 
             .category-breadcrumb {
@@ -1994,6 +1993,24 @@ body {
                     a {
                         text-decoration: none;
                         color: #666;
+                    }
+                }
+
+                .filter {
+                    border: 1px red solid;
+                    font-size: 12px;
+                    padding: 2px 0 2px 2px;
+
+                    .filter-value {
+                        color: red;
+                    }
+
+                    .remove-filter {
+                        text-decoration: none;
+                        color: white;
+                        font-weight: bold;
+                        background: red;
+                        padding: 2px;
                     }
                 }
             }
