@@ -67,7 +67,6 @@
 
             <!-- 导航条的右侧 -->
             <ul class="navbar-nav navbar-right">
-                <!-- 登录注册链接开始 -->
                 @guest
                 <!-- 身份验证链接 -->
                 <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">登录</a></li>
@@ -76,11 +75,11 @@
                 <li class="nav-item">
                     <a class="nav-link mt-1" href="{{ route('cart.index') }}">
                         <i class="fa fa-shopping-cart"></i>
+                        @if(Auth::user()->cartItems()->count() != '0')
                         <span class="badge badge-success">
-                            @if(Auth::user()->cartItems()->count() != '0')
                             {{ Auth::user()->cartItems()->count() }}
-                            @endif
                         </span>
+                        @endif
                     </a>
                 </li>
 
@@ -105,7 +104,6 @@
                     </div>
                 </li>
                 @endguest
-                <!-- 登录注册链接结束 -->
             </ul>
         </div>
     </div>

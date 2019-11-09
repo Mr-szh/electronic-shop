@@ -74,8 +74,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function cartItems()
     {
-        // 一对多关系
         return $this->hasMany(CartItem::class);
+    }
+
+    public function configItems()
+    {
+        return $this->hasMany(ConfigItem::class);
     }
 
     public function topics()

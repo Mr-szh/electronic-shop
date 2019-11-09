@@ -58,7 +58,8 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
     Route::resource('notifications', 'NotificationsController', ['only' => ['index']]);
 
     Route::get('custom', 'ProductsController@custom')->name('custom.index');
-
+    Route::post('config', 'ConfigController@add')->name('config.add');
+    
 });
 
 Route::resource('users', 'UserController', ['only' => ['show']]);
