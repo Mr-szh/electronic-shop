@@ -97,6 +97,7 @@
                     @else
                     <span class="float-left">以下为所有商品：</span>
                     @endif
+                    <span class="float-left" style="padding-left:200px;">共 <font>{{ count($products) }}</font> 款</span>
                     <div class="col-md-4 float-right" style="margin-top:0.5rem;">
                         <select name="order" class="form-control form-control-sm float-right margin-style">
                             <option value="">排序方式</option>
