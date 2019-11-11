@@ -10,7 +10,11 @@
 
                 @foreach ($categories as $item)
                 @if($item->parent_id == '1')
-                <a href="{{ route('custom.index', ['category_id' => $item->id]) }}" class="btn btn-default category-choose category-name" >{{ $item->name }}</a>
+                @if($category)
+                <a href="{{ route('custom.index', ['category_id' => $item->id]) }}" class="btn btn-default category-choose category-name @if($item->id == $category->id) selected1 @endif">{{ $item->name }}</a>
+                @else
+                <a href="{{ route('custom.index', ['category_id' => $item->id]) }}" class="btn btn-default category-choose category-name">{{ $item->name }}</a>
+                @endif
                 @endif
                 @endforeach
 
@@ -23,7 +27,13 @@
                     <ul class="dropdown-menu dropdown-menu-right category-more" aria-labelledby="dropdownMenu1">
                         @foreach ($categories as $item)
                         @if($item->parent_id == '9')
-                        <li class="dropdown-header"><a href="{{ route('custom.index', ['category_id' => $item->id]) }}" class="category-name" >{{ $item->name }}</a></li>
+                        <li class="dropdown-header">
+                            @if($category)
+                            <a href="{{ route('custom.index', ['category_id' => $item->id]) }}" class="category-name @if($item->id == $category->id) selected2 @endif">{{ $item->name }}</a>
+                            @else
+                            <a href="{{ route('custom.index', ['category_id' => $item->id]) }}" class="category-name">{{ $item->name }}</a>
+                            @endif
+                        </li>
                         <hr>
                         @endif
                         @endforeach
@@ -51,11 +61,30 @@
                             <i class="important">*</i>
                             @endif
                         </h3>
+
+                        @foreach($configItems as $configItem)
+                        @if($item->id == $configItem->productSku->product->category_id)
+                        <span class="sm-img float-left" data-id="{{ $configItem->productSku->id }}">
+                            <img src="{{ URL::asset('/upload/'.$configItem->productSku->product->image[0]) }}" alt="">
+                        </span>
+                        <div class="config-items float-left">
+                            <div class="title float-left">
+                                <span>{{ $configItem->productSku->title }}</span>
+                            </div>
+                            <span class="minus">-</span>
+                            <span class="num" rel="{{ $configItem->productSku->price }}">{{ $configItem->amount }}</span>
+                            <span class="plus">+</span>
+                        </div>
+                        <span class="add-price float-right"><b>￥</b>{{ $configItem->productSku->price }}</span>
+                        <span class="delete">x</span>
+                        @else
                         <div class="col-auto float-left choose-product">请选择商品</div>
                         <div class="left-operation">
-                            <span class="create">添加</span>
+                            <a href="{{ route('custom.index', ['category_id' => $item->id]) }}" class="create">添加</a>
                             <span class="delete">x</span>
                         </div>
+                        @endif
+                        @endforeach
                     </li>
                     @endif
                     @endforeach
@@ -156,7 +185,7 @@
             <div class="category-items">
                 <div class="filters">
                     @foreach($properties as $property)
-                    <div class="col-4 filter-key float-left"`>{{ $property['key'] }}：</div>
+                    <div class="col-4 filter-key float-left">{{ $property['key'] }}：</div>
                     <div class="col-9 filter-values float-left">
                         @foreach($property['values'] as $value)
                         <a href="javascript: appendFilterToQuery('{{ $property['key'] }}', '{{ $value }}')">{{ $value }}</a>
@@ -190,6 +219,30 @@
             }
 
             $('.search-form').submit();
+        });
+
+        $('.btn-add-to-cart').click(function () {
+            axios.post('{{ route('config.add') }}', {
+                sku_id: $(this).parent().parent().find('select[name=skus]').val(),
+                amount: '1',
+            }).then(function() {
+                swal('加入配置成功', '', 'success');
+            }, function (error) {
+                if (error.response.status === 401) {
+                    swal('请先登录', '', 'error');
+                } else if (error.response.status === 422) {
+                    var html = '<div>';
+                    _.each(error.response.data.errors, function (errors) {
+                        _.each(errors, function (error) {
+                            html += error+'<br>';
+                        })
+                    });
+                    html += '</div>';
+                    swal({content: $(html)[0], icon: 'error'})
+                } else {
+                    swal('系统错误', '', 'error');
+                }
+            })
         });
     })
 

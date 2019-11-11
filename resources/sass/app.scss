@@ -1788,6 +1788,15 @@ body {
                 margin: 0;
             }
         }
+
+        .selected1 {
+            box-sizing: border-box;
+            border: 1px solid #3791ED !important;
+        }
+
+        .selected2 {
+            color: #3791ED !important;
+        }
     }
 
     .custom-left {
@@ -1820,6 +1829,78 @@ body {
                     }
                 }
 
+                .sm-img {
+                    width: 60px;
+                    margin: 0;
+                    background: none;
+
+                    img {
+                        display: block;
+                        margin: 0 auto;
+                        height: 40px;
+                    }
+                }
+
+                .config-items {
+                    text-align: center;
+                    line-height: 40px;
+                    width: 270px;
+                    color: #999;
+
+                    .title {
+                        color: #333;
+                        width: 204px;
+                        word-break: break-all;
+                        text-align: left;
+
+                        span {
+                            line-height: 40px;
+                            text-decoration: none;
+                            color: #333;
+                            font-size: 12px;
+                        }
+                    }
+
+                    .minus,
+                    .plus {
+                        cursor: pointer;
+                        display: inline-block;
+                        width: 12px;
+                    }
+
+                    .num {
+                        width: 30px;
+                        text-align: center;
+                        display: inline-block;
+                        background-color: #F7F7F7;
+                        margin-top: 5px;
+                        color: #333;
+                        line-height: 30px;
+                    }
+                }
+
+                .add-price {
+                    display: inline-block;
+                    color: #E5393B;
+                    font-size: 14px;
+                    width: 16%;
+                    line-height: 40px;
+                    cursor: pointer;
+                }
+
+                .delete {
+                    position: absolute;
+                    right: 0;
+                    top: 20px;
+                    width: 20px;
+                    height: 20px;
+                    display: inline-block;
+                }
+
+                .delete:hover {
+                    color: #E5393B;
+                }
+
                 .choose-product {
                     text-align: center;
                     line-height: 40px;
@@ -1845,9 +1926,12 @@ body {
                         width: 20px;
                         height: 40px;
                         cursor: pointer;
-                        line-height: 40px;
                         display: block;
                         float: right;
+                    }
+
+                    .delete:hover {
+                        color: #E5393B;
                     }
                 }
 
@@ -2042,7 +2126,6 @@ body {
                     display: block;
                     word-break: break-all;
                     word-wrap: break-word;
-                    margin-bottom: 24px;
 
                     a {
                         font-size: 14px;
@@ -2054,6 +2137,28 @@ body {
 
                     a:hover {
                         color: red;
+                    }
+                }
+
+                .sku-select {
+                    display: block;
+                    width: 80%;
+                    margin-bottom: 14px;
+                    height: 24px;
+                    font-size: 0.9rem;
+                    font-weight: 400;
+                    line-height: 24px;
+                    background-clip: padding-box;
+                    border: 1px solid #ced4da;
+                    border-radius: 0.25rem;
+                    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+                    .sku-option {
+                        font-weight: normal;
+                        display: block;
+                        white-space: pre;
+                        min-height: 24px;
+                        padding: 0px 2px 1px;
                     }
                 }
 
@@ -2084,22 +2189,22 @@ body {
                     margin-bottom: 34px;
                 }
 
-                .insert {
-                    display: block;
+                .btn-add-to-cart {
                     width: 106px;
                     height: 36px;
+                    border-color: #3490dc;
                     color: #fff;
-                    font-size: 14px;
-                    background-color: #3891ed;
-                    border-radius: 3px;
-                    line-height: 36px;
+                    background-color: #3490dc;
                     text-decoration: none;
+                    border-radius: 5px;
+                    display: inline-block;
+                    vertical-align: middle;
+                    font-size: 0.9rem;
+                    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
                     i {
-                        display: inline-block;
                         width: 10px;
                         height: 10px;
-                        margin: 0 5px 0 10px;
                     }
                 }
             }

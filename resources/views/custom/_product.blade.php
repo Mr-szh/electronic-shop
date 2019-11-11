@@ -12,16 +12,23 @@
                 <h3>
                     <a href="{{ route('products.show', ['product' => $product->id]) }}">{{ $product->title }}</a>
                 </h3>
+
+                <select class="sku-select" name="skus">
+                    @foreach($product->skus as $sku)
+                    <option class="sku-option" value="{{ $sku->id }}">{{ $sku->title }}</option>
+                    @endforeach
+                </select>
+
                 <div class="item-box" style="border-right: 1px solid #eee;">销量 <span>{{ $product->sold_count }}笔</span></div>
                 <div class="item-box">评价 <span>{{ $product->review_count }}</span></div>
             </div>
 
             <div class="price-box">
                 <span class="price"><b>￥</b>{{ $product->price }}</span>
-                <a class="insert" href="">
+                <button class="btn-add-to-cart">
                     <i>+</i>
                     加入配置单
-                </a>
+                </button>
             </div>
         </div>
         @endforeach

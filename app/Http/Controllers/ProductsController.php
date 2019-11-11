@@ -8,10 +8,12 @@ use App\Http\Requests\ProductsRequest;
 use App\Exceptions\InvalidRequestException;
 use App\Models\OrderItem;
 use App\Models\Category;
+use App\Models\ConfigItem;
 use App\Services\CategoryService;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\SearchBuilders\ProductSearchBuilder;
 use App\Services\ProductService;
+use Illuminate\Support\Facades\Auth;
 
 class ProductsController extends Controller
 {
@@ -308,19 +310,17 @@ class ProductsController extends Controller
     public function custom(Request $request)
     {
         $categories = Category::query()->get();
-
+        $configItems = ConfigItem::query()->where('user_id', Auth::id())->get();
+        
         $page = $request->input('page', 1);
         $perPage = 6;
 
         $builder = (new ProductSearchBuilder())->onSale()->paginate($perPage, $page);
 
-    
-
         if ($request->input('category_id') && $category = Category::find($request->input('category_id'))) {
             $builder->category($category);
         }
 
-        
         if ($search = $request->input('search', '')) {
             $keywords = array_filter(explode(' ', $search));
 
@@ -388,6 +388,7 @@ class ProductsController extends Controller
             'category' => $category ?? null,
             'properties' => $properties,
             'propertyFilters' => $propertyFilters,
+            'configItems' => $configItems,
         ]);
     }
 }
