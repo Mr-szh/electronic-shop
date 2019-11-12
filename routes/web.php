@@ -59,7 +59,8 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
 
     Route::get('custom', 'ProductsController@custom')->name('custom.index');
     Route::post('config', 'ConfigController@add')->name('config.add');
-    
+    Route::delete('config/{sku}', 'ConfigController@remove')->name('config.remove');
+
 });
 
 Route::resource('users', 'UserController', ['only' => ['show']]);

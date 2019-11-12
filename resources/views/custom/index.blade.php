@@ -52,8 +52,9 @@
             </div>
             <div class="panel panel-body">
                 <ul class="list-group">
-                    @foreach ($categories as $item)
-                    @if(isset($item->parent_id))
+                @foreach ($categories as $item)
+
+                    @if(isset($item->parent_id) && $item->parent_id == '1' || $item->parent_id == '9')
                     <li class="list-group-item">
                         <h3>
                             {{ $item->name }}
@@ -63,31 +64,40 @@
                         </h3>
 
                         @foreach($configItems as $configItem)
-                        @if($item->id == $configItem->productSku->product->category_id)
+                        @if($equal = $item->id == $configItem->productSku->product->category_id)
                         <span class="sm-img float-left" data-id="{{ $configItem->productSku->id }}">
                             <img src="{{ URL::asset('/upload/'.$configItem->productSku->product->image[0]) }}" alt="">
                         </span>
                         <div class="config-items float-left">
+                            @if(!$configItem->productSku->product->on_sale)
+                            <span class="warning">该商品已下架</span>
+                            @else
                             <div class="title float-left">
-                                <span>{{ $configItem->productSku->title }}</span>
+                                <span>{{ $configItem->productSku->product->title }}</span>
                             </div>
-                            <span class="minus">-</span>
-                            <span class="num" rel="{{ $configItem->productSku->price }}">{{ $configItem->amount }}</span>
-                            <span class="plus">+</span>
+                            <span class="setNum">-</span>
+                            <!-- <span class="num" rel="{{ $configItem->productSku->price }}">{{ $configItem->amount }}</span> -->
+                            <input class="num" type="text" value="{{ $configItem->amount }}" rel="{{ $configItem->productSku->price }}"  @if($item->id == '6' || $item->id == '7' || $item->id == '8' || $item->id == '10' || $item->id == '15' || $item->id == '16' || $item->id == '17') max="1" @elseif($item->id == '2' || $item->id == '11') max="2" @elseif($item->id == '3' || $item->id == '4') max="4" @elseif($item->id == '5') max="8" @endif>
+                            <span class="setNum">+</span>
+                            @endif
                         </div>
-                        <span class="add-price float-right"><b>￥</b>{{ $configItem->productSku->price }}</span>
-                        <span class="delete">x</span>
-                        @else
+                        <span class="add-price float-right" ><b>￥</b>{{ $configItem->productSku->price }}</span>
+                        <span class="btn-remove">x</span>
+                        @break
+                        @endif
+                        @endforeach
+                        
+                        @if(!$equal == 1)
                         <div class="col-auto float-left choose-product">请选择商品</div>
                         <div class="left-operation">
                             <a href="{{ route('custom.index', ['category_id' => $item->id]) }}" class="create">添加</a>
                             <span class="delete">x</span>
                         </div>
                         @endif
-                        @endforeach
+
                     </li>
                     @endif
-                    @endforeach
+                @endforeach
                 </ul>
                 <ul class="list-group">
                     <li class="list-group-item">
@@ -226,7 +236,9 @@
                 sku_id: $(this).parent().parent().find('select[name=skus]').val(),
                 amount: '1',
             }).then(function() {
-                swal('加入配置成功', '', 'success');
+                swal('加入配置成功', '', 'success').then(function () {
+                    location.reload();
+                });
             }, function (error) {
                 if (error.response.status === 401) {
                     swal('请先登录', '', 'error');
@@ -244,7 +256,60 @@
                 }
             })
         });
-    })
+
+        $('.btn-remove').click(function () {
+            var id = $(this).parent().find('.sm-img').data('id');
+            swal({
+                title: "确认要将该商品移除？",
+                icon: "warning",
+                buttons: ['取消', '确定'],
+                dangerMode: true,
+            }).then(function(willDelete) {
+                if (!willDelete) {
+                    return;
+                }
+                axios.delete('/config/' + id).then(function () {
+                    swal('移除成功', '', 'success').then(function () {
+                        location.reload();
+                    });
+                })
+            });
+        });
+
+        $(".setNum").click(function () {
+            var price = $(this).parent().find('.num').attr("rel");
+            if ($(this).text() === '-') {
+                if ($(this).next().val() > 1) {
+                    var num = parseInt($(this).next().val()) - parseInt(1);
+                    $(this).next().attr("value", num);
+                    $(this).next().val(num);
+                }
+            } else if ($(this).text() === '+') {
+                var max = $(this).prev().attr('max');
+                if ($(this).prev().val() !== max) {
+                    var num = parseInt($(this).prev().val()) + parseInt(1);
+                    $(this).prev().attr("value", num);
+                    $(this).prev().val(num);
+                }
+            }
+            func1();
+        });
+
+        function func1() {
+            var price = 0;
+            var num = 0;
+            var totalnum = 0;
+            $('.list-group').find('.list-group-item').each(function () {
+                num = parseInt($(this).find('div.config-items').find('.num').attr("rel"));
+                if (!isNaN(num)) {
+                    totalnum += num;
+                }
+                
+                console.log(totalnum);
+            });
+        }
+
+    });
 
     function parseSearch() {
         var searches = {};

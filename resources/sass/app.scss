@@ -884,7 +884,7 @@ body {
 
             li {
                 display: inline-block;
-                width: 30%;
+                width: 33%;
                 overflow: hidden;
             }
         }
@@ -1816,7 +1816,7 @@ body {
                 h3 {
                     font-size: 14px;
                     float: left;
-                    width: 70px;
+                    width: 66px;
                     display: block;
                     margin-block-start: 1em;
                     margin-block-end: 1em;
@@ -1847,11 +1847,19 @@ body {
                     width: 270px;
                     color: #999;
 
+                    .warning {
+                        color: red;
+                        font-size: 18px;
+                    }
+
                     .title {
                         color: #333;
                         width: 204px;
                         word-break: break-all;
                         text-align: left;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
 
                         span {
                             line-height: 40px;
@@ -1861,8 +1869,7 @@ body {
                         }
                     }
 
-                    .minus,
-                    .plus {
+                    .setNum {
                         cursor: pointer;
                         display: inline-block;
                         width: 12px;
@@ -1872,10 +1879,12 @@ body {
                         width: 30px;
                         text-align: center;
                         display: inline-block;
-                        background-color: #F7F7F7;
                         margin-top: 5px;
                         color: #333;
                         line-height: 30px;
+                        background-color: #fff;
+                        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+                        border: 1px solid #ced4da;
                     }
                 }
 
@@ -1888,6 +1897,7 @@ body {
                     cursor: pointer;
                 }
 
+                .btn-remove,
                 .delete {
                     position: absolute;
                     right: 0;
@@ -1895,9 +1905,10 @@ body {
                     width: 20px;
                     height: 20px;
                     display: inline-block;
+                    cursor: pointer;
                 }
 
-                .delete:hover {
+                .btn-remove:hover {
                     color: #E5393B;
                 }
 

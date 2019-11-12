@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-// use Illuminate\Http\Request;
+use Illuminate\Http\Request;
 use App\Http\Requests\AddConfigRequest;
 use App\Models\ConfigItem;
+use App\Models\ProductSku;
 
 class ConfigController extends Controller
 {
@@ -26,6 +27,12 @@ class ConfigController extends Controller
             
             $config->save();
         }
+
+        return [];
+    }
+
+    public function remove(ProductSku $sku, Request $request) {
+        $request->user()->configItems()->where('product_sku_id', $sku->id)->delete();
 
         return [];
     }
