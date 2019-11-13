@@ -36,4 +36,10 @@ class ConfigController extends Controller
 
         return [];
     }
+
+    public function removeAll(Request $request) {
+        $request->user()->configItems()->delete();
+
+        return [];
+    }
 }

@@ -26,7 +26,7 @@
 
                     <ul class="dropdown-menu dropdown-menu-right category-more" aria-labelledby="dropdownMenu1">
                         @foreach ($categories as $item)
-                        @if($item->parent_id == '9')
+                        @if($item->parent_id == '11')
                         <li class="dropdown-header">
                             @if($category)
                             <a href="{{ route('custom.index', ['category_id' => $item->id]) }}" class="category-name @if($item->id == $category->id) selected2 @endif">{{ $item->name }}</a>
@@ -54,7 +54,7 @@
                 <ul class="list-group">
                 @foreach ($categories as $item)
 
-                    @if(isset($item->parent_id) && $item->parent_id == '1' || $item->parent_id == '9')
+                    @if(isset($item->parent_id) && $item->parent_id == '1' || $item->parent_id == '11')
                     <li class="list-group-item">
                         <h3>
                             {{ $item->name }}
@@ -77,17 +77,25 @@
                             </div>
                             <span class="setNum">-</span>
                             <!-- <span class="num" rel="{{ $configItem->productSku->price }}">{{ $configItem->amount }}</span> -->
-                            <input class="num" type="text" value="{{ $configItem->amount }}" rel="{{ $configItem->productSku->price }}"  @if($item->id == '6' || $item->id == '7' || $item->id == '8' || $item->id == '10' || $item->id == '15' || $item->id == '16' || $item->id == '17') max="1" @elseif($item->id == '2' || $item->id == '11') max="2" @elseif($item->id == '3' || $item->id == '4') max="4" @elseif($item->id == '5') max="8" @endif>
+                            <input class="num" type="text" stock="{{ $configItem->productSku->stock }}" value="{{ $configItem->amount }}" @if($item->id == '6' || $item->id == '7' || $item->id == '8' || $item->id == '10' || $item->id == '15' || $item->id == '16' || $item->id == '17') max="1" @elseif($item->id == '2' || $item->id == '11') max="2" @elseif($item->id == '3' || $item->id == '4') max="4" @elseif($item->id == '5') max="8" @endif>
                             <span class="setNum">+</span>
                             @endif
                         </div>
-                        <span class="add-price float-right" ><b>￥</b>{{ $configItem->productSku->price }}</span>
+                        <span class="add-price float-right" rel="{{ $configItem->productSku->price }}"><b>￥</b><span class="singular">{{ $configItem->productSku->price }}</span></span>
                         <span class="btn-remove">x</span>
                         @break
                         @endif
                         @endforeach
                         
-                        @if(!$equal == 1)
+                        @if(isset($equal))
+                        @if($equal != 1)
+                        <div class="col-auto float-left choose-product">请选择商品</div>
+                        <div class="left-operation">
+                            <a href="{{ route('custom.index', ['category_id' => $item->id]) }}" class="create">添加</a>
+                            <span class="delete">x</span>
+                        </div>
+                        @endif
+                        @else
                         <div class="col-auto float-left choose-product">请选择商品</div>
                         <div class="left-operation">
                             <a href="{{ route('custom.index', ['category_id' => $item->id]) }}" class="create">添加</a>
@@ -101,10 +109,10 @@
                 </ul>
                 <ul class="list-group">
                     <li class="list-group-item">
-                        <span class="left-count">共计0项</span>
+                        <span class="left-count">共计<span class="total-number">0</span>项</span>
                         <span class="right-total">
                             合计
-                            <span>￥0</span>
+                            <span>￥<span class="total-price">0</span></span>
                         </span>
                     </li>
                     <li class="list-group-item">
@@ -113,9 +121,39 @@
                         </p>
                         <textarea class="form-control" rows="5"></textarea>
                         <div class="buttons">
-                            <button class="btn btn-default custom">定制配置单</button>
-                            <button class="btn btn-default button-style">预览</button>
-                            <button class="btn btn-default button-style">清空</button>
+                            @php
+                                $i = 1;
+                                $error = '0';
+                                $status = "";
+
+                                if (count($configItems) != 0) {
+                                    for ($i = 2; $i <= 10; $i++) {
+                                        foreach ($configItems as $configItem) {
+                                            if ($configItem->productSku->product->category_id == $i) {
+                                                $error = '0';
+                                                break;
+                                            } else {
+                                                $error = '1';
+                                            }
+                                        }
+                                        
+                                        if ($error == '1') {
+                                            break;
+                                        }
+                                    }
+
+                                    if ($error == '1') {
+                                        $status = "disabled='disabled'";
+                                    }
+                                } else {
+                                    $status = "disabled='disabled'";
+                                }
+                                
+                            @endphp
+                            <!-- <button class="btn btn-default custom @php echo $i; @endphp">定制配置单</button> -->
+                            <input type="button" class="btn btn-default custom" @php echo $status; @endphp value="定制配置单">
+                            <!-- <button class="btn btn-default button-style">暂存</button> -->
+                            <button class="btn btn-default button-style btn-removeAll">清空</button>
                         </div>
                     </li>
                 </ul>
@@ -218,6 +256,8 @@
     var filters = {!! json_encode($filters) !!};
 
     $(document).ready(function() {
+        changeNumber();
+        
         $('.search-form input[name=search]').val(filters.search);
         $('.search-form select[name=order]').val(filters.order);
 
@@ -276,37 +316,60 @@
             });
         });
 
+        $('.btn-removeAll').click(function () {
+            axios.delete('{{ route('config.removeAll') }}').then(function () {
+                swal('清空成功', '', 'success').then(function () {
+                    location.reload();
+                });
+            });
+        });
+
         $(".setNum").click(function () {
-            var price = $(this).parent().find('.num').attr("rel");
+            var price = $(this).closest('li').find('.add-price').attr("rel");
+
             if ($(this).text() === '-') {
                 if ($(this).next().val() > 1) {
                     var num = parseInt($(this).next().val()) - parseInt(1);
                     $(this).next().attr("value", num);
                     $(this).next().val(num);
+                    $(this).parent().next().find('.singular').text(((parseInt(price)).toFixed(2) * (parseInt(num)).toFixed(2)).toFixed(2));
                 }
             } else if ($(this).text() === '+') {
+                var stock = $(this).prev().attr('stock');
                 var max = $(this).prev().attr('max');
-                if ($(this).prev().val() !== max) {
+
+                if ($(this).prev().val() !== max && $(this).prev().val() < parseInt(stock)) {
                     var num = parseInt($(this).prev().val()) + parseInt(1);
                     $(this).prev().attr("value", num);
                     $(this).prev().val(num);
+                    $(this).parent().next().find('.singular').text(((parseInt(price)).toFixed(2) * (parseInt(num)).toFixed(2)).toFixed(2));
                 }
             }
-            func1();
+
+            changeNumber();
         });
 
-        function func1() {
+        $('.custom').click(function () {
+            console.log('a');
+        });
+
+        function changeNumber() {
             var price = 0;
             var num = 0;
             var totalnum = 0;
+            var p = 0;
+
             $('.list-group').find('.list-group-item').each(function () {
-                num = parseInt($(this).find('div.config-items').find('.num').attr("rel"));
-                if (!isNaN(num)) {
-                    totalnum += num;
-                }
-                
-                console.log(totalnum);
+                num = parseInt($(this).find('div.config-items').find('.num').val());
+                p = Number($(this).find('span.add-price').attr("rel"));
+
+                if (!isNaN(num) && !isNaN(p)) {
+                    totalnum += num;     
+                    price += parseInt(p) * num;     
+                }     
             });
+            $('.total-number').text(totalnum);
+            $('.total-price').text(price);
         }
 
     });
@@ -320,7 +383,6 @@
 
         return searches;
     }
-
 
     function buildSearch(searches) {
         var query = '?';
