@@ -13,7 +13,12 @@ class ConfigController extends Controller
     {
         $user = $request->user();
         $skuId  = $request->input('sku_id');
+        $categoryId = $request->input('category_id');
         $amount = $request->input('amount');
+
+        if ($user->configItems()->where('category_id', $categoryId)->first()) {
+            $request->user()->configItems()->where('category_id', $categoryId)->delete();
+        }
 
         if ($config = $user->configItems()->where('product_sku_id', $skuId)->first()) {
             $config->update([
@@ -24,6 +29,7 @@ class ConfigController extends Controller
             
             $config->user()->associate($user);
             $config->productSku()->associate($skuId);
+            $config->category()->associate($categoryId);
             
             $config->save();
         }

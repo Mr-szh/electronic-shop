@@ -311,9 +311,10 @@ class ProductsController extends Controller
     {
         $categories = Category::query()->get();
         $configItems = ConfigItem::query()->where('user_id', Auth::id())->get();
+        $addresses = $request->user()->addresses()->orderBy('last_used_at', 'desc')->get();
         
         $page = $request->input('page', 1);
-        $perPage = 6;
+        $perPage = 10;
 
         $builder = (new ProductSearchBuilder())->onSale()->paginate($perPage, $page);
 
@@ -389,6 +390,7 @@ class ProductsController extends Controller
             'properties' => $properties,
             'propertyFilters' => $propertyFilters,
             'configItems' => $configItems,
+            'addresses' => $addresses,
         ]);
     }
 }

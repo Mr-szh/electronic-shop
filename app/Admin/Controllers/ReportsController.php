@@ -11,6 +11,7 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Carbon\Carbon;
 use App\Models\User;
+use Encore\Admin\Widgets\Box;
 
 class ReportsController extends Controller
 {
@@ -34,6 +35,7 @@ class ReportsController extends Controller
         
         return $content
             ->header('数据报表')
-            ->body(view('admin.reports.index', ['users' => $users, 'sales' => $sales]));
+            // ->body(view('admin.reports.index', ['users' => $users, 'sales' => $sales]));
+            ->body(new Box('Bar chart', view('admin.chartjs')));
     }
 } 

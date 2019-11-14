@@ -1988,6 +1988,15 @@ body {
                         cursor: pointer;
                     }
                 }
+
+                .address-title {
+                    font-weight: bolder;
+                    font-size: 16px;
+                }
+
+                .address-select {
+                    margin-top: 10px;
+                }
             }
         }
     }
@@ -2212,11 +2221,19 @@ body {
                     vertical-align: middle;
                     font-size: 0.9rem;
                     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+                }
 
-                    i {
-                        width: 10px;
-                        height: 10px;
-                    }
+                .btn-disabled-to-cart {
+                    width: 106px;
+                    height: 36px;
+                    color: #fff;
+                    background-color: #ccc;
+                    text-decoration: none;
+                    border-radius: 5px;
+                    display: inline-block;
+                    vertical-align: middle;
+                    font-size: 0.9rem;
+                    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
                 }
             }
 

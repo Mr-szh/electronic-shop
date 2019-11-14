@@ -77,7 +77,7 @@
                             </div>
                             <span class="setNum">-</span>
                             <!-- <span class="num" rel="{{ $configItem->productSku->price }}">{{ $configItem->amount }}</span> -->
-                            <input class="num" type="text" stock="{{ $configItem->productSku->stock }}" value="{{ $configItem->amount }}" @if($item->id == '6' || $item->id == '7' || $item->id == '8' || $item->id == '10' || $item->id == '15' || $item->id == '16' || $item->id == '17') max="1" @elseif($item->id == '2' || $item->id == '11') max="2" @elseif($item->id == '3' || $item->id == '4') max="4" @elseif($item->id == '5') max="8" @endif>
+                            <input class="num" type="text" stock="{{ $configItem->productSku->stock }}" value="{{ $configItem->amount }}" @if($item->id == '3' || $item->id == '8' || $item->id == '9' || $item->id == '10' || $item->id == '12' || $item->id == '13' || $item->id == '14' || $item->id == '15') max = "1" @elseif($item->id == '2' || $item->id == '6') max = "2" @elseif($item->id == '5' || $item->id == '7') max = "4" @elseif($item->id == '4') max="8" @endif>
                             <span class="setNum">+</span>
                             @endif
                         </div>
@@ -116,10 +116,20 @@
                         </span>
                     </li>
                     <li class="list-group-item">
+                        <span class="address-title">选择收货地址:</span>
+                        <div class="address-select">
+                            <select class="form-control" name="address">
+                                @foreach($addresses as $address)
+                                <option value="{{ $address->id }}">{{ $address->full_address }} {{ $address->contact_name }} {{ $address->contact_phone }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
                         <p>
                             <b>备注: </b>
                         </p>
-                        <textarea class="form-control" rows="5"></textarea>
+                        <textarea class="form-control remark" rows="5"></textarea>
                         <div class="buttons">
                             @php
                                 $i = 1;
@@ -274,6 +284,7 @@
         $('.btn-add-to-cart').click(function () {
             axios.post('{{ route('config.add') }}', {
                 sku_id: $(this).parent().parent().find('select[name=skus]').val(),
+                category_id: $(this).parent().parent().find('.category_id').val(),
                 amount: '1',
             }).then(function() {
                 swal('加入配置成功', '', 'success').then(function () {
