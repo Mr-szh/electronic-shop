@@ -6,11 +6,11 @@
     </div>
 </div>
 
-@if (count($active_users))
 <div class="card mt-4">
     <div class="card-body active-users pt-2">
         <div class="text-center mt-1 mb-0 text-muted">活跃用户</div>
         <hr class="mt-2">
+        @if (count($active_users))
         @foreach ($active_users as $active_user)
         <a class="media mt-2" href="{{ route('users.show', $active_user->id) }}">
             <div class="media-left media-middle mr-2 ml-1">
@@ -21,6 +21,8 @@
             </div>
         </a>
         @endforeach
+        @else
+        <div class="text-center mt-1 mb-0 text-muted">暂无活跃用户</div>
+        @endif
     </div>
 </div>
-@endif

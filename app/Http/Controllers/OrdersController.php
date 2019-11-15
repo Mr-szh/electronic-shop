@@ -43,12 +43,12 @@ class OrdersController extends Controller
         return view('orders.show', ['order' => $order->load(['items.productSku', 'items.product'])]);
     }
 
-    // 利用 laravel 的自动解析功能注入 OrderService 类
     public function store(OrderRequest $request, OrderService $orderService)
     {
         $user = $request->user();
         $address = UserAddress::find($request->input('address_id'));
         $coupon  = null;
+        $custom = $request->input('custom');
 
         if ($code = $request->input('coupon_code')) {
             $coupon = CouponCode::where('code', $code)->first();
@@ -57,7 +57,7 @@ class OrdersController extends Controller
             }
         }
 
-        return $orderService->store($user, $address, $request->input('remark'), $request->input('items'), $coupon);
+        return $orderService->store($user, $address, $request->input('remark'), $request->input('items'), $coupon, $custom);
     }
 
     public function received(Order $order, Request $request)

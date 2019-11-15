@@ -1475,7 +1475,7 @@ body {
     padding: 0;
     padding-top: 1px;
     width: 100%;
-    background: #f29b2a;
+    background-color: rgb(63, 81, 181);
     z-index: -1;
 
     h1,
@@ -1650,6 +1650,15 @@ body {
             }
         }
     }
+
+    .show-more {
+        margin: auto;
+        margin-top: 20px;
+
+        .btn-more {
+            border: 1px solid black;
+        }
+    }
 }
 
 .topics-index-page {
@@ -1749,9 +1758,19 @@ body {
 }
 
 .custom-index-page {
-    .topic-list>.custom-title {
-        font-weight: bolder;
-        font-size: 20px;
+    .topic-list {
+        .custom-title {
+            font-weight: bolder;
+            font-size: 20px;
+        }
+
+        .sign {
+            font-size: 12px;
+
+            .important {
+                color: red;
+            }
+        }
     }
 
     .btn-group {
@@ -1861,7 +1880,7 @@ body {
                         text-overflow: ellipsis;
                         white-space: nowrap;
 
-                        span {
+                        .title-style {
                             line-height: 40px;
                             text-decoration: none;
                             color: #333;

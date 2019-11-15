@@ -15,16 +15,16 @@
   </div>
 </div>
 
-<div id="demo" class="carousel slide" data-ride="carousel">
+<!-- <div id="demo" class="carousel slide" data-ride="carousel"> -->
   <!-- 指示符 -->
-  <ul class="carousel-indicators">
+  <!-- <ul class="carousel-indicators">
     <li data-target="#demo" data-slide-to="0" class="active"></li>
     <li data-target="#demo" data-slide-to="1"></li>
     <li data-target="#demo" data-slide-to="2"></li>
-  </ul>
+  </ul> -->
 
   <!-- 轮播图片 -->
-  <div class="carousel-inner">
+  <!-- <div class="carousel-inner">
     <div class="carousel-item active">
       <img src="{{ URL::asset('/advertising/bg1.jpg') }}" style="max-width:1000px;max-height:479px;">
       <div class="carousel-caption">
@@ -46,17 +46,17 @@
         <p>描述文字!</p>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- 左右切换按钮 -->
-  <a class="carousel-control-prev" href="#demo" data-slide="prev">
+  <!-- <a class="carousel-control-prev" href="#demo" data-slide="prev">
     <span class="carousel-control-prev-icon"></span>
   </a>
   <a class="carousel-control-next" href="#demo" data-slide="next">
     <span class="carousel-control-next-icon"></span>
   </a>
 
-</div>
+</div> -->
 
 <!-- 推荐商品栏 开始 -->
 @if(count($products) > 0)
@@ -83,8 +83,8 @@
     </div>
     @endforeach
   </div>
-  <div class="col-md-3" style="margin:auto;">
-    <a class="btn btn-default btn-lg btn-block" href="{{ url('/products') }}" style="border:1px solid black;">查看更多</a>
+  <div class="col-md-3 show-more">
+    <a class="btn btn-default btn-lg btn-block btn-more" href="{{ url('/products') }}">查看更多</a>
   </div>
 </div>
 @endif

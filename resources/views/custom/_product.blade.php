@@ -3,14 +3,14 @@
         @foreach($products as $product)
         <div class="row products-list">
             <div class="image">
-                <a href="{{ route('products.show', ['product' => $product->id]) }}">
+                <a target="_blank" href="{{ route('products.show', ['product' => $product->id]) }}">
                     <img src="{{ URL::asset('/upload/'.$product->image[0]) }}" alt="">
                 </a>
             </div>
 
             <div class="col-7 pro-intro">
                 <h3>
-                    <a href="{{ route('products.show', ['product' => $product->id]) }}">{{ $product->title }}</a>
+                    <a target="_blank" href="{{ route('products.show', ['product' => $product->id]) }}">{{ $product->title }}</a>
                 </h3>
 
                 <select class="sku-select" name="skus">

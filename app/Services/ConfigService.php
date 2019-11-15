@@ -32,9 +32,13 @@ class ConfigService
         return $config;
     }
 
-    public function remove($skuId)
+    public function remove($skuIds)
     {
-        Auth::user()->configItems()->where('product_sku_id', $skuId)->delete();
+        if (!is_array($skuIds)) {
+            $skuIds = [$skuIds];
+        }
+
+        Auth::user()->configItems()->wherein('product_sku_id', $skuIds)->delete();
     }
 
     public function removeAll()

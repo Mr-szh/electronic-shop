@@ -29,9 +29,7 @@
                             <img class="thumbnail img-fluid" src="{{ $topic->user->avatar }}" width="300px" height="300px">
                         </a>
                         @else
-                        <a href="#">
-                            <img class="thumbnail img-fluid" src="{{ $topic->admin['avatar'] }}" width="300px" height="300px">
-                        </a>
+                        <img class="thumbnail img-fluid" src="{{ $topic->admin['avatar'] }}" width="300px" height="300px">
                         @endif
                     </div>
                 </div>

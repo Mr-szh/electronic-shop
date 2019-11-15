@@ -5,6 +5,7 @@
 <div class="row mb-5">
     <div class="col-lg-12 col-md-12 topic-list">
         <span class="custom-title">请选择组件</span>
+        <span class="sign"><i class="important">*</i> 号为必选项</span>
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups" style="margin-top:10px;">
             <div class="btn-group" role="group">
 
@@ -73,7 +74,7 @@
                             <span class="warning">该商品已下架</span>
                             @else
                             <div class="title float-left">
-                                <span>{{ $configItem->productSku->product->title }}</span>
+                                <a target="_blank" href="{{ route('products.show', ['product' => $configItem->productSku->product->id]) }}" class="title-style">{{ $configItem->productSku->product->title }}</a>
                             </div>
                             <span class="setNum">-</span>
                             <!-- <span class="num" rel="{{ $configItem->productSku->price }}">{{ $configItem->amount }}</span> -->
@@ -161,7 +162,7 @@
                                 
                             @endphp
                             <!-- <button class="btn btn-default custom @php echo $i; @endphp">定制配置单</button> -->
-                            <input type="button" class="btn btn-default custom" @php echo $status; @endphp value="定制配置单">
+                            <input type="button" class="btn btn-default custom btn-create-order" @php echo $status; @endphp value="定制配置单">
                             <!-- <button class="btn btn-default button-style">暂存</button> -->
                             <button class="btn btn-default button-style btn-removeAll">清空</button>
                         </div>
@@ -360,8 +361,47 @@
             changeNumber();
         });
 
-        $('.custom').click(function () {
-            console.log('a');
+        $('.btn-create-order').click(function () {
+            var req = {
+                address_id: $('.address-select').find('select[name=address]').val(),
+                items: [],
+                remark: $('.list-group-item').find('textarea[name=remark]').val(),
+                custom: 1,
+            };
+
+            $('.list-group').find('.list-group-item').each(function () {
+                var $input = $(this).find('div.config-items').find('.num');
+
+                if ($input.val() == 0 || isNaN($input.val())) {
+                    return;
+                }
+
+                req.items.push({
+                    sku_id: $(this).find('span.sm-img').data('id'),
+                    amount: $input.val(),
+                })
+            });
+            
+            axios.post('{{ route('orders.store') }}', req).then(function (response) {
+                swal('订单提交成功', '', 'success').then(function () {
+                    location.href = '/orders/' + response.data.id;
+                });
+            }, function (error) {
+                if (error.response.status === 422) {
+                    var html = '<div>';
+                    _.each(error.response.data.errors, function (errors) {
+                        _.each(errors, function (error) {
+                            html += error+'<br>';
+                        })
+                    });
+                    html += '</div>';
+                    swal({content: $(html)[0], icon: 'error'})
+                } else if (error.response.status == 403) {
+                    swal(error.response.data.msg, '', 'error');
+                } else {
+                    swal('系统错误', '', 'error');
+                }
+            });
         });
 
         function changeNumber() {

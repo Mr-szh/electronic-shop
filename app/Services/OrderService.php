@@ -14,14 +14,14 @@ use App\Exceptions\CouponCodeUnavailableException;
 
 class OrderService
 {
-    public function store(User $user, UserAddress $address, $remark, $items, CouponCode $coupon = null)
+    public function store(User $user, UserAddress $address, $remark, $items, CouponCode $coupon = null, $custom)
     {
         if ($coupon) {
             $coupon->checkAvailable($user);
         }
 
         // 开启一个数据库事务
-        $order = \DB::transaction(function () use ($user, $address, $remark, $items, $coupon) {
+        $order = \DB::transaction(function () use ($user, $address, $remark, $items, $coupon, $custom) {
             // 更新此地址的最后使用时间
             $address->update(['last_used_at' => Carbon::now()]);
             // 创建一个订单
@@ -78,7 +78,13 @@ class OrderService
 
             // 将下单的商品从购物车中移除
             $skuIds = collect($items)->pluck('sku_id')->all();
-            app(CartService::class)->remove($skuIds);
+
+            if ($custom == 0) {
+                app(CartService::class)->remove($skuIds);
+            } elseif ($custom == 1) {
+                app(ConfigService::class)->remove($skuIds);
+            }
+            
 
             return $order;
         });
