@@ -129,7 +129,7 @@
                         <p>
                             <b>备注: </b>
                         </p>
-                        <textarea class="form-control remark" rows="5"></textarea>
+                        <textarea name="remark" class="form-control" rows="5"></textarea>
                         <div class="buttons">
                             @php
                                 $i = 1;

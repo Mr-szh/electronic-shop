@@ -22,7 +22,7 @@ class ProductService
 
         // 设置最少匹配一半的属性
         // $builder->minShouldMatch(ceil(count($product->properties) / 2));
-        $builder->minShouldMatch(ceil(count($product->properties) / 4));
+        $builder->minShouldMatch(ceil(count($product->properties) / 2));
         $params = $builder->getParams();
         // 同时将当前商品的 ID 排除
         $params['body']['query']['bool']['must_not'] = [['term' => ['_id' => $product->id]]];

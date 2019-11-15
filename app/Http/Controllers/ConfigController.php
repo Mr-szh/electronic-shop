@@ -6,45 +6,32 @@ use Illuminate\Http\Request;
 use App\Http\Requests\AddConfigRequest;
 use App\Models\ConfigItem;
 use App\Models\ProductSku;
+use App\Services\ConfigService;
 
 class ConfigController extends Controller
 {
+    protected $configService;
+
+    public function __construct(ConfigService $configService)
+    {
+        $this->configService = $configService;
+    }
+
     public function add(AddConfigRequest $request)
     {
-        $user = $request->user();
-        $skuId  = $request->input('sku_id');
-        $categoryId = $request->input('category_id');
-        $amount = $request->input('amount');
-
-        if ($user->configItems()->where('category_id', $categoryId)->first()) {
-            $request->user()->configItems()->where('category_id', $categoryId)->delete();
-        }
-
-        if ($config = $user->configItems()->where('product_sku_id', $skuId)->first()) {
-            $config->update([
-                'amount' => $config->amount + $amount,
-            ]);
-        } else {
-            $config = new ConfigItem(['amount' => $amount]);
-            
-            $config->user()->associate($user);
-            $config->productSku()->associate($skuId);
-            $config->category()->associate($categoryId);
-            
-            $config->save();
-        }
+        $this->configService->add($request->input('sku_id'), $request->input('category_id'), $request->input('amount'));
 
         return [];
     }
 
     public function remove(ProductSku $sku, Request $request) {
-        $request->user()->configItems()->where('product_sku_id', $sku->id)->delete();
+        $this->configService->remove($sku->id);
 
         return [];
     }
 
     public function removeAll(Request $request) {
-        $request->user()->configItems()->delete();
+        $this->configService->removeAll();
 
         return [];
     }
