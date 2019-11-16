@@ -586,6 +586,11 @@ body {
                             color: #333;
                             text-decoration: none;
                         }
+
+                        a:hover {
+                            color: red;
+                            text-decoration: underline;
+                        }
                     }
                 }
 
@@ -700,6 +705,24 @@ body {
             font-weight: bold;
             background: red;
             padding: 2px;
+        }
+    }
+}
+
+.products-favorites-page {
+    .fav-title {
+        height: 36px;
+
+        a {
+            font-size: 12px;
+            line-height: 14px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: red;
+            text-decoration: underline;
         }
     }
 }
@@ -1218,15 +1241,15 @@ body {
 }
 
 .orders-show-page {
-    font-size: 12px;
-
     .vertical-middle {
         vertical-align: middle;
+        font-size: 12px;
     }
 
     .product-info {
         display: flex;
         flex-direction: row;
+        font-size: 12px;
 
         .preview {
             img {
@@ -1253,21 +1276,25 @@ body {
     }
 
     .table {
+        font-size: 12px;
         margin-bottom: 0;
     }
 
     .item-amount {
+        font-size: 12px;
         padding-right: 20px;
         width: 200px;
     }
 
     .order-bottom {
+        font-size: 12px;
         display: flex;
         flex-direction: row;
     }
 
     .order-info {
         width: 50%;
+        font-size: 12px;
 
         .line {
             display: flex;
@@ -1289,6 +1316,7 @@ body {
     .order-summary {
         width: 50%;
         font-family: Verdana, Tahoma, Helvetica, Arial;
+        font-size: 12px;
 
         .total-amount {
             font-weight: bolder;
@@ -1310,12 +1338,14 @@ body {
     .payment-buttons {
         margin-top: 10px;
         padding-right: 10px;
+        font-size: 12px;
     }
 
     .payment-buttons,
     .receive-button {
         margin-top: 10px;
         padding-right: 10px;
+        font-size: 12px;
     }
 
     .payment-buttons,
@@ -1323,6 +1353,7 @@ body {
     .refund-button {
         margin-top: 10px;
         padding-right: 10px;
+        font-size: 12px;
     }
 }
 
@@ -2258,6 +2289,39 @@ body {
 
             .paging {
                 margin-top: 60px;
+            }
+        }
+    }
+}
+
+.row {
+    .user-info {
+        .card {
+            .card-img-top {
+                border: 2px solid black;
+            }
+        }
+    }
+
+    .user-content {
+        .card-body {
+            .mb-0 {
+                font-size: 22px;
+            }
+
+            .list-group {
+                .list-group-item {
+                    .reply-content {
+                        a {
+                            color: #f08779 !important;
+                        }
+
+                        a:link {
+                            text-decoration: underline !important;
+                            color: #f08779 !important;
+                        }
+                    }
+                }
             }
         }
     }

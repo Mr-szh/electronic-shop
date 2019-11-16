@@ -71,11 +71,7 @@ class TopicsController extends Controller
 
         $id = DB::table('topics')->max('id') + 1;
 
-        if (Auth::user()->id == '1') {
-            $topic->role = 'admin';
-        } else {
-            $topic->role = 'user';
-        }
+        $topic->role = 'user';
 
         $url = $request->url() . '/' . $id;
         $topic->url = $url;

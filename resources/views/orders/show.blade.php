@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('title', '查看订单')
 
 @section('content')

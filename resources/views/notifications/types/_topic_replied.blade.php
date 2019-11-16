@@ -14,10 +14,10 @@
             <a href="{{ $notification->data['topic_link'] }}">{{ $notification->data['topic_title'] }}</a> -->
             {{-- 通知分为话题被评论；话题评论中被提及 --}}
             @if ($notification->data['type'] == 'reply')
-            •回复了你的话题：
+            回复了你的话题：
             <a href="{{ $notification->data['topic_link'] }}">{{ $notification->data['topic_title'] }}</a>
             @else
-            •在
+            在
             <a href="{{ $notification->data['topic_link'] }}">{{ $notification->data['topic_title'] }}</a>
               的评论中提及到了你
             @endif

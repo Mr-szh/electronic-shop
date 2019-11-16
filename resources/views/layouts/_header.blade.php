@@ -92,7 +92,6 @@
                         <a href="{{ route('user_information.index') }}" class="dropdown-item">个人信息</a>
                         <a href="{{ route('users.topicsShow') }}" class="dropdown-item">我的社区信息</a>
                         <a href="{{ route('user_addresses.index') }}" class="dropdown-item">收货地址</a>
-                        <a href="{{ route('products.index') }}" class="dropdown-item">商品列表</a>
                         <a href="{{ route('products.favorites') }}" class="dropdown-item">我的收藏</a>
                         <a href="{{ route('orders.index') }}" class="dropdown-item">历史订单</a>
                         <!-- event.preventDefault() 阻止元素发生默认的行为 -->

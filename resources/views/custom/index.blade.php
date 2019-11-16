@@ -175,6 +175,7 @@
     <div class="col-lg-6 col-md-6 topic-list custom-right">
         <div class="panel panel-primary">
             <form action="{{ route('custom.index') }}" class="search-form">
+                {{ csrf_field() }}
                 <input type="hidden" name="filters">
                 <div class="panel-heading">
                     @if ($category)
