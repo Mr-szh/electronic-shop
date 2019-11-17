@@ -72,9 +72,9 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-form-label col-sm-3 text-md-right">优惠码</label>
+                            <label class="col-form-label col-sm-3 text-md-right" style="padding-left:0px;">优惠码</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="coupon_code">
+                                <input type="text" class="form-control" name="coupon_code" autocomplete="off">
                                 <span class="form-text text-muted" id="coupon_desc"></span>
                             </div>
                             <div class="col-sm-3">

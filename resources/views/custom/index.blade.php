@@ -51,6 +51,41 @@
             <div class="panel-heading left-title">
                 <span class="panel-title">装机配置单</span>
             </div>
+
+            @php
+                $cpu = '2';
+                $nc = '8';
+                $yp = '4';
+                $gtyp = '2';
+                $xk = '4';
+                $dy = '1';
+                $sr = '1';
+                $other = '1';
+
+                foreach($configItems as $configItem) {
+                    if($configItem->category_id == 3) {
+                        $items = $configItem->productSku->product->properties;
+                        foreach($items as $item) {
+                            if ($item['name'] == 'CPU插槽数') {
+                                $cpu = $item['value'];
+                            } elseif ($item['name'] == '内存条插槽数') {
+                                $nc = $item['value'];
+                            } elseif ($item['name'] == '硬盘插槽数') {
+                                $yp = $item['value'];
+                            } elseif ($item['name'] == '固态硬盘插槽数') {
+                                $gtyp = $item['value'];
+                            } elseif ($item['name'] == '显卡插槽数') {
+                                $xk = $item['value'];
+                            } elseif ($item['name'] == '电源插槽数') {
+                                $dy = $item['value'];
+                            } elseif ($item['name'] == '散热器插槽数') {
+                                $sr = $item['value'];
+                            }
+                        }
+                    }
+                }
+            @endphp
+
             <div class="panel panel-body">
                 <ul class="list-group">
                 @foreach ($categories as $item)
@@ -78,7 +113,7 @@
                             </div>
                             <span class="setNum">-</span>
                             <!-- <span class="num" rel="{{ $configItem->productSku->price }}">{{ $configItem->amount }}</span> -->
-                            <input class="num" type="text" stock="{{ $configItem->productSku->stock }}" value="{{ $configItem->amount }}" @if($item->id == '3' || $item->id == '8' || $item->id == '9' || $item->id == '10' || $item->id == '12' || $item->id == '13' || $item->id == '14' || $item->id == '15') max = "1" @elseif($item->id == '2' || $item->id == '6') max = "2" @elseif($item->id == '5' || $item->id == '7') max = "4" @elseif($item->id == '4') max="8" @endif>
+                            <input class="num" type="text" stock="{{ $configItem->productSku->stock }}" value="{{ $configItem->amount }}" max="@if($configItem->category_id == '2'){{$cpu}}@elseif($configItem->category_id == '4'){{$nc}}@elseif($configItem->category_id == '5'){{$yp}}@elseif($configItem->category_id == '6'){{$gtyp}}@elseif($configItem->category_id == '7'){{$xk}}@elseif($configItem->category_id == '9'){{$sr}}@elseif($configItem->category_id == '10'){{$dy}}@else{{$other}}@endif">
                             <span class="setNum">+</span>
                             @endif
                         </div>
@@ -125,12 +160,24 @@
                                 @endforeach
                             </select>
                         </div>
-                    </li>
-                    <li class="list-group-item">
+
                         <p>
                             <b>备注: </b>
                         </p>
                         <textarea name="remark" class="form-control" rows="5"></textarea>
+                        
+                        <div class="form-group row">
+                            <label class="col-form-label col-sm-3 text-md-right">优惠码</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" name="coupon_code" autocomplete="off">
+                                <span class="form-text text-muted" id="coupon_desc"></span>
+                            </div>
+                            <div class="col-sm-3">
+                                <button type="button" class="btn btn-success" id="btn-check-coupon">检查</button>
+                                <button type="button" class="btn btn-danger" style="display: none;" id="btn-cancel-coupon">取消</button>
+                            </div>
+                        </div>
+
                         <div class="buttons">
                             @php
                                 $i = 1;
@@ -283,6 +330,36 @@
             $('.search-form').submit();
         });
 
+        $('#btn-check-coupon').click(function () {
+            var code = $('input[name=coupon_code]').val();
+            if(!code) {
+                swal('请输入优惠码', '', 'warning');
+                return;
+            }
+
+            axios.get('/coupon_codes/' + encodeURIComponent(code)).then(function (response) {
+                $('#coupon_desc').text(response.data.description);
+                $('input[name=coupon_code]').prop('readonly', true);
+                $('#btn-cancel-coupon').show();
+                $('#btn-check-coupon').hide();
+            }, function (error) {
+                if(error.response.status === 404) {
+                    swal('优惠码不存在', '', 'error');
+                } else if (error.response.status === 403) {
+                    swal(error.response.data.msg, '', 'error');
+                } else {
+                    swal('系统内部错误', '', 'error');
+                }
+            })
+        });
+
+        $('#btn-cancel-coupon').click(function () {
+            $('#coupon_desc').text('');
+            $('input[name=coupon_code]').prop('readonly', false);
+            $('#btn-cancel-coupon').hide();
+            $('#btn-check-coupon').show();
+        });
+
         $('.btn-add-to-cart').click(function () {
             axios.post('{{ route('config.add') }}', {
                 sku_id: $(this).parent().parent().find('select[name=skus]').val(),
@@ -367,6 +444,7 @@
                 address_id: $('.address-select').find('select[name=address]').val(),
                 items: [],
                 remark: $('.list-group-item').find('textarea[name=remark]').val(),
+                coupon_code: $('input[name=coupon_code]').val(),
                 custom: 1,
             };
 
