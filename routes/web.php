@@ -55,6 +55,7 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
     Route::resource('replies', 'RepliesController', ['only' => ['store', 'destroy']]);
     Route::get('atwho', 'RepliesController@atwho')->name('replies.atwho');
 
+    Route::resource('topics', 'TopicsController', ['only' => ['index', 'create', 'store', 'update', 'edit', 'destroy']]);
     Route::resource('notifications', 'NotificationsController', ['only' => ['index']]);
 
     Route::get('custom', 'ProductsController@custom')->name('custom.index');
@@ -65,7 +66,7 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
 });
 
 Route::resource('users', 'UserController', ['only' => ['show']]);
-Route::resource('topics', 'TopicsController', ['only' => ['index', 'create', 'store', 'update', 'edit', 'destroy']]);
+Route::resource('topics', 'TopicsController', ['only' => ['index']]);
 Route::resource('categories', 'CategoriesController', ['only' => ['show']]);
 
 Route::get('topics/{topic}/{slug?}', 'TopicsController@show')->name('topics.show');

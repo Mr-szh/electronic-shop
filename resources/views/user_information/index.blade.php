@@ -135,8 +135,6 @@
 
             axios.post('{{ route('user_information.updateAvatar') }}', data).then(function(res) { // 请求成功会执行这个回调
                 swal('上传成功', '', 'success').then(function () {
-                    // location.reload();
-                    // console.log(res.data);
                     $('#avatar').attr('src', res.data);
                 });
             }, function(error) { 

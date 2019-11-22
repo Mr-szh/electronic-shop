@@ -58,6 +58,7 @@ class UserController extends Controller
     public function updateAvatar(AvatarRequest $request, ImageUploadHandler $uploader)
     {
         $path = '';
+        
         if ($request->avatar) {
             $result = $uploader->save($request->avatar, 'avatars', Auth::user()->id, 400);
             if ($result) {
