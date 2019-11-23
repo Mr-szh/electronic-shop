@@ -28,16 +28,16 @@ class Links
       <span class="label label-danger">9</span>
     </a>
 </li> -->
-<li class="dropdown notifications-menu">
+<!-- <li class="dropdown notifications-menu">
 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
   <i class="fa fa-bell-o"></i>
   <span class="label label-warning">10</span>
 </a>
 <ul class="dropdown-menu">
   <li class="header">You have 10 notifications</li>
-  <li>
+  <li> -->
     <!-- inner menu: contains the actual data -->
-    <ul class="menu">
+    <!-- <ul class="menu">
       <li>
         <a href="#">
           <i class="fa fa-users text-aqua"></i> 5 new members joined today
@@ -69,7 +69,7 @@ class Links
   </li>
   <li class="footer"><a href="#">View all</a></li>
 </ul>
-</li>
+</li> -->
 
 HTML;
     }

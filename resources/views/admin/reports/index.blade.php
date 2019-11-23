@@ -1,5 +1,3 @@
-<link rel="stylesheet" href="{{ URL::asset('/css/reports.css') }}" />
-
 <div class="row">
     <div class="col-md-4 col-xl-4">
         <div class="card mb-3 widget-content bg-midnight-bloom" style="width: 460px;height: 90px;margin-bottom: 30px !important;background-image: linear-gradient(-20deg, #2b5876 0%, #4e4376 100%) !important;

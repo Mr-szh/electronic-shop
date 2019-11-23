@@ -21,7 +21,7 @@ class ReportsController extends Controller
 
     public function index(Content $content)
     {
-        // 获取每天新注册量
+        // 获取每天新注册量s
         $users = User::query()->where('created_at', '>', Carbon::today())->count();
         $orders = Order::query()->where('created_at', '>', Carbon::today())
             ->where('closed', false)

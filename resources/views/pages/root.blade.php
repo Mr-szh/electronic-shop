@@ -2,7 +2,7 @@
 @section('title', '首页')
 
 @section('content')
-<div class="hg">
+<div class="hg" style="height:588px;">
   <div class="bottom">
   </div>
   <div class="inner">
