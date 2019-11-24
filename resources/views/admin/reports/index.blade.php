@@ -246,7 +246,7 @@
     };
 
     // 使用刚指定的配置项和数据显示图表。
-    myChart.setOption(option);
+    myChart.setOption(option,true);
 </script>
 
 <script type="text/javascript">
@@ -329,7 +329,7 @@
         }],
     };
 
-    myChart.setOption(option);
+    myChart.setOption(option,true);
 </script>
 
 <script type="text/javascript">
@@ -412,5 +412,5 @@
         }],
     };
 
-    myChart.setOption(option);
+    myChart.setOption(option,true);
 </script>

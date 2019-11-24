@@ -17,7 +17,7 @@ class HomeController extends Controller
 {
     public function index(Content $content)
     {
-        // 获取每天新注册量s
+        // 获取每天新注册量
         $users = User::query()->where('created_at', '>', Carbon::today())->count();
         $orders = Order::query()->where('created_at', '>', Carbon::today())
             ->where('closed', false)
@@ -54,13 +54,13 @@ class HomeController extends Controller
         $seven_sales = collect();
 
         for ($i = 6; $i >= 0; $i--) {
-            $seven_sales[] = Order::query()->where('created_at', '<', Carbon::today()->subDays($i))->count(); 
+            $seven_sales[] = Order::query()->where('created_at', '<', Carbon::today()->endOfDay()->subDays($i))->count(); 
         }      
         
         $seven_users = collect();
 
-        for ($i = 6; $i >= 0; $i--) {
-            $seven_users[] = User::query()->where('created_at', '<', Carbon::today()->subDays($i))->count(); 
+        for ($j = 6; $j >= 0; $j--) {
+            $seven_users[] = User::query()->where('created_at', '<', Carbon::today()->endOfDay()->subDays($j))->count(); 
         }    
 
         return $content
@@ -77,5 +77,5 @@ class HomeController extends Controller
         ));
         // ->body(new Box('Bar chart', view('admin.chartjs')));
         // ->body(new Box('Bar chart', view('admin.chartjs')));
-    }
+    }       
 }
