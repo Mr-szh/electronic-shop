@@ -17,6 +17,7 @@ use App\Jobs\CloseOrder;
 use App\Http\Requests\Admin\HandleRefundRequest;
 use App\Exceptions\InternalException;
 use App\Models\CrowdfundingProduct;
+use App\Services\OrderService;
 
 class OrdersController extends Controller
 {
@@ -210,7 +211,7 @@ class OrdersController extends Controller
         return redirect()->back();
     }
 
-    public function handleRefund(Order $order, HandleRefundRequest $request)
+    public function handleRefund(Order $order, HandleRefundRequest $request, OrderService $orderService)
     {
         if ($order->refund_status !== Order::REFUND_STATUS_APPLIED) {
             throw new InvalidRequestException('订单状态有误');
@@ -228,7 +229,9 @@ class OrdersController extends Controller
                 'extra' => $extra,
             ]);
             
-            $this->_refundOrder($order);
+            // $this->_refundOrder($order);
+            // 改为调用封装的方法
+            $orderService->refundOrder($order);
         } else {
             $extra = $order->extra ?: [];
             $extra['refund_disagree_reason'] = $request->input('reason');
