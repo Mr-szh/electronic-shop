@@ -35,6 +35,39 @@ class CrowdfundingProductsController extends CommonProductsController
         $grid->column('crowdfunding.status', ' 状态')->display(function ($value) {
             return CrowdfundingProduct::$statusMap[$value];
         }); 
+
+        $grid->filter(function ($filter) {
+            // 去掉默认的id过滤器
+            $filter->disableIdFilter();
+            
+            $filter->column(1/2, function ($filter) {
+                $filter->like('title', '商品名称')->placeholder('请输入商品名称');
+                $filter->in('on_sale', '商品状态')->multipleSelect(['true' => '上架', 'false' => '下架']);
+                $filter->between('created_at', '创建时间')->date();
+            });
+            
+            $filter->column(1/2, function ($filter) {
+                $filter->between('price', '价格区间');
+                $filter->group('sold_count', '销量', function ($group) {
+                    $group->gt('大于');
+                    $group->lt('小于');
+                    $group->nlt('不小于');
+                    $group->ngt('不大于');
+                    $group->equal('等于');
+                })->integer()->placeholder('请输入销量');
+                $filter->group('review_count', '评论数', function ($group) {
+                    $group->gt('大于');
+                    $group->lt('小于');
+                    $group->nlt('不小于');
+                    $group->ngt('不大于');
+                    $group->equal('等于');
+                })->integer()->placeholder('请输入评论数');
+            });
+            
+            $filter->scope('new', '最近创建/修改')
+                ->whereDate('created_at', date('Y-m-d'))
+                ->orWhereDate('updated_at', date('Y-m-d'));
+        });
     }
 
     protected function customForm(Form $form)

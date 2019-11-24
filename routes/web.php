@@ -63,6 +63,8 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
     Route::delete('config/{sku}', 'ConfigController@remove')->name('config.remove');
     Route::delete('config', 'ConfigController@removeAll')->name('config.removeAll');
 
+    Route::post('crowdfunding_orders', 'OrdersController@crowdfunding')->name('crowdfunding_orders.store');
+
 });
 
 Route::resource('users', 'UserController', ['only' => ['show']]);

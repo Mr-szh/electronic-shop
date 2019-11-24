@@ -358,6 +358,7 @@ class ProductsController extends Controller
 
         $products = Product::query()
             ->whereIn('id', $productIds)
+            ->where('type', 'normal')
             ->orderByRaw(sprintf("FIND_IN_SET(id, '%s')", join(',', $productIds)))
             ->get();
 
