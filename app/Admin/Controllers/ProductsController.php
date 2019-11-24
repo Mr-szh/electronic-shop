@@ -40,6 +40,7 @@ class ProductsController extends Controller
     {
         $grid = new Grid(new Product);
 
+        $grid->model()->where('type', Product::TYPE_NORMAL)->with(['category']);
         $grid->model()->with(['category']);
 
         $grid->column('id', 'ID')->sortable();
@@ -140,6 +141,8 @@ class ProductsController extends Controller
     {
         $form = new Form(new Product);
 
+        $form->hidden('type')->value(Product::TYPE_NORMAL);
+        
         $form->tab('商品基本信息', function($form) {
             $form->text('title', '商品名称')->rules('required')->creationRules('required|unique:products');
             $form->text('long_title', '商品长标题')->rules('required');
@@ -151,7 +154,7 @@ class ProductsController extends Controller
                 }
             })->ajax('/admin/api/categories?is_directory=0');
 
-            $form->textarea('description', '产品参数')->rules('required');
+            $form->textarea('description', '产品描述')->rules('required');
             // $form->image('image', '封面图片')->rules('required|image')->move('cover');
             $form->multipleImage('image', '封面图片')->rules('required|image|max:3')->removable()->sortable()->move('cover');
             $form->radio('on_sale', '是否上架')->options(['1' => '是', '0'=> '否'])->default('0');
