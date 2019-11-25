@@ -21,17 +21,6 @@ class ProductsController extends CommonProductsController
         return Product::TYPE_NORMAL;
     }
 
-    // use HasResourceActions;
-
-    // protected $title = '商品管理';
-
-    // public function index(Content $content)
-    // {
-    //     return $content
-    //         ->header('商品列表')
-    //         ->body($this->grid());
-    // }
-
     protected function customGrid(Grid $grid)
     {
         $grid->model()->with(['category']);
@@ -48,7 +37,6 @@ class ProductsController extends CommonProductsController
         $grid->column('review_count', '评论数');
 
         $grid->filter(function ($filter) {
-            // 去掉默认的id过滤器
             $filter->disableIdFilter();
             
             $filter->column(1/2, function ($filter) {
@@ -92,7 +80,7 @@ class ProductsController extends CommonProductsController
 
     protected function customForm(Form $form)
     {
-        // 普通商品没有额外的字段，因此这里不需要写任何代码
+        
     }
 
     // protected function grid()
@@ -261,19 +249,5 @@ class ProductsController extends CommonProductsController
     //     });
         
     //     return $form;
-    // }
-
-    // public function create(Content $content)
-    // {
-    //     return $content
-    //         ->header('创建商品')
-    //         ->body($this->form());
-    // }
-
-    // public function edit($id, Content $content)
-    // {
-    //     return $content
-    //         ->header('编辑商品')
-    //         ->body($this->form()->edit($id));
     // }
 }

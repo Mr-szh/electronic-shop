@@ -16,7 +16,6 @@ abstract class CommonProductsController extends Controller
 {
     use HasResourceActions;
 
-    // 定义一个抽象方法，返回当前管理的商品类型
     abstract public function getProductType();
 
     public function index(Content $content)
@@ -44,9 +43,8 @@ abstract class CommonProductsController extends Controller
     {
         $grid = new Grid(new Product());
 
-        // 筛选出当前类型的商品，默认 ID 倒序排序
         $grid->model()->where('type', $this->getProductType())->orderBy('id', 'desc');
-        // 调用自定义方法
+
         $this->customGrid($grid);
 
         $grid->actions(function ($actions) {
@@ -63,14 +61,12 @@ abstract class CommonProductsController extends Controller
         return $grid;
     }
 
-    // 定义一个抽象方法，各个类型的控制器将实现本方法来定义列表应该展示哪些字段
     abstract protected function customGrid(Grid $grid);
 
     protected function form()
     {
         $form = new Form(new Product());
 
-        // 在表单页面中添加一个名为 type 的隐藏字段，值为当前商品类型
         $form->hidden('type')->value($this->getProductType());
         
         $form->tab('商品基本信息', function($form) {
@@ -102,7 +98,6 @@ abstract class CommonProductsController extends Controller
             $form->multipleImage('images', '详情图')->rules('image')->removable()->sortable()->move('details/'.time());
         });
 
-        // 调用自定义方法
         $this->customForm($form);
 
         $form->tools(function (Form\Tools $tools) {
@@ -116,7 +111,6 @@ abstract class CommonProductsController extends Controller
             $footer->disableCreatingCheck();
         });
 
-        // 定义事件回调，当模型即将保存时会触发这个回调
         $form->saving(function (Form $form) {
             $form->model()->price = collect($form->input('skus'))->where(Form::REMOVE_FLAG_NAME, 0)->min('price') ?: 0;
         });
@@ -129,6 +123,5 @@ abstract class CommonProductsController extends Controller
         return $form;
     }
 
-    // 定义一个抽象方法，各个类型的控制器将实现本方法来定义表单应该有哪些额外的字段
     abstract protected function customForm(Form $form);
 }

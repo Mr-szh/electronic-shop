@@ -1,13 +1,12 @@
 <?php
-
 namespace App\Console\Commands\Cron;
 
-use Illuminate\Console\Command;
+use App\Jobs\RefundCrowdfundingOrders;
 use App\Models\CrowdfundingProduct;
+use App\Services\OrderService;
+use Illuminate\Console\Command;
 use App\Models\Order;
 use Carbon\Carbon;
-use App\Services\OrderService;
-use App\Jobs\RefundCrowdfundingOrders;
 
 class FinishCrowdfunding extends Command
 {
@@ -18,6 +17,8 @@ class FinishCrowdfunding extends Command
     public function handle()
     {
         CrowdfundingProduct::query()
+            // 预加载商品数据
+            ->with(['product'])
             // 众筹结束时间早于当前时间
             ->where('end_at', '<=', Carbon::now())
             // 众筹状态为众筹中
@@ -43,35 +44,13 @@ class FinishCrowdfunding extends Command
         ]);
     }
 
-    // protected function crowdfundingFailed(CrowdfundingProduct $crowdfunding)
-    // {
-    //     // 将众筹状态改为众筹失败
-    //     $crowdfunding->update([
-    //         'status' => CrowdfundingProduct::STATUS_FAIL,
-    //     ]);
-
-    //     $orderService = app(OrderService::class);
-
-    //     // 查询出所有参与了此众筹的订单
-    //     Order::query()
-    //         // 订单类型为众筹商品订单
-    //         ->where('type', Order::TYPE_CROWDFUNDING)
-    //         // 已支付的订单
-    //         ->whereNotNull('paid_at')
-    //         ->whereHas('items', function ($query) use ($crowdfunding) {
-    //             // 包含了当前商品
-    //             $query->where('product_id', $crowdfunding->product_id);
-    //         })
-    //         ->get()
-    //         ->each(function (Order $order) use ($orderService) {
-    //             $orderService->refundOrder($order);
-    //         });
-    // }
     protected function crowdfundingFailed(CrowdfundingProduct $crowdfunding)
     {
+        // 将众筹状态改为众筹失败
         $crowdfunding->update([
             'status' => CrowdfundingProduct::STATUS_FAIL,
         ]);
+        
         dispatch(new RefundCrowdfundingOrders($crowdfunding));
     }
 }

@@ -7,7 +7,6 @@ Route::get('/', 'PagesController@root')->name('root');
 Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('products', 'ProductsController@index')->name('products.index');
 
 Route::get('about', 'PagesController@about')->name('about');
 Route::get('faq', 'PagesController@faq')->name('faq');
@@ -73,6 +72,7 @@ Route::resource('categories', 'CategoriesController', ['only' => ['show']]);
 
 Route::get('topics/{topic}/{slug?}', 'TopicsController@show')->name('topics.show');
 
+Route::get('products', 'ProductsController@index')->name('products.index');
 Route::get('products/{product}', 'ProductsController@show')->name('products.show');
 
 Route::post('payment/alipay/notify', 'PaymentController@alipayNotify')->name('payment.alipay.notify');

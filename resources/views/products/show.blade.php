@@ -111,7 +111,6 @@
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="product-detail-tab"> 
 
-                            <!-- 商品属性开始 -->
                             <div class="properties-list">
                                 <div class="properties-list-title">产品参数：</div>
                                 <ul class="properties-list-body">
@@ -120,7 +119,7 @@
                                 @endforeach
                                 </ul>
                             </div>
-                            <!-- 商品属性结束 -->
+
                             <div class="product-description">
                                 {!! $product->description !!}
                             </div>
@@ -160,7 +159,6 @@
                     </div>
                 </div>
 
-                <!-- 推荐商品 -->
                 @if(count($similar) > 0)
                 <div class="similar-products">
                     <div class="title">猜你喜欢</div>
@@ -206,18 +204,15 @@
             $('.product-info .stock').text('库存：' + $(this).data('stock') + '件');
         });
 
-        // 监听收藏按钮的点击事件
         $('.btn-favor').click(function () {
             axios.post('{{ route('products.favor', ['product' => $product->id]) }}').then(function () {
                 swal('收藏成功', '', 'success').then(function () {
                     location.reload();
                 });
             }, function(error) {
-                // 返回码 401 代表没登录
                 if (error.response && error.response.status === 401) {
                     swal('请先登录', '', 'error');
                 } else if (error.response && (error.response.data.msg || error.response.data.message)) {
-                    // 其他有 msg 或者 message 字段的情况，将 msg 提示给用户
                     swal(error.response.data.msg ? error.response.data.msg : error.response.data.message, '', 'error');
                 }  else {
                     swal('系统错误', '', 'error');
@@ -233,9 +228,7 @@
             });
         });
 
-        // 加入购物车按钮点击事件
         $('.btn-add-to-cart').click(function () {
-            // 请求加入购物车接口
             axios.post('{{ route('cart.add') }}', {
                 sku_id: $('label.active input[name=skus]').val(),
                 amount: $('.cart_amount input').val(),
@@ -249,9 +242,11 @@
                         $('.badge-success').text(count);
                     }
                 });
-            }, function (error) { // 请求失败执行此回调
+            }, function (error) {
                 if (error.response.status === 401) {
                     swal('请先登录', '', 'error');
+                } else if (error.response.status === 400) {
+                    swal(error.response.data.msg, '', 'error')
                 } else if (error.response.status === 422) {
                     // http 状态码为 422 代表用户输入校验失败
                     var html = '<div>';
@@ -327,13 +322,12 @@
 
         lunbo();
 
-         // 参与众筹 按钮点击事件
         $('.btn-crowdfunding').click(function () {
-            // 判断是否选中 SKU
             if (!$('label.active input[name=skus]').val()) {
                 swal('请先选择商品', '', 'error');
                 return;
             }
+
             // 把用户的收货地址以 JSON 的形式放入页面，赋值给 addresses 变量
             var addresses = {!! json_encode(Auth::check() ? Auth::user()->addresses : []) !!};
             // 使用 jQuery 动态创建一个表单
@@ -344,15 +338,12 @@
                 '<div class="col-sm-9">' +
                 '<select class="custom-select" name="address_id"></select>' +
                 '</div></div>');
-            // 循环每个收货地址
             addresses.forEach(function (address) {
-                // 把当前收货地址添加到收货地址下拉框选项中
                 $form.find('select[name=address_id]')
                 .append("<option value='" + address.id + "'>" +
                     address.full_address + ' ' + address.contact_name + ' ' + address.contact_phone +
                     '</option>');
             });
-            // 在表单中添加一个名为 购买数量 的输入框
             $form.append('<div class="form-group row">' +
                 '<label class="col-form-label col-sm-3">购买数量</label>' +
                 '<div class="col-sm-9"><input class="form-control" name="amount" autocomplete="off">' +
@@ -360,27 +351,24 @@
             // 调用 SweetAlert 弹框
             swal({
                 text: '参与众筹',
-                content: $form[0], // 弹框的内容就是刚刚创建的表单
+                content: $form[0],
                 buttons: ['取消', '确定']
             }).then(function (ret) {
-                // 如果用户没有点确定按钮，则什么也不做
                 if (!ret) {
                     return;
                 }
-                // 构建请求参数
+
                 var req = {
                     address_id: $form.find('select[name=address_id]').val(),
                     amount: $form.find('input[name=amount]').val(),
                     sku_id: $('label.active input[name=skus]').val()
                 };
-                // 调用众筹商品下单接口
+
                 axios.post('{{ route('crowdfunding_orders.store') }}', req).then(function (response) {
-                    // 订单创建成功，跳转到订单详情页
                     swal('订单提交成功', '', 'success').then(() => {
                         location.href = '/orders/' + response.data.id;
                     });
                 }, function (error) {
-                    // 输入参数校验失败，展示失败原因
                     if (error.response.status === 422) {
                         var html = '<div>';
                         _.each(error.response.data.errors, function (errors) {

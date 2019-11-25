@@ -214,10 +214,6 @@ class OrdersController extends Controller
     public function handleRefund(Order $order, HandleRefundRequest $request, OrderService $orderService)
     {
         if ($order->refund_status !== Order::REFUND_STATUS_APPLIED) {
-            throw new InvalidRequestException('订单状态有误');
-        }
-
-        if ($order->refund_status !== Order::REFUND_STATUS_APPLIED) {
             throw new InvalidRequestException('订单状态不正确');
         }
 
@@ -245,39 +241,39 @@ class OrdersController extends Controller
         return $order;
     }
 
-    protected function _refundOrder(Order $order)
-    {
-        switch ($order->payment_method) {
-            case 'wechat':
-                break;
-            case 'alipay':
-                $refundNo = Order::getAvailableRefundNo();
+    // protected function _refundOrder(Order $order)
+    // {
+    //     switch ($order->payment_method) {
+    //         case 'wechat':
+    //             break;
+    //         case 'alipay':
+    //             $refundNo = Order::getAvailableRefundNo();
                 
-                $ret = app('alipay')->refund([
-                    'out_trade_no' => $order->no,
-                    'refund_amount' => $order->total_amount,
-                    'out_request_no' => $refundNo,
-                ]);
+    //             $ret = app('alipay')->refund([
+    //                 'out_trade_no' => $order->no,
+    //                 'refund_amount' => $order->total_amount,
+    //                 'out_request_no' => $refundNo,
+    //             ]);
                 
-                if ($ret->sub_code) {
-                    $extra = $order->extra;
-                    $extra['refund_failed_code'] = $ret->sub_code;
+    //             if ($ret->sub_code) {
+    //                 $extra = $order->extra;
+    //                 $extra['refund_failed_code'] = $ret->sub_code;
                     
-                    $order->update([
-                        'refund_no' => $refundNo,
-                        'refund_status' => Order::REFUND_STATUS_FAILED,
-                        'extra' => $extra,
-                    ]);
-                } else {
-                    $order->update([
-                        'refund_no' => $refundNo,
-                        'refund_status' => Order::REFUND_STATUS_SUCCESS,
-                    ]);
-                }
-                break;
-            default:
-                throw new InternalException('未知订单支付方式：'.$order->payment_method);
-                break;
-        }
-    }
+    //                 $order->update([
+    //                     'refund_no' => $refundNo,
+    //                     'refund_status' => Order::REFUND_STATUS_FAILED,
+    //                     'extra' => $extra,
+    //                 ]);
+    //             } else {
+    //                 $order->update([
+    //                     'refund_no' => $refundNo,
+    //                     'refund_status' => Order::REFUND_STATUS_SUCCESS,
+    //                 ]);
+    //             }
+    //             break;
+    //         default:
+    //             throw new InternalException('未知订单支付方式：'.$order->payment_method);
+    //             break;
+    //     }
+    // }
 }

@@ -65,7 +65,6 @@ class OrdersController extends Controller
     {
         $this->authorize('own', $order);
 
-        // 判断订单的发货状态是否为已发货
         if ($order->ship_status !== Order::SHIP_STATUS_DELIVERED) {
             throw new InvalidRequestException('发货状态不正确');
         }

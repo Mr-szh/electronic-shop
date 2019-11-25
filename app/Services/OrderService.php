@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use App\Models\CouponCode;
 use App\Exceptions\CouponCodeUnavailableException;
 use App\Exceptions\InternalException;
+use App\Exceptions\SystemException;
 
 class OrderService
 {
@@ -23,9 +24,8 @@ class OrderService
 
         // 开启一个数据库事务
         $order = \DB::transaction(function () use ($user, $address, $remark, $items, $coupon, $custom) {
-            // 更新此地址的最后使用时间
             $address->update(['last_used_at' => Carbon::now()]);
-            // 创建一个订单
+
             $order = new Order([
                 'address' => [
                     'address' => $address->full_address,
@@ -75,7 +75,6 @@ class OrderService
                 }
             }
 
-            // 更新订单总金额
             $order->update(['total_amount' => $totalAmount]);
 
             // 将下单的商品从购物车中移除
@@ -87,7 +86,6 @@ class OrderService
                 app(ConfigService::class)->remove($skuIds);
             }
             
-
             return $order;
         });
 
@@ -100,8 +98,9 @@ class OrderService
     {
         $order = \DB::transaction(function () use ($amount, $sku, $user, $address) {
             $address->update(['last_used_at' => Carbon::now()]);
+            
             $order = new Order([
-                'address' => [ // 将地址信息放入订单中
+                'address' => [
                     'address' => $address->full_address,
                     'zip' => $address->zip,
                     'contact_name' => $address->contact_name,
@@ -117,7 +116,7 @@ class OrderService
 
             $item = $order->items()->make([
                 'amount' => $amount,
-                'price'  => $sku->price,
+                'price' => $sku->price,
             ]);
 
             $item->product()->associate($sku->product_id);
@@ -144,20 +143,6 @@ class OrderService
         // 判断该订单的支付方式
         switch ($order->payment_method) {
             case 'wechat':
-                // 生成退款订单号
-                $refundNo = Order::getAvailableRefundNo();
-                app('wechat_pay')->refund([
-                    'out_trade_no' => $order->no,
-                    'total_fee' => $order->total_amount * 100,
-                    'refund_fee' => $order->total_amount * 100,
-                    'out_refund_no' => $refundNo,
-                    'notify_url' => ngrok_url('payment.wechat.refund_notify'),
-                ]);
-                $order->update([
-                    'refund_no' => $refundNo,
-                    'refund_status' => Order::REFUND_STATUS_PROCESSING,
-                ]);
-                break;
             case 'alipay':
                 $refundNo = Order::getAvailableRefundNo();
                 $ret = app('alipay')->refund([
@@ -181,7 +166,7 @@ class OrderService
                 }
                 break;
             default:
-                throw new InternalException('未知订单支付方式：'.$order->payment_method);
+                throw new SystemException('未知订单支付方式：' . $order->payment_method);
                 break;
         }
     }

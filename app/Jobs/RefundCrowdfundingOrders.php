@@ -30,6 +30,7 @@ class RefundCrowdfundingOrders implements ShouldQueue
         }
         // 将定时任务中的众筹失败退款代码移到这里
         $orderService = app(OrderService::class);
+        
         Order::query()
             ->where('type', Order::TYPE_CROWDFUNDING)
             ->whereNotNull('paid_at')
