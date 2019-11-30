@@ -12,7 +12,6 @@ class PaymentController extends Controller
 {
     public function payByAlipay(Order $order, Request $request)
     {
-        // 判断订单是否属于当前用户
         $this->authorize('own', $order);
 
         if ($order->paid_at || $order->closed) {
@@ -26,13 +25,9 @@ class PaymentController extends Controller
         ]);
     }
 
-    // 前端回调页面
+    // 前端回调
     public function alipayReturn()
     {
-        // 校验提交的参数是否合法
-        // $data = app('alipay')->verify();
-        // dd($data);
-
         try {
             app('alipay')->verify();
         } catch (\Exception $e) {
@@ -45,19 +40,15 @@ class PaymentController extends Controller
     // 服务器端回调
     public function alipayNotify()
     {
-        // $data = app('alipay')->verify();
-        // \Log::debug('Alipay notify', $data->all());
-
-        // 校验输入参数
         $data  = app('alipay')->verify();
-        // 如果订单状态不是成功或者结束，则不走后续的逻辑
+
         // 所有交易状态：https://docs.open.alipay.com/59/103672
         if(!in_array($data->trade_status, ['TRADE_SUCCESS', 'TRADE_FINISHED'])) {
             return app('alipay')->success();
         }
 
         $order = Order::where('no', $data->out_trade_no)->first();
-        // 不太可能出现支付了一笔不存在的订单，加强系统健壮性。
+
         if (!$order) {
             return 'fail';
         }

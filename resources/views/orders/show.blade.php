@@ -56,7 +56,7 @@
                         </div>
                         <div class="line">
                             <div class="line-label">订单备注：</div>
-                            <div class="line-value">{{ $order->remark ?: '-' }}</div>
+                            <div class="line-value">{{ $order->remark ?: '~' }}</div>
                         </div>
                         <div class="line">
                             <div class="line-label">订单编号：</div>

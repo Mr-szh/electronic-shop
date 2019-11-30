@@ -54,15 +54,14 @@
 @section('scriptsAfterJs')
 <script>
     $(document).ready(function() {
-        // 监听更改按钮的点击事件
         $('.btn-confirm').click(function() {
             var msg = '';
 
             axios.put('{{ route('user_information.replace') }}', {
-                    oldPassword: $("input[name='oldPassword']").val(),
-                    password: $("input[name='password']").val(),
-                    password_confirmation: $("input[name='password_confirmation']").val(),
-                }).then(function() {
+                oldPassword: $("input[name='oldPassword']").val(),
+                password: $("input[name='password']").val(),
+                password_confirmation: $("input[name='password_confirmation']").val(),
+            }).then(function() {
                 swal('密码更改成功', '', 'success');
             }, function(error) {
                 $("input").removeClass('dangerous');

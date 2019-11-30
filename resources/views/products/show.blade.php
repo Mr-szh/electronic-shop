@@ -8,7 +8,6 @@
             <div class="card-body product-info">
                 <div class="row">
                     <div class="col-5">
-                        <!-- <img class="cover" src="{{ URL::asset('/upload/'.$product->image[0]) }}" alt=""> -->
                         <div id="bigImg" class="active">
                             <img src="{{ URL::asset('/upload/'.$product->image[0]) }}" alt="" width="100%">
                         </div>
@@ -93,8 +92,10 @@
                                 @else
                                     <a class="btn btn-primary" href="{{ route('login') }}">请先登录</a>
                                 @endif
-                            @else
+                            @elseif($product->on_sale)
                             <button class="btn btn-primary btn-add-to-cart">加入购物车</button>
+                            @else
+                            <button class="btn btn-primary btn-error">该商品已下架，可选择取消收藏</button>
                             @endif
                         </div>
                     </div>
@@ -143,6 +144,7 @@
                                         <td>时间</td>
                                     </tr>
                                 </thead>
+                                @if($reviews->count())
                                 <tbody>
                                 @foreach($reviews as $review)
                                 <tr>
@@ -154,6 +156,13 @@
                                 </tr>
                                 @endforeach
                                 </tbody>
+                                @else
+                                <tbody>
+                                    <tr class="text-center">
+                                        <td class="nonentity" colspan="5" style="color:red;font-size:20px;letter-spacing:8px;">该商品暂无评论!</td>
+                                    </tr>
+                                </tbody>
+                                @endif
                             </table>
                         </div>
                     </div>
@@ -194,7 +203,6 @@
 @section('scriptsAfterJs')
 <script>
     $(document).ready(function() {
-        // 这个属性来启用 Bootstrap 的工具提示来美化样式
         $('[data-toggle="tooltip"]').tooltip({
             trigger: 'hover'
         });
@@ -202,6 +210,13 @@
         $('.sku-btn').click(function() {
             $('.product-info .price span').text($(this).data('price'));
             $('.product-info .stock').text('库存：' + $(this).data('stock') + '件');
+        });
+
+        $('.btn-error').click(function () {
+            swal({
+                title: "该商品已下架！",
+                icon: "error",
+            });
         });
 
         $('.btn-favor').click(function () {
@@ -234,13 +249,7 @@
                 amount: $('.cart_amount input').val(),
             }).then(function () {
                 swal('加入购物车成功', '', 'success').then(function () {
-                    var count = parseInt($('.badge-success').text());
-                    if (isNaN(count)){ 
-                        $('.badge-success').text('1');
-                    } else {
-                        count = count + 1;
-                        $('.badge-success').text(count);
-                    }
+                    location.reload();
                 });
             }, function (error) {
                 if (error.response.status === 401) {
@@ -248,7 +257,6 @@
                 } else if (error.response.status === 400) {
                     swal(error.response.data.msg, '', 'error')
                 } else if (error.response.status === 422) {
-                    // http 状态码为 422 代表用户输入校验失败
                     var html = '<div>';
                     _.each(error.response.data.errors, function (errors) {
                         _.each(errors, function (error) {
@@ -328,11 +336,9 @@
                 return;
             }
 
-            // 把用户的收货地址以 JSON 的形式放入页面，赋值给 addresses 变量
             var addresses = {!! json_encode(Auth::check() ? Auth::user()->addresses : []) !!};
-            // 使用 jQuery 动态创建一个表单
+  
             var $form = $('<form></form>');
-            // 表单中添加一个收货地址的下拉框
             $form.append('<div class="form-group row">' +
                 '<label class="col-form-label col-sm-3">选择地址</label>' +
                 '<div class="col-sm-9">' +
@@ -348,7 +354,7 @@
                 '<label class="col-form-label col-sm-3">购买数量</label>' +
                 '<div class="col-sm-9"><input class="form-control" name="amount" autocomplete="off">' +
                 '</div></div>');
-            // 调用 SweetAlert 弹框
+
             swal({
                 text: '参与众筹',
                 content: $form[0],

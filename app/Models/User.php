@@ -14,7 +14,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function topicNotify($instance)
     {
-        // 如果要通知的人是当前用户，就不必通知了！
         if ($this->id == Auth::id()) {
             return;
         }
@@ -24,22 +23,10 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->notify($instance);
     }
 
-    /**
-     * The attributes that are mass assignable.
-     * 可分配的属性
-     * 
-     * @var array
-     */
     protected $fillable = [
         'name', 'email', 'password', 'avatar',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     * 应该为数组隐藏的属性
-     * 
-     * @var array
-     */
     protected $hidden = [
         'password', 'remember_token',
     ];
@@ -56,17 +43,11 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function addresses()
     {
-        // 一对多关系
         return $this->hasMany(UserAddress::class);
     }
 
     public function favoriteProducts()
     {
-        /**
-         * 用于定义一个多对多的关联
-         * withTimestamps() 代表中间表带有时间戳字段
-         * 默认的排序方式是根据中间表的创建时间倒序排序
-         */
         return $this->belongsToMany(Product::class, 'user_favorite_products')
             ->withTimestamps()
             ->orderBy('user_favorite_products.created_at', 'desc');

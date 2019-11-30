@@ -6,7 +6,6 @@
     <div class="container">
         <div class="member-area-from-wrap">
             <div class="row">
-
                 <div class="col-lg-6">
                     <div class="user-information-form-wrap">
                         <h4>用户头像</h4>
@@ -32,7 +31,7 @@
                         {{ csrf_field() }}
                         <div class="single-input-item">
                             用户名：
-                            <input type="text" name="name" placeholder="请输入您的用户名" old-data="{{ $user->name }}" value="{{ $user->name }}" />
+                            <input type="text" name="name" placeholder="请输入您的用户名" old-data="{{ $user->name }}" value="{{ $user->name }}" autocomplete="off" />
                         </div>
                         <div class="single-input-item">
                             邮箱：
@@ -43,7 +42,7 @@
                                 <div class="single-input-item">
                                     性别：
                                     <select name="sex" id="showSex" class="form-control">
-                                        <option value="0"></option>
+                                        <option value="0">保密</option>
                                         <option value="1">男</option>
                                         <option value="2">女</option>
                                     </select>
@@ -81,13 +80,12 @@
         $('#pop_file').change(function () {
             var src = document.getElementById('show').src;
             document.getElementById('show').setAttribute('old-data', src);
-            // 获取FileList的第一个元素
+
             var file = document.getElementById('pop_file').files[0];
             var img_src = window.URL.createObjectURL(file);
             document.getElementById('show').src = img_src;
         });
 
-        // 监听修改按钮的点击事件
         $('.btn-confirm').click(function() {
             var msg = '';
             
@@ -103,7 +101,6 @@
                     $('#user-name').text(res.data);
                 });
             }, function(error) { 
-                // 请求失败会执行这个回调
                 $("input").removeClass('dangerous');
 
                 if (error.response.data.errors.name) {
@@ -133,7 +130,7 @@
             var data = new FormData();
             data.append('avatar', file);
 
-            axios.post('{{ route('user_information.updateAvatar') }}', data).then(function(res) { // 请求成功会执行这个回调
+            axios.post('{{ route('user_information.updateAvatar') }}', data).then(function(res) {
                 swal('上传成功', '', 'success').then(function () {
                     $('#avatar').attr('src', res.data);
                 });

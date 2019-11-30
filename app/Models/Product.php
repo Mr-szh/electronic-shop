@@ -25,7 +25,6 @@ class Product extends Model
         'on_sale' => 'boolean',
     ];
 
-    // 与商品SKU关联
     public function skus()
     {
         return $this->hasMany(ProductSku::class);
@@ -41,25 +40,7 @@ class Product extends Model
         return $this->hasOne(CrowdfundingProduct::class);
     }
 
-    // 修复页面无法显示商品封面图片的问题
-    // public function getImageUrlAttribute()
-    // {
-    //     // 如果 image 字段本身就已经是完整的 url 就直接返回
-    //     if (Str::startsWith($this->attributes['image'], ['http://', 'https://'])) {
-    //         return $this->attributes['image'];
-    //     }
-    //     return \Storage::disk('public')->url($this->attributes['image']);
-    // }
-
-    // public function getImagesUrlAttribute()
-    // {
-    //     // 如果 image 字段本身就已经是完整的 url 就直接返回
-    //     if (Str::startsWith($this->attributes['images'], ['http://', 'https://'])) {
-    //         return $this->attributes['images'];
-    //     }
-    //     return \Storage::disk('public')->url($this->attributes['images']);
-    // }
-
+    // 访问器
     public function getImageAttribute($value)
     {
         return explode(',', $value);
@@ -85,11 +66,9 @@ class Product extends Model
         return $this->hasMany(ProductProperty::class);
     }
 
-    // 保证商品属性为最小粒度
     public function getGroupedPropertiesAttribute()
     {
         return $this->properties
-            // 按照属性名聚合，返回的集合的 key 是属性名，value 是包含该属性名的所有属性集合
             ->groupBy('name')
             ->map(function ($properties) {
                 // 使用 map 方法将属性集合变为属性值集合
@@ -115,7 +94,7 @@ class Product extends Model
         // 有类目则 category 字段为类目名数组，否则为空字符串
         $arr['category'] = $this->category ? explode(' - ', $this->category->full_name) : '';
         $arr['category_path'] = $this->category ? $this->category->path : '';
-        // strip_tags 函数可以将 html 标签去除
+        // strip_tags 函数可将 html 标签去除
         $arr['description'] = strip_tags($this->description);
         // 只取出需要的 SKU 字段
         $arr['skus'] = $this->skus->map(function (ProductSku $sku) {
@@ -124,7 +103,7 @@ class Product extends Model
         // 只取出需要的商品属性字段
         $arr['properties'] = $this->properties->map(function (ProductProperty $property) {
             // return Arr::only($property->toArray(), ['name', 'value']);
-            // 对应地增加一个 search_value 字段，用符号 : 将属性名和属性值拼接起来
+            // 增加一个 search_value 字段，用符号 : 将属性名和属性值拼接起来
             return array_merge(array_only($property->toArray(), ['name', 'value']), [
                 'search_value' => $property->name.':'.$property->value,
             ]);
@@ -133,6 +112,7 @@ class Product extends Model
         return $arr;
     }
 
+    // 根据ID查询对应的商品并保持 ID 的次序
     public function scopeByIds($query, $ids)
     {
         return $query->whereIn('id', $ids)->orderByRaw(sprintf("FIND_IN_SET(id, '%s')", join(',', $ids)));

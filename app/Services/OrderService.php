@@ -22,7 +22,6 @@ class OrderService
             $coupon->checkAvailable($user);
         }
 
-        // 开启一个数据库事务
         $order = \DB::transaction(function () use ($user, $address, $remark, $items, $coupon, $custom) {
             $address->update(['last_used_at' => Carbon::now()]);
 
@@ -38,7 +37,6 @@ class OrderService
                 'type' => Order::TYPE_NORMAL,
             ]);
 
-            // 订单关联到当前用户
             $order->user()->associate($user);
             $order->save();
 
@@ -63,13 +61,12 @@ class OrderService
             }
 
             if ($coupon) {
-                // 检查是否符合优惠券规则
+                // 检验优惠券
                 $coupon->checkAvailable($user, $totalAmount);
-                // 把订单金额修改为优惠后的金额
+                // 修改优惠后的金额
                 $totalAmount = $coupon->getAdjustedPrice($totalAmount);
-                // 将订单与优惠券关联
                 $order->couponCode()->associate($coupon);
-                // 增加优惠券的用量，需判断返回值
+
                 if ($coupon->changeUsed() <= 0) {
                     throw new CouponCodeUnavailableException('该优惠券已被兑完');
                 }
@@ -130,9 +127,9 @@ class OrderService
             return $order;
         });
 
-        // 众筹结束时间减去当前时间得到剩余秒数
+        // 众筹结束时间减去当前时间得到剩余秒数作为订单关闭时间
         $crowdfundingTtl = $sku->product->crowdfunding->end_at->getTimestamp() - time();
-        // 剩余秒数与默认订单关闭时间取较小值作为订单关闭时间
+
         dispatch(new CloseOrder($order, min(config('app.order_ttl'), $crowdfundingTtl)));
 
         return $order;
@@ -140,19 +137,22 @@ class OrderService
 
     public function refundOrder(Order $order)
     {
-        // 判断该订单的支付方式
         switch ($order->payment_method) {
             case 'wechat':
+                break;
             case 'alipay':
                 $refundNo = Order::getAvailableRefundNo();
+                
                 $ret = app('alipay')->refund([
                     'out_trade_no' => $order->no,
                     'refund_amount' => $order->total_amount,
                     'out_request_no' => $refundNo,
                 ]);
+
                 if ($ret->sub_code) {
                     $extra = $order->extra;
                     $extra['refund_failed_code'] = $ret->sub_code;
+                    
                     $order->update([
                         'refund_no' => $refundNo,
                         'refund_status' => Order::REFUND_STATUS_FAILED,

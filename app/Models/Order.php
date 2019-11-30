@@ -7,7 +7,6 @@ use Ramsey\Uuid\Uuid;
 
 class Order extends Model
 {
-    //定义 REFUND_* 和 SHIP_STATUS_* 两组常量，分别代表退款的各个状态和物流的各个状态
     const REFUND_STATUS_PENDING = 'pending';
     const REFUND_STATUS_APPLIED = 'applied';
     const REFUND_STATUS_PROCESSING = 'processing';
@@ -76,9 +75,9 @@ class Order extends Model
         // 监听模型创建事件，在写入数据库之前触发
         static::creating(function ($model) {
             if (!$model->no) {
-                // 调用 findAvailableNo 生成订单流水号
+                // 生成订单流水号
                 $model->no = static::findAvailableNo();
-                // 生成失败则终止创建订单
+
                 if (!$model->no) {
                     return false;
                 }
@@ -98,16 +97,16 @@ class Order extends Model
 
     public static function findAvailableNo()
     {
-        // 订单流水号前缀
         $prefix = date('YmdHis');
+
         for ($i = 0; $i < 10; $i++) {
-            // 随机生成 6 位的数字
             $no = $prefix.str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-            // 判断是否已经存在
+
             if (!static::query()->where('no', $no)->exists()) {
                 return $no;
             }
         }
+        
         \Log::warning('订单号错误');
 
         return false;

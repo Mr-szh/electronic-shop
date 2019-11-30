@@ -38,7 +38,7 @@ class PasswordRequest extends Request
 
     public function newValidator()
     {
-        // 自定义验证类
+        // 定义验证类，用来验证旧密码是否正确
         Validator::extend('check_pwd', function ($attribute, $value, $parameters, $validator) {
             return Hash::check($value, Auth::user()->password);
         });

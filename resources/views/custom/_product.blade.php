@@ -1,3 +1,12 @@
+@if ($products->count() == 0)
+<div class="card">
+    <div class="card-body">
+        <div class="list-group text-center">
+            <span class="nonentity">该分类下暂无商品</span>
+        </div>
+    </div>
+</div>
+@else
 <div class="card">
     <div class="card-body">
         @foreach($products as $product)
@@ -49,3 +58,4 @@
         <div class="paging float-left">{{ $products->appends($filters)->render() }}</div>
     </div>
 </div>
+@endif

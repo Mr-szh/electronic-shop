@@ -5,7 +5,7 @@
 <div class="row mb-5">
     <div class="col-lg-12 col-md-12 topic-list">
         <span class="custom-title">请选择组件</span>
-        <span class="sign"><i class="important">*</i> 号为必选项</span>
+        <span class="sign"><i class="important">*</i> 号为必选项 （<i class="important">若不想凑足配置，可选择单独购买</i>）</span>
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups" style="margin-top:10px;">
             <div class="btn-group" role="group">
 
@@ -209,7 +209,7 @@
                                 
                             @endphp
                             <!-- <button class="btn btn-default custom @php echo $i; @endphp">定制配置单</button> -->
-                            <input type="button" class="btn btn-default custom btn-create-order" @php echo $status; @endphp value="定制配置单">
+                            <input type="button" class="btn btn-default custom btn-create-order" @php echo $status; @endphp value="定制配置单" role="button" data-toggle="popover" data-placement="top" data-trigger="focus" title="若不想凑足配置，可选择单独购买">
                             <!-- <button class="btn btn-default button-style">暂存</button> -->
                             <button class="btn btn-default button-style btn-removeAll">清空</button>
                         </div>

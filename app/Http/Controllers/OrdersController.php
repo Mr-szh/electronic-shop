@@ -24,7 +24,6 @@ class OrdersController extends Controller
     public function index(Request $request)
     {
         $orders = Order::query()
-            // 使用 with 方法预加载，避免N + 1问题
             ->with(['items.product', 'items.productSku']) 
             ->where('user_id', $request->user()->id)
             ->orderBy('created_at', 'desc')
@@ -35,10 +34,6 @@ class OrdersController extends Controller
     
     public function show(Order $order)
     {
-        /* 延迟预加载
-         * load()：在已经查询出来的模型上调用
-         * with()：在 ORM 查询构造器上调用
-         */
         $this->authorize('own', $order);
 
         return view('orders.show', ['order' => $order->load(['items.productSku', 'items.product'])]);

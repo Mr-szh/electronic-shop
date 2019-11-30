@@ -98,16 +98,14 @@
 <script>
     $(document).ready(function () {
         $('.btn-remove').click(function () {
-            // closest() 方法可以获取到匹配选择器的第一个祖先元素，在这里就是当前点击的 移除 按钮之上的 <tr> 标签
-            // data('id') 方法可以获取到我们之前设置的 data-id 属性的值，也就是对应的 SKU id
             var id = $(this).closest('tr').data('id');
+
             swal({
                 title: "确认要将该商品移除？",
                 icon: "warning",
                 buttons: ['取消', '确定'],
                 dangerMode: true,
             }).then(function(willDelete) {
-                // 用户点击 确定 按钮，willDelete 的值就会是 true，否则为 false
                 if (!willDelete) {
                     return;
                 }
@@ -120,18 +118,14 @@
         });
 
         $('#select-all').change(function() {
-            // prop() 方法可以知道标签中是否包含某个属性，当单选框被勾选时，对应的标签就会新增一个 checked 的属性
             var checked = $(this).prop('checked');
-            // 获取所有 name=select 并且不带有 disabled 属性的勾选框
-            // 对于已经下架的商品我们不希望对应的勾选框会被选中，因此我们需要加上 :not([disabled]) 这个条件
+
             $('input[name=select][type=checkbox]:not([disabled])').each(function() {
-                // 将其勾选状态设为与目标单选框一致
                 $(this).prop('checked', checked);
             });
         });
 
         $('.btn-create-order').click(function () {
-            // 构建请求参数，将用户选择的地址的 id 和备注内容写入请求参数
             var req = {
                 address_id: $('#order-form').find('select[name=address]').val(),
                 items: [],
@@ -139,21 +133,20 @@
                 coupon_code: $('input[name=coupon_code]').val(),
                 custom: 0,
             };
-            // 遍历 <table> 标签内所有带有 data-id 属性的 <tr> 标签 —— 每一个购物车中的商品 SKU
+
             $('table tr[data-id]').each(function () {
-                // 获取当前行的单选框
                 var $checkbox = $(this).find('input[name=select][type=checkbox]');
-                // 如果单选框被禁用或者没有被选中则跳过
+
                 if ($checkbox.prop('disabled') || !$checkbox.prop('checked')) {
                     return;
                 }
-                // 获取当前行中数量输入框
+
                 var $input = $(this).find('input[name=amount]');
-                // 如果用户将数量设为 0 或者不是一个数字，则也跳过
+
                 if ($input.val() == 0 || isNaN($input.val())) {
                     return;
                 }
-                // 把 SKU id 和数量存入请求参数数组中
+
                 req.items.push({
                     sku_id: $(this).data('id'),
                     amount: $input.val(),
@@ -176,7 +169,6 @@
                 } else if (error.response.status == 403) {
                     swal(error.response.data.msg, '', 'error');
                 } else {
-                    // 其他情况应该是系统挂了
                     swal('系统错误', '', 'error');
                 }
             });
@@ -184,6 +176,7 @@
 
         $('#btn-check-coupon').click(function () {
             var code = $('input[name=coupon_code]').val();
+            
             if(!code) {
                 swal('请输入优惠码', '', 'warning');
                 return;

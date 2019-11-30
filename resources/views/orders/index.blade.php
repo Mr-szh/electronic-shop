@@ -6,10 +6,15 @@
     <div class="col-lg-10 offset-lg-1">
         <div class="card">
             <div class="card-header">
-                历史订单 　　　　
-                <span class="float-right">共 {{ $orders->count () }} 件</span>
+                历史订单　　
+                <span class="float-right">共 {{ $orders->count() }} 件</span>
             </div>
             <div class="card-body">
+                @if ($orders->count() == 0)
+                <ul class="list-group text-center">
+                    <span class="nonentity">暂无订单</span>
+                </ul>
+                @else 
                 <ul class="list-group">
                     @foreach($orders as $order)
                     <li class="list-group-item">
@@ -51,7 +56,11 @@
                                         <td rowspan="{{ count($order->items) }}" class="text-center total-amount">￥{{ $order->total_amount }}</td>
                                         <td rowspan="{{ count($order->items) }}" class="text-center">
                                             @if($order->paid_at)
-                                                @if($order->refund_status === \App\Models\Order::REFUND_STATUS_PENDING)
+                                                @if($order->ship_status === \App\Models\Order::SHIP_STATUS_RECEIVED)
+                                                已收货
+                                                @elseif($order->ship_status === \App\Models\Order::SHIP_STATUS_DELIVERED)
+                                                已发货
+                                                @elseif($order->ship_status === \App\Models\Order::SHIP_STATUS_PENDING)
                                                 已支付
                                                 @else
                                                 {{ \App\Models\Order::$refundStatusMap[$order->refund_status] }}
@@ -80,7 +89,6 @@
                                         <tr>
                                             <td colspan="6" style="font-size:15px;">
                                                 物流状态：
-                                                <!-- {{ $order->ship_status }} -->
                                                 @if($order->ship_status === \App\Models\Order::SHIP_STATUS_PENDING)
                                                     未发货
                                                 @elseif($order->ship_status === \App\Models\Order::SHIP_STATUS_DELIVERED)
@@ -98,6 +106,7 @@
                     </li>
                     @endforeach
                 </ul>
+                @endif
                 <div class="float-right">{{ $orders->render() }}</div>
             </div>
         </div>

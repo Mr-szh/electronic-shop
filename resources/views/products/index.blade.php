@@ -7,7 +7,6 @@
         <div class="card">
             <div class="card-body">
 
-                <!-- 筛选组件开始 -->
                 <form action="{{ route('products.index') }}" class="search-form">
                     <input type="hidden" name="filters">
                     <div class="form-row">
@@ -25,14 +24,14 @@
                                         @endforeach
                                         <span class="category">{{ $category->name }}</span>
                                         <span> ></span>
-                                        <!-- 当前类目的 ID，当用户调整排序方式时，可以保证 category_id 参数不丢失 -->
+                                        
                                         <input type="hidden" name="category_id" value="{{ $category->id }}">
                                     @endif
 
                                     @foreach($propertyFilters as $name => $value)
                                     <span class="filter">{{ $name }}:
                                         <span class="filter-value">{{ $value }}</span>
-                                        <!-- 调用之后定义的 removeFilterFromQuery -->
+
                                         <a class="remove-filter" href="javascript: removeFilterFromQuery('{{ $name }}')">×</a>
                                     </span>
                                     @endforeach
@@ -54,9 +53,7 @@
                         </div>
                     </div>
                 </form>
-                <!-- 筛选组件结束 -->
 
-                <!-- 展示子类目开始 -->
                 <div class="filters">
                     @if($category && $category->is_directory)
                     <div class="row">
@@ -74,7 +71,7 @@
                             <div class="col-3 filter-key">{{ $property['key'] }}：</div>
                             <div class="col-9 filter-values">
                             @foreach($property['values'] as $value)
-                                <!-- 调用下面定义的 appendFilterToQuery 函数 -->
+
                                 <a href="javascript: appendFilterToQuery('{{ $property['key'] }}', '{{ $value }}')">{{ $value }}</a>
                             @endforeach
                             </div>
@@ -82,8 +79,16 @@
                     @endforeach
 
                 </div>
-                <!-- 展示子类目结束 -->
 
+                @if ($products->count() == 0)
+                <div class="card">
+                    <div class="card-body">
+                        <div class="list-group text-center">
+                            <span class="nonentity">该分类下暂无商品</span>
+                        </div>
+                    </div>
+                </div>
+                @else
                 <div class="row products-list">
                     @foreach($products as $product)
                     <div class="col-3 product-item">
@@ -107,9 +112,9 @@
                     </div>
                     @endforeach
                 </div>
-                <!-- 将json获取到的数组传到url -->
-                <div class="float-right">{{ $products->appends($filters)->links() }}</div>
-                <!-- <div class="float-right">{{ $products->appends($filters)->links('vendor.pagination.bootstrap-4') }}</div> -->
+                @endif
+
+                <div class="button-link float-right" style="margin-top:20px;">{{ $products->appends($filters)->links() }}</div>
             </div>
         </div>
     </div>

@@ -18,13 +18,11 @@ class UserAddress extends Model
         'contact_phone',
         'last_used_at',
     ];
-    // Carbon 对象，Carbon 是 Laravel 默认使用的时间日期处理类，继承自 PHP DateTime 类的 API 扩展
+    // Carbon 对象
     protected $dates = ['last_used_at'];
 
-    // 与 User 模型关联
     public function user()
     {
-        // 关联关系是一对多，belongsTo：属于
         return $this->belongsTo(User::class);
     }
 

@@ -559,6 +559,16 @@ body {
                 .top {
                     padding: 5px;
 
+                    .error-img {
+                        padding-top: 21.54px;
+                        padding-bottom: 21.54px;
+
+                        img {
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+
                     img {
                         width: 197.5px;
                         height: 197.5px;
@@ -591,6 +601,15 @@ body {
                             color: red;
                             text-decoration: underline;
                         }
+                    }
+                }
+
+                .error-bottom {
+                    height: 33px;
+
+                    .btn-sm {
+                        margin: 0 auto;
+                        width: 100px;
                     }
                 }
 
@@ -1218,6 +1237,13 @@ body {
             max-width: 100%;
             max-height: 100%;
         }
+    }
+}
+
+.list-group {
+    .nonentity {
+        color: red;
+        font-size: 200%;
     }
 }
 
@@ -2365,4 +2391,8 @@ body {
             }
         }
     }
+}
+
+.button-link {
+    margin-top: 20px;
 }

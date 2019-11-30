@@ -15,14 +15,14 @@
                     <table class="table">
                         <tbody>
                             <tr>
-                                <td>商品名称</td>
-                                <td>打分</td>
-                                <td>评价</td>
+                                <td style="width:45%;">商品名称</td>
+                                <td style="width:15%;">打分</td>
+                                <td style="width:40%;">评价</td>
                             </tr>
                             @foreach($order->items as $index => $item)
                             <tr>
                                 <td class="product-info">
-                                    <div class="preview">
+                                    <div class="preview"> 
                                         <a target="_blank" href="{{ route('products.show', [$item->product_id]) }}">
                                             <img src="{{ URL::asset('/upload/'.$item->product->image[0]) }}">
                                         </a>
@@ -59,6 +59,7 @@
                                 <td>
                                     @if($order->reviewed)
                                     {{ $item->review }}
+                                    
                                     @else
                                     <textarea class="form-control {{ $errors->has('reviews.'.$index.'.review') ? 'is-invalid' : '' }}" name="reviews[{{$index}}][review]"></textarea>
                                         @if($errors->has('reviews.'.$index.'.review'))

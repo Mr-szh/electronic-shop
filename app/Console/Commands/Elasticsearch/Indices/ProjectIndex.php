@@ -24,7 +24,7 @@ class ProjectIndex
             'price' => ['type' => 'scaled_float', 'scaling_factor' => 100],
             'on_sale' => ['type' => 'boolean'],
             'rating' => ['type' => 'float'],
-            'sold_count' => ['type' => 'integer'],
+            'sold_count'   => ['type' => 'integer'],
             'review_count' => ['type' => 'integer'],
             'skus' => [
                 'type' => 'nested',

@@ -154,12 +154,10 @@ class ProductsController extends Controller
             }
         }
 
-        // 是否有提交 order 参数，如果有就赋值给 $order 变量
-        // order 参数用来控制商品的排序规则
         if ($order = $request->input('order', '')) {
             // 是否是以 _asc 或者 _desc 结尾
             if (preg_match('/^(.+)_(asc|desc)$/', $order, $m)) {
-                // 如果字符串的开头是这 3 个字符串之一，说明是一个合法的排序值
+                // 如果字符串的开头是这 3 个字符串之一，说明合法
                 if (in_array($m[1], ['price', 'sold_count', 'rating'])) {
                     // 根据传入的排序值来构造排序参数
                     // $builder->orderBy($m[1], $m[2]);
@@ -192,7 +190,7 @@ class ProductsController extends Controller
         ]);
 
         $properties = [];
-        // 有 aggregations 字段则说明做了分面搜索
+
         if (isset($result['aggregations'])) {
             $properties = collect($result['aggregations']['properties']['properties']['buckets'])
                 ->map(function ($bucket) {
@@ -219,16 +217,13 @@ class ProductsController extends Controller
         ]);
     }
 
-    // 利用 Laravel 的自动注入来初始化 ProductService 对象
     public function show(Product $product, Request $request, ProductService $service)
     {
-        // 判断商品是否已经上架，如果没有上架则抛出异常。
-        if (!$product->on_sale) {
-            throw new InvalidRequestException('商品未上架');
-        }
+        // if (!$product->on_sale) {
+        //     throw new InvalidRequestException('商品未上架');
+        // }
 
         $favored = false;
-        // $description = explode('，', $product->description);
 
         // 用户未登录时返回的是 null，已登录时返回的是对应的用户对象
         if ($user = $request->user()) {
@@ -245,6 +240,7 @@ class ProductsController extends Controller
             ->limit(10)
             ->get();
 
+        // 推荐相似商品
         $similarProductIds = $service->getSimilarProductIds($product, 4);
 
         // 根据 Elasticsearch 搜索出来的商品 ID 从数据库中读取商品数据
@@ -255,8 +251,6 @@ class ProductsController extends Controller
 
         $similarProducts = Product::query()->byIds($similarProductIds)->get();
 
-        // return view('products.show', ['product' => $product, 'favored' => $favored]);
-        // return view('products.show', ['product' => $product, 'favored' => $favored, 'description' => $description]);
         return view('products.show', [
             'product' => $product,
             'favored' => $favored,
@@ -269,13 +263,11 @@ class ProductsController extends Controller
     public function favor(Product $product, Request $request)
     {
         $user = $request->user();
-        // 判断当前用户是否已经收藏了此商品
+
         if ($user->favoriteProducts()->find($product->id)) {
             return [];
         }
 
-        // 通过 attach() 方法将当前用户和此商品关联起来
-        // attach() 方法的参数可以是模型的 id，也可以是模型对象本身，可以写成 attach($product->id)
         $user->favoriteProducts()->attach($product);
 
         return [];
@@ -297,12 +289,13 @@ class ProductsController extends Controller
         return view('products.favorites', ['products' => $products]);
     }
 
-    public function disfavors(Request $request)
+    public function disfavors(Request $request, Product $product)
     {
         $user = $request->user();
         $product_id = $request->input('product_id');
-        // detach() 方法用于取消多对多的关联
-        $user->favoriteProducts()->detach($product_id);
+        $product = Product::query()->where('product_id', $product_id)->get();
+
+        $user->favoriteProducts()->detach($product);
 
         return [];
     }

@@ -8,40 +8,22 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use App\Models\Order;
 
-// 发送通知邮件的通知类
 class OrderPaidNotification extends Notification
 {
     use Queueable;
 
     protected $order;
 
-    /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
     public function __construct(Order $order)
     {
         $this->order = $order;
     }
 
-    /**
-     * 只需要通过邮件通知，只需要一个 mail 即可
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
     public function via($notifiable)
     {
         return ['mail'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
     public function toMail($notifiable)
     {
         return (new MailMessage)
@@ -52,12 +34,6 @@ class OrderPaidNotification extends Notification
             ->success();
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
     public function toArray($notifiable)
     {
         return [

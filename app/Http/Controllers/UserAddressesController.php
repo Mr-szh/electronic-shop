@@ -22,12 +22,6 @@ class UserAddressesController extends Controller
 
     public function store(UserAddressRequest $request)
     {
-        // $request->user() 获取当前登录用户
-        // user()->addresses() 获取当前用户与地址的关联关系
-        // addresses()->create() 在关联关系里创建一个新的记录
-        // $request->only() 通过白名单的方式从用户提交的数据里获取我们所需要的数据/只读取指定的数据
-        // $request->all()：获取全部数据、$request->except()：获取除了name的所有数据
-        // 
         $request->user()->addresses()->create($request->only([
             'province',
             'city',
@@ -38,7 +32,6 @@ class UserAddressesController extends Controller
             'contact_phone',
         ]));
 
-        // 跳转回地址列表页面
         return redirect()->route('user_addresses.index');
     }
 
@@ -71,8 +64,8 @@ class UserAddressesController extends Controller
         $this->authorize('own', $user_address);
         
         $user_address->delete();
+        
         // return redirect()->route('user_addresses.index');
-        // 把之前的 redirect 改成返回空数组
         return [];
     }
 }

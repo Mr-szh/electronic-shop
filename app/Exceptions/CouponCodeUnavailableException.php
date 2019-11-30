@@ -5,7 +5,6 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Http\Request;
 
-// 校验优惠码的异常类
 class CouponCodeUnavailableException extends Exception
 {
     public function __construct($message, int $code = 403)

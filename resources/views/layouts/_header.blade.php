@@ -1,6 +1,5 @@
-<nav class="navbar navbar-expand-lg navbar-light navbar-static-top site-header sticky-top py-1" style="background-color:rgba(0,0,0,0);">
+<nav class="navbar navbar-expand-lg navbar-light navbar-static-top site-header sticky-top py-1">
     <div class="container">
-        <!-- 品牌形象 -->
         <a class="navbar-brand" href="{{ url('/') }}">
             可定制电脑商城
         </a>
@@ -12,7 +11,6 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <!-- 导航条的左侧 -->
             <a class="nav-link nav-style" href="{{ url('/products') }}">
                 所有商品
             </a>
@@ -25,7 +23,6 @@
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="categoryTree">
-                        <!-- 遍历 $categoryTree 集合，将集合中的每一项以 $category 变量注入 layouts._category_item 模板中并渲染 -->
                         <!-- 第一个参数是模板名称，第二个参数是要遍历的数组，第三个参数是遍历的项在模板中的变量名 -->
                         @each('layouts._category_item', $categoryTree, 'category')
                     </ul>

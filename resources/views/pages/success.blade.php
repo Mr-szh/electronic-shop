@@ -5,7 +5,7 @@
 <div class="error-container">
     <div class="error">
         <h2>{{ $msg }}</h2>
-        <a class="btn btn-primary" href="{{ route('root') }}">返回首页</a>
+        <a class="btn btn-primary" href="{{ route('orders.index') }}">进入历史订单</a>
     </div>
     <div class="stack-container">
         <div class="card-container">

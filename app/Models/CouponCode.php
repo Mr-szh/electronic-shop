@@ -123,9 +123,7 @@ class CouponCode extends Model
     // 新增、减少用量
     public function changeUsed($increase = true)
     {
-        // 传入 true 代表新增用量，否则是减少用量
         if ($increase) {
-            // 检查当前用量是否已经超过总量
             return $this->where('id', $this->id)->where('used', '<', $this->total)->increment('used');
         } else {
             return $this->decrement('used');
