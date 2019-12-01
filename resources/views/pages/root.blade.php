@@ -67,9 +67,9 @@
     <div class="col-3 product-item">
       <div class="product-content">
         <div class="top">
-          <div class="img">
+          <div class="img" style="width:197.5px;height:197.5px;">
             <a href="{{ route('products.show', ['product' => $product->id]) }}">
-              <img src="{{ URL::asset('/upload/'.$product->image[0]) }}" alt="">
+              <img src="{{ URL::asset('/upload/'.$product->image[0]) }}" alt="" style="width:100%;height:100%;">
             </a>
           </div>
           <div class="price">

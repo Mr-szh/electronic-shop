@@ -307,7 +307,7 @@ class ProductsController extends Controller
         $addresses = $request->user()->addresses()->orderBy('last_used_at', 'desc')->get();
         
         $page = $request->input('page', 1);
-        $perPage = 10;
+        $perPage = 12;
 
         $builder = (new ProductSearchBuilder())->onSale()->paginate($perPage, $page);
 

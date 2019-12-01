@@ -22,7 +22,7 @@ use Encore\Admin\Facades\Admin;
 use App\Admin\Extensions\Form\uEditor;
 use Encore\Admin\Form;
 
-Form::extend('ueditor', uEditor::class);
+// Form::extend('ueditor', uEditor::class);
 
 Admin::navbar(function (\Encore\Admin\Widgets\Navbar $navbar) {
 

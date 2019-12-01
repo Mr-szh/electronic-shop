@@ -21,16 +21,9 @@ class TopicsController extends Controller
     public function index(Request $request, Topic $topic, User $user)   
     {
         $topics = $topic->withOrder($request->order)->paginate(10);
-        // $topics_admin = $topic->where('admin_id', '1')->paginate(2);
-
-        // // return view('topics.index', compact('topics'));
         $active_users = $user->getActiveUsers();
 
         return view('topics.index', compact('topics', 'active_users'));
-
-        // $comments = App\Administrator::find(1);
-
-        // dd($admin);
     }
 
     public function create(Topic $topic)
@@ -43,7 +36,6 @@ class TopicsController extends Controller
 
     public function store(TopicRequest $request, Topic $topic, TimeOuts $timeOuts)
     {
-        // 获取最后发布的话题
         $lastTopic = Topic::query()
             ->where(['user_id' => Auth::user()->id])
             ->where(['category_id' => $request->category_id])
@@ -51,14 +43,12 @@ class TopicsController extends Controller
             ->first();
 
         if (isset($lastTopic)) {
-            // 检查频率
             $key = 'topic_create_' . \Auth::id();
 
             if ($timeOuts->get($key)) {
                 return redirect()->to($topic->link())->with('danger', '你发帖时间过短！');
             }
 
-            // 检查雷同
             similar_text($lastTopic->title, $request->title, $percent);
 
             if ($percent > 80) {
@@ -84,7 +74,6 @@ class TopicsController extends Controller
 
     public function show(Request $request, Topic $topic)
     {
-        // URL 矫正
         if (!empty($topic->slug) && $topic->slug != $request->slug) {
             return redirect($topic->link(), 301);
         }
@@ -100,11 +89,9 @@ class TopicsController extends Controller
             'file_path' => ''
         ];
 
-        // 判断是否有上传图片，并赋值给 $file
         if ($file = $request->upload_file) {
-            // 保存图片到本地
             $result = $uploader->save($request->upload_file, 'topics', \Auth::id(), 1024);
-            // 图片保存成功后
+
             if ($result) {
                 $data['file_path'] = $result['path'];
                 $data['msg'] = '上传成功!';

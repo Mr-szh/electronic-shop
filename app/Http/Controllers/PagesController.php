@@ -12,7 +12,7 @@ class PagesController extends Controller
     {
         $products = Product::query()
             ->where('on_sale', true)
-            ->orderBy('on_sale', 'desc')
+            ->orderBy('sold_count', 'desc')
             ->paginate(4);
         // dd($products);
         return view('pages.root', ['products' => $products]);

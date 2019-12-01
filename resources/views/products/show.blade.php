@@ -95,7 +95,7 @@
                             @elseif($product->on_sale)
                             <button class="btn btn-primary btn-add-to-cart">加入购物车</button>
                             @else
-                            <button class="btn btn-primary btn-error">该商品已下架，可选择取消收藏</button>
+                            <button class="btn btn-primary btn-error">该商品已下架</button>
                             @endif
                         </div>
                     </div>

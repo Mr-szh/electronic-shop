@@ -17,16 +17,14 @@ class TopicReplied extends Notification implements ShouldQueue
 
     public function __construct(Reply $reply, $type)
     {
-        // 注入回复实体，方便 toDatabase 方法中的使用
         $this->reply = $reply;
         $this->type = $type;
     }
 
     public function via($notifiable)
     {
-        // 开启通知的频道
-        return ['database'];
-        // return ['database', 'mail'];
+        // return ['database'];
+        return ['database', 'mail'];
     }
 
     public function toDatabase($notifiable)
@@ -34,7 +32,6 @@ class TopicReplied extends Notification implements ShouldQueue
         $topic = $this->reply->topic;
         $link =  $topic->link(['#reply' . $this->reply->id]);
 
-        // 存入数据库里的数据
         return [
             // 'type' => 'reply',
             'type' => $this->type,
@@ -54,9 +51,9 @@ class TopicReplied extends Notification implements ShouldQueue
         $url = $this->reply->topic->link(['#reply'.$this->reply->id]);
         
         return (new MailMessage)
-            ->subject($this->reply->user->name.'评论了您的文章')
-            ->line($this->reply->user->name."评论了您的文章:")
-            ->action($this->reply->post->title, $url)
+            ->subject('社区用户：'.$this->reply->user->name.'评论了您的文章')
+            ->line('社区用户：'.$this->reply->user->name."评论了您的文章:")
+            ->action('查看回复', $url)
             ->line("评论内容如下: ")
             ->line($this->reply->body);
     }

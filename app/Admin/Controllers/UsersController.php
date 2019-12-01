@@ -46,12 +46,10 @@ class UsersController extends AdminController
         $grid->column('updated_at', '修改时间');
         // $grid->column('status', '状态')->editable('select', [0 => '禁用', 1 => '启用']);
         
-        // 禁用控件
         $grid->disableCreateButton();
         $grid->disableRowSelector();
         $grid->disableActions();
 
-        // 筛选条件
         $grid->filter(function ($filter) {
             // 去掉默认的id过滤器
             $filter->disableIdFilter();

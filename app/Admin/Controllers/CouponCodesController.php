@@ -8,6 +8,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Layout\Content;
+use Illuminate\Support\MessageBag;
 
 class CouponCodesController extends AdminController
 {
@@ -45,7 +46,7 @@ class CouponCodesController extends AdminController
         // $grid->column('min_amount', '最低金额');
         // $grid->column('not_before', __('Not before'));
         // $grid->column('not_after', __('Not after'));
-        $grid->column('enabled', '是否启用')->display(function($value) {
+        $grid->column('enabled', '是否启用')->display(function ($value) {
             return $value ? '是' : '否';
         });
         $grid->column('created_at', '创建时间');
@@ -58,11 +59,11 @@ class CouponCodesController extends AdminController
         $grid->filter(function ($filter) {
             // 去掉默认的id过滤器
             $filter->disableIdFilter();
-            
+
             $filter->like('name', '优惠券名称')->placeholder('请输入优惠券名称');
             $filter->in('enabled', '是否启用')->multipleSelect(['1' => '是', '0' => '否']);
             $filter->between('created_at', '创建时间')->date();
-            
+
             $filter->scope('new', '最近创建/修改')
                 ->whereDate('created_at', date('Y-m-d'));
         });
@@ -108,9 +109,9 @@ class CouponCodesController extends AdminController
 
         $form->text('name', '名称')->rules('required');
         // 管理员可不填，将由系统自动生成
-        $form->text('code', '优惠码')->rules(function($form) {
+        $form->text('code', '优惠码')->rules(function ($form) {
             if ($id = $form->model()->id) {
-                return 'nullable|unique:coupon_codes,code,'.$id.',id';
+                return 'nullable|unique:coupon_codes,code,' . $id . ',id';
             } else {
                 return 'nullable|unique:coupon_codes';
             }
@@ -135,7 +136,7 @@ class CouponCodesController extends AdminController
             $tools->disableView();
         });
 
-        $form->footer(function ($footer) {     
+        $form->footer(function ($footer) {
             $footer->disableViewCheck();
             $footer->disableEditingCheck();
             $footer->disableCreatingCheck();
@@ -145,6 +146,11 @@ class CouponCodesController extends AdminController
             if (!$form->code) {
                 $form->code = CouponCode::findAvailableCode();
             }
+
+            return response()->json([
+                'status' => false,
+                'message' => 'false',
+            ]);
         });
 
         return $form;

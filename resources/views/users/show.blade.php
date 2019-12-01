@@ -6,7 +6,9 @@
 <div class="row">
     <div class="col-lg-3 col-md-3 hidden-sm hidden-xs user-info">
         <div class="card">
-            <img class="card-img-top" src="{{ URL::asset($user->avatar) }}" alt="{{ $user->name }}">
+            <div style="padding:20px;width:253px;height:253px;">
+                <img class="card-img-top" src="{{ URL::asset($user->avatar) }}" alt="{{ $user->name }}" style="width:100%;height:100%;">
+            </div>
             <div class="card-body">
                 <h5>
                     <strong>{{ $user->name }}</strong>
