@@ -38,9 +38,9 @@ class UsersController extends AdminController
         });
         // $grid->column('password', '密码')->hide();
         $grid->column('sex', '性别')->using(['0' => '暂空', '1' => '男', '2' => '女']);
-        $grid->column('birthday', '生日')->display(function ($value) {
-            return $value ? $value : '暂空';
-        });
+        // $grid->column('birthday', '生日')->display(function ($value) {
+        //     return $value ? $value : '暂空';
+        // });
         // $grid->column('remember_token', __('Remember token'))->hide();
         $grid->column('created_at', '注册时间');
         $grid->column('updated_at', '修改时间');

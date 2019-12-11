@@ -84,7 +84,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="list-group text-center">
-                            <span class="nonentity">该分类下暂无商品</span>
+                            <span class="nonentity">暂无商品</span>
                         </div>
                     </div>
                 </div>

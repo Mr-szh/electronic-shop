@@ -44,7 +44,7 @@ class TopicsController extends Controller
             // 去掉默认的id过滤器
             $filter->disableIdFilter();
 
-            $filter->in('category.name', '分类')->multipleSelect(['1' => '分享', '2' => '问答', '3' => '公告', '4' => '定制']);
+            // $filter->in('category.name', '分类')->multipleSelect(['1' => '分享', '2' => '问答', '3' => '公告']);
             $filter->in('role', '角色')->multipleSelect(['user' => '用户', 'admin' => '管理员']);
             
             $filter->scope('new', '最近发帖')
