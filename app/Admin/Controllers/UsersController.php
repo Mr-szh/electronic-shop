@@ -102,15 +102,15 @@ class UsersController extends AdminController
     {
         $form = new Form(new User);
 
-        $form->text('name', __('Name'));
-        $form->email('email', __('Email'));
-        $form->datetime('email_verified_at', __('Email verified at'))->default(date('Y-m-d H:i:s'));
-        $form->password('password', __('Password'));
-        $form->text('sex', __('Sex'));
-        $form->date('birthday', __('Birthday'))->default(date('Y-m-d'));
-        $form->image('avatar', __('Avatar'))->default('http://electronic-shop/images/default.jpg');
+        $form->text('name', '用户名');
+        $form->email('email', '电子邮箱');
+        $form->datetime('email_verified_at', '邮箱验证时间')->default(date('Y-m-d H:i:s'));
+        // $form->password('password', __('Password'));
+        $form->text('sex', '性别');
+        $form->date('birthday', '生日')->default(date('Y-m-d'));
+        $form->image('avatar', '头像')->default('http://electronic-shop/images/default.jpg');
         $form->text('remember_token', __('Remember token'));
-        $form->text('status', __('Status'))->default('1');
+        $form->text('status', '状态')->default('1');
 
         $form->tools(function (Form\Tools $tools) {
             // 去掉`列表`按钮

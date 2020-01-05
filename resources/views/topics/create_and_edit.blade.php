@@ -52,7 +52,7 @@
 
                         <div class="well well-sm">
                             <button type="submit" class="btn btn-primary">
-                                <i class="far fa-save mr-2" aria-hidden="true"></i> 保存
+                                <i class="far fa-save mr-2" aria-hidden="true"></i> 提交
                             </button>
                         </div>
                     </form>
